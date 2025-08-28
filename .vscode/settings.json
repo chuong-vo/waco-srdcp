@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "random.h": "c",
+        "wur_trace.h": "c"
+    }
+}
