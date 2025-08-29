@@ -1,0 +1,4 @@
+[06:26:01 - main] [Cooja.java:1350] [INFO] - > Starting Cooja
+[06:26:01 - main] [Cooja.java:2856] [INFO] - External tools default settings: /external_tools_linux_64.config
+[06:26:01 - main] [Cooja.java:2886] [INFO] - External tools user settings: /home/chuongvo/.cooja.user.properties
+[06:26:01 - main] [Cooja.java:1356] [INFO] - > Creating simulation

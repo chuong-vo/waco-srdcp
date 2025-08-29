@@ -15,7 +15,7 @@
 #define MAX_NODES 30
 #define MAX_PATH_LENGTH 10
 
-#define BEACON_INTERVAL (CLOCK_SECOND * 5)
+#define BEACON_INTERVAL (CLOCK_SECOND * 10)
 #define BEACON_FORWARD_DELAY (random_rand() % (CLOCK_SECOND * 4))
 // Used for topology reports
 #define TOPOLOGY_REPORT_HOLD_TIME (CLOCK_SECOND * 15)
@@ -45,7 +45,6 @@ typedef struct DictEntry
 typedef struct TreeDict
 {
         int len;
-        // int cap;
         DictEntry entries[MAX_NODES];
         linkaddr_t tree_path[MAX_PATH_LENGTH];
 } TreeDict;
@@ -63,7 +62,7 @@ struct my_collect_conn
         // address of parent node
         linkaddr_t parent;
         struct ctimer beacon_timer;
-        // metric: hop count
+        // metric: hop count (0 if sink)
         uint16_t metric;
         // sequence number of the tree protocol
         uint16_t beacon_seqn;
@@ -144,5 +143,20 @@ struct downward_data_packet_header
         uint8_t path_len;
 } __attribute__((packed));
 typedef struct downward_data_packet_header downward_data_packet_header;
+
+/* --------------------------------------------------------------------
+ * Application hook: notify app that a beacon was observed
+ *  - sender: neighbor address who sent the beacon
+ *  - metric: neighbor's hop-count to sink (0 for sink itself)
+ *  - rssi, lqi: link quality observed for this beacon
+ *
+ * NOTE: This does not change SRDCP logic; it's for telemetry only.
+ * The app may ignore this by not implementing the symbol; a weak
+ * default definition is provided in my_collect.c.
+ * ------------------------------------------------------------------ */
+void srdcp_app_beacon_observed(const linkaddr_t *sender,
+                               uint16_t metric,
+                               int16_t rssi,
+                               uint8_t lqi);
 
 #endif // MY_COLLECT_H

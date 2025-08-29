@@ -9,7 +9,8 @@
 
 /* ===== Stack selection ===== */
 #undef NETSTACK_CONF_RDC
-#define NETSTACK_CONF_RDC wurrdc_driver /* WaCo: Wake-up RDC */
+// #define NETSTACK_CONF_RDC wurrdc_driver /* WaCo: Wake-up RDC */
+#define NETSTACK_CONF_RDC wurrdc_driver
 // #define NETSTACK_CONF_RDC contikimac_driver
 #undef NETSTACK_CONF_MAC
 #define NETSTACK_CONF_MAC csma_driver /* CSMA cho main radio */
@@ -23,14 +24,15 @@
  * 64 Hz là hợp lý; nếu cần phản ứng nhanh hơn có thể 128 Hz (tốn năng lượng hơn).
  */
 #undef NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE
-#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 128
+#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 64
 
 /* ===== Buffering & tiện ích debug ===== */
 #ifndef QUEUEBUF_CONF_NUM
 #define QUEUEBUF_CONF_NUM 16 /* tăng nếu topo lớn/nhiều control frames */
 #endif
 #define RIMESTATS_CONF_ENABLED 1 /* giúp thống kê retransmissions/ACKs */
-
+#undef UIP_CONF_IPV6
+#define UIP_CONF_IPV6 0
 /* ===== Dự phòng chuyển nhanh sang ContikiMAC (tắt WuR) nếu cần so sánh năng lượng ===== */
 /* // #undef  NETSTACK_CONF_RDC
  * // #define NETSTACK_CONF_RDC          contikimac_driver

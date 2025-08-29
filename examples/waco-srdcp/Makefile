@@ -2,7 +2,6 @@
 CONTIKI            = ../..
 CONTIKI_WITH_RIME  = 1
 CONTIKI_PROJECT    = example-runicast-srdcp
-TARGET            ?= sky
 
 # ---- App & sources ----
 all: $(CONTIKI_PROJECT)
@@ -19,8 +18,7 @@ PROJECT_SOURCEFILES += my_collect.c routing_table.c topology_report.c
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
 
 # Bật powertrace
-APPS   += powertrace
-
+APPS = serial-shell powertrace collect-view
 # Tuỳ chọn: in Top-K lân cận ở SINK mọi lần nhận gói (thay vì chỉ khi topo đổi)
 # CFLAGS += -DNEI_PRINT_ALWAYS=1
 
