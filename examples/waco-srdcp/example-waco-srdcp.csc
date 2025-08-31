@@ -9,7 +9,6 @@
   <project EXPORT="discard">[APPS_DIR]/radiologger-headless</project>
   <simulation>
     <title>waco-srdcp</title>
-    <speedlimit>1.0</speedlimit>
     <randomseed>123456</randomseed>
     <motedelay_us>1000000</motedelay_us>
     <radiomedium>

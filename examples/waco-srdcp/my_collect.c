@@ -331,8 +331,7 @@ void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
                         uint8_t i;
                         for (i = 0; i < hdr.piggy_len; i++)
                         {
-                                memcpy(&tc, packetbuf_dataptr() + sizeof(tree_connection) * i,
-                                       sizeof(tree_connection));
+                                memcpy(&tc, packetbuf_dataptr() + sizeof(tree_connection) * i, sizeof(tree_connection));
                                 dict_add(&conn->routing_table, tc.node, tc.parent);
                         }
                         packetbuf_hdrreduce(sizeof(tree_connection) * hdr.piggy_len);
@@ -341,29 +340,58 @@ void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
         }
         else
         {
-                hdr.hops = hdr.hops + 1;
+                hdr.hops++;
+
                 if (PIGGYBACKING == 1 &&
                     !check_address_in_piggyback_block(hdr.piggy_len, linkaddr_node_addr))
                 {
-                        packetbuf_hdralloc(sizeof(tree_connection));
-                        packetbuf_compact();
-                        tree_connection tc = {.node = linkaddr_node_addr, .parent = conn->parent};
-                        hdr.piggy_len = hdr.piggy_len + 1;
 
-                        LOG(TAG_PIGGY, "append (node=%02x:%02x parent=%02x:%02x)",
-                            tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]);
+                        if (hdr.piggy_len < MAX_PATH_LENGTH)
+                        {
+                                tree_connection tc = {.node = linkaddr_node_addr, .parent = conn->parent};
 
-                        memcpy(packetbuf_hdrptr(), packetbuf_dataptr(), sizeof(enum packet_type));
-                        memcpy(packetbuf_hdrptr() + sizeof(enum packet_type),
-                               &hdr, sizeof(upward_data_packet_header));
-                        memcpy(packetbuf_hdrptr() + sizeof(enum packet_type) + sizeof(upward_data_packet_header),
-                               &tc, sizeof(tree_connection));
+                                /* Layout hiện tại: [pt][hdr][piggy...]; chèn thêm 1 entry ngay sau hdr */
+                                const size_t off_pt = 0;
+                                const size_t off_hdr = off_pt + sizeof(enum packet_type);
+                                const size_t off_piggy0 = off_hdr + sizeof(upward_data_packet_header);
+                                const size_t old_bytes = (size_t)hdr.piggy_len * sizeof(tree_connection);
+
+                                /* Mở rộng header và đảm bảo liên tục trước khi dịch */
+                                packetbuf_hdralloc(sizeof(tree_connection));
+                                packetbuf_compact();
+
+                                uint8_t *hptr = packetbuf_hdrptr();
+
+                                /* Dịch block piggy cũ sang phải để chừa chỗ cho entry mới */
+                                memmove(hptr + off_piggy0 + sizeof(tree_connection),
+                                        hptr + off_piggy0,
+                                        old_bytes);
+
+                                /* Ghi pt + hdr (hdr với piggy_len mới) */
+                                enum packet_type pt = upward_data_packet;
+                                hdr.piggy_len++;
+                                memcpy(hptr + off_pt, &pt, sizeof(pt));
+                                memcpy(hptr + off_hdr, &hdr, sizeof(hdr));
+
+                                /* Ghi entry piggy mới ngay vị trí vừa chèn */
+                                memcpy(hptr + off_piggy0, &tc, sizeof(tc));
+
+                                LOG(TAG_PIGGY, "append (node=%02x:%02x parent=%02x:%02x) len=%u",
+                                    tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1], hdr.piggy_len);
+                        }
+                        else
+                        {
+                                LOG(TAG_PIGGY, "skip append (len=%u >= max=%u)",
+                                    (unsigned)hdr.piggy_len, (unsigned)MAX_PATH_LENGTH);
+                                memcpy(packetbuf_dataptr() + sizeof(enum packet_type), &hdr, sizeof(hdr));
+                        }
                 }
                 else
                 {
-                        memcpy(packetbuf_dataptr() + sizeof(enum packet_type),
-                               &hdr, sizeof(upward_data_packet_header));
+                        /* Không piggy hoặc trùng -> chỉ cập nhật hops */
+                        memcpy(packetbuf_dataptr() + sizeof(enum packet_type), &hdr, sizeof(hdr));
                 }
+
                 unicast_send(&conn->uc, &conn->parent);
         }
 }
