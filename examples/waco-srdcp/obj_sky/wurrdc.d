@@ -23,7 +23,8 @@ obj_sky/wurrdc.o: ../../core/net/mac/wurrdc.c \
  ../../core/./net/netstack.h ../../core/./net/llsec/llsec.h \
  ../../core/./net/mac/framer.h ../../platform/sky/dev/wur.h \
  ../../core/./lib/sensors.h ../../core/./net/rime/rimestats.h \
- ../../core/./dev/leds.h ../../core/./dev/watchdog.h
+ ../../core/./dev/leds.h ../../core/sys/clock.h \
+ ../../core/./dev/watchdog.h
 ../../core/net/mac/wurrdc.c :
  ../../core/./net/mac/mac-sequence.h ../../core/./net/mac/wurrdc.h :
  ../../core/./sys/rtimer.h ../../platform/sky/./contiki-conf.h :
@@ -49,4 +50,5 @@ obj_sky/wurrdc.o: ../../core/net/mac/wurrdc.c \
  ../../core/./net/netstack.h ../../core/./net/llsec/llsec.h :
  ../../core/./net/mac/framer.h ../../platform/sky/dev/wur.h :
  ../../core/./lib/sensors.h ../../core/./net/rime/rimestats.h :
- ../../core/./dev/leds.h ../../core/./dev/watchdog.h :
+ ../../core/./dev/leds.h ../../core/sys/clock.h :
+ ../../core/./dev/watchdog.h :

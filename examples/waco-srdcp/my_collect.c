@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdio.h>
 #include "contiki.h"
@@ -12,6 +13,31 @@
 #include "routing_table.h"
 #include "topology_report.h"
 
+/* ------------------------------------ LOG Tags / Helper ------------------------------------ */
+#define TAG_BEACON "BEACON"
+#define TAG_COLLECT "COLLECT"
+#define TAG_UC "UC"
+#define TAG_TOPO "TOPO"
+#define TAG_PIGGY "PIGGY"
+#define TAG_SRDCP "SRDCP"
+#define TAG_UL "UL"
+
+#define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
+
+/*--------------------------------------------------------------------------------------*/
+/* Forward declarations (for clean initialization order) */
+void beacon_timer_cb(void *ptr);
+void send_beacon(struct my_collect_conn *conn);
+void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender);
+void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender);
+
+int sr_send(struct my_collect_conn *conn, const linkaddr_t *dest);
+int my_collect_send(struct my_collect_conn *conn);
+
+bool check_address_in_piggyback_block(uint8_t piggy_len, linkaddr_t node);
+void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender);
+void forward_downward_data(struct my_collect_conn *conn, const linkaddr_t *sender);
+
 /*--------------------------------------------------------------------------------------*/
 /* Callback structures */
 struct broadcast_callbacks bc_cb = {.recv = bc_recv};
@@ -23,7 +49,7 @@ void my_collect_open(struct my_collect_conn *conn, uint16_t channels,
                      bool is_sink, const struct my_collect_callbacks *callbacks)
 {
         linkaddr_copy(&conn->parent, &linkaddr_null);
-        conn->metric = 65535; // not connected yet
+        conn->metric = 65535; /* not connected yet */
         conn->beacon_seqn = 0;
         conn->callbacks = callbacks;
         conn->treport_hold = 0;
@@ -59,7 +85,7 @@ void send_beacon(struct my_collect_conn *conn)
 
         packetbuf_clear();
         packetbuf_copyfrom(&beacon, sizeof(beacon));
-        printf("my_collect: sending beacon: seqn %d metric %d\n", conn->beacon_seqn, conn->metric);
+        LOG(TAG_BEACON, "send seq=%u metric=%u", (unsigned)conn->beacon_seqn, (unsigned)conn->metric);
         broadcast_send(&conn->bc);
 }
 
@@ -74,22 +100,23 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
 
         if (packetbuf_datalen() != sizeof(struct beacon_msg))
         {
-                printf("my_collect: broadcast of wrong size (not a beacon)\n");
+                LOG(TAG_BEACON, "drop (unexpected size=%u)", (unsigned)packetbuf_datalen());
                 return;
         }
         memcpy(&beacon, packetbuf_dataptr(), sizeof(struct beacon_msg));
         rssi = packetbuf_attr(PACKETBUF_ATTR_RSSI);
         lqi = packetbuf_attr(PACKETBUF_ATTR_LINK_QUALITY);
 
-        printf("my_collect: recv beacon from %02x:%02x seqn %u metric %u rssi %d\n",
-               sender->u8[0], sender->u8[1], beacon.seqn, beacon.metric, (int)rssi);
+        LOG(TAG_BEACON, "rx from=%02x:%02x seq=%u metric=%u rssi=%d lqi=%u",
+            sender->u8[0], sender->u8[1],
+            (unsigned)beacon.seqn, (unsigned)beacon.metric, (int)rssi, (unsigned)lqi);
 
         /* Application hook: implemented in example-runicast-srdcp.c */
         srdcp_app_beacon_observed(sender, beacon.metric, rssi, lqi);
 
         if (rssi < RSSI_THRESHOLD)
         {
-                printf("packet rejected due to low rssi\n");
+                LOG(TAG_BEACON, "drop (rssi=%d < thr=%d)", (int)rssi, (int)RSSI_THRESHOLD);
                 return;
         }
 
@@ -101,8 +128,8 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
         {
                 if (conn->metric <= beacon.metric + 1)
                 {
-                        printf("my_collect: return. conn->metric: %u, beacon.metric: %u\n",
-                               conn->metric, beacon.metric);
+                        LOG(TAG_COLLECT, "ignore beacon (my_metric=%u, neigh_metric=%u)",
+                            (unsigned)conn->metric, (unsigned)beacon.metric);
                         return;
                 }
         }
@@ -114,6 +141,9 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
         if (!linkaddr_cmp(&conn->parent, sender))
         {
                 linkaddr_copy(&conn->parent, sender);
+                LOG(TAG_COLLECT, "parent set to %02x:%02x (new_metric=%u)",
+                    conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric);
+
                 if (TOPOLOGY_REPORT)
                 {
                         conn->treport_hold = 1;
@@ -125,6 +155,7 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
 
         /* forward beacon after a small random delay */
         ctimer_set(&conn->beacon_timer, BEACON_FORWARD_DELAY, beacon_timer_cb, conn);
+        LOG(TAG_COLLECT, "schedule beacon forward after %u ticks", (unsigned)BEACON_FORWARD_DELAY);
 }
 
 /* ------------------------------------ Send / Receive ------------------------------------ */
@@ -144,21 +175,29 @@ int my_collect_send(struct my_collect_conn *conn)
         enum packet_type pt = upward_data_packet;
 
         if (linkaddr_cmp(&conn->parent, &linkaddr_null))
-                return 0; // no parent
+        {
+                LOG(TAG_UL, "drop (no parent)");
+                return 0; /* no parent */
+        }
 
         if (PIGGYBACKING == 1)
         {
-                packetbuf_hdralloc(sizeof(enum packet_type) + sizeof(upward_data_packet_header) + sizeof(tree_connection));
+                packetbuf_hdralloc(sizeof(enum packet_type) +
+                                   sizeof(upward_data_packet_header) +
+                                   sizeof(tree_connection));
                 memcpy(packetbuf_hdrptr(), &pt, sizeof(enum packet_type));
-                memcpy(packetbuf_hdrptr() + sizeof(enum packet_type), &hdr, sizeof(upward_data_packet_header));
+                memcpy(packetbuf_hdrptr() + sizeof(enum packet_type),
+                       &hdr, sizeof(upward_data_packet_header));
                 memcpy(packetbuf_hdrptr() + sizeof(enum packet_type) + sizeof(upward_data_packet_header),
                        &tc, sizeof(tree_connection));
         }
         else
         {
-                packetbuf_hdralloc(sizeof(enum packet_type) + sizeof(upward_data_packet_header));
+                packetbuf_hdralloc(sizeof(enum packet_type) +
+                                   sizeof(upward_data_packet_header));
                 memcpy(packetbuf_hdrptr(), &pt, sizeof(enum packet_type));
-                memcpy(packetbuf_hdrptr() + sizeof(enum packet_type), &hdr, sizeof(upward_data_packet_header));
+                memcpy(packetbuf_hdrptr() + sizeof(enum packet_type),
+                       &hdr, sizeof(upward_data_packet_header));
         }
         return unicast_send(&conn->uc, &conn->parent);
 }
@@ -171,18 +210,27 @@ int sr_send(struct my_collect_conn *conn, const linkaddr_t *dest)
         int path_len = find_route(conn, dest);
         print_route(conn, path_len, dest);
         if (path_len == 0)
+        {
+                LOG(TAG_SRDCP, "no route to %02x:%02x (downlink dropped)", dest->u8[0], dest->u8[1]);
                 return 0;
+        }
 
         enum packet_type pt = downward_data_packet;
         downward_data_packet_header hdr = {.hops = 0, .path_len = path_len};
 
-        packetbuf_hdralloc(sizeof(enum packet_type) + sizeof(downward_data_packet_header) + sizeof(linkaddr_t) * path_len);
+        packetbuf_hdralloc(sizeof(enum packet_type) +
+                           sizeof(downward_data_packet_header) +
+                           sizeof(linkaddr_t) * path_len);
         memcpy(packetbuf_hdrptr(), &pt, sizeof(enum packet_type));
-        memcpy(packetbuf_hdrptr() + sizeof(enum packet_type), &hdr, sizeof(downward_data_packet_header));
+        memcpy(packetbuf_hdrptr() + sizeof(enum packet_type),
+               &hdr, sizeof(downward_data_packet_header));
+
         int i;
         for (i = path_len - 1; i >= 0; i--)
         {
-                memcpy(packetbuf_hdrptr() + sizeof(enum packet_type) + sizeof(downward_data_packet_header) + sizeof(linkaddr_t) * (path_len - (i + 1)),
+                memcpy(packetbuf_hdrptr() + sizeof(enum packet_type) +
+                           sizeof(downward_data_packet_header) +
+                           sizeof(linkaddr_t) * (path_len - (i + 1)),
                        &conn->routing_table.tree_path[i],
                        sizeof(linkaddr_t));
         }
@@ -197,43 +245,41 @@ void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender)
         enum packet_type pt;
         memcpy(&pt, packetbuf_dataptr(), sizeof(enum packet_type));
 
-        printf("Node %02x:%02x received unicast packet with type %d\n",
-               linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1], pt);
+        LOG(TAG_UC, "rx type=%d from=%02x:%02x", (int)pt, sender->u8[0], sender->u8[1]);
 
         switch (pt)
         {
         case upward_data_packet:
-                printf("Node %02x:%02x receivd a unicast data packet\n",
-                       linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
+                LOG(TAG_UC, "data rx");
                 forward_upward_data(conn, sender);
                 break;
+
         case topology_report:
                 if (TOPOLOGY_REPORT == 0)
                 {
-                        printf("ERROR: Received a topoloy report with TOPOLOGY_REPORT=0. Node: %02x:%02x\n",
-                               linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
+                        LOG(TAG_TOPO, "drop (feature disabled)");
                 }
                 else
                 {
-                        printf("Node %02x:%02x receivd a unicast topology report\n",
-                               linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
+                        LOG(TAG_UC, "topology rx");
                         if (conn->is_sink)
                         {
                                 deliver_topology_report_to_sink(conn);
                         }
                         else
                         {
-                                send_topology_report(conn, 1); // forwarding
+                                send_topology_report(conn, 1); /* forwarding */
                         }
                 }
                 break;
+
         case downward_data_packet:
-                printf("Node %02x:%02x receivd a unicast source routing packet\n",
-                       linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
+                LOG(TAG_UC, "sr rx");
                 forward_downward_data(conn, sender);
                 break;
+
         default:
-                printf("Packet type not recognized.\n");
+                LOG(TAG_UC, "drop (unknown type=%d size=%u)", (int)pt, (unsigned)packetbuf_datalen());
         }
 }
 
@@ -241,27 +287,32 @@ void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender)
 
 bool check_address_in_piggyback_block(uint8_t piggy_len, linkaddr_t node)
 {
-        printf("Checking piggy address: %02x:%02x\n", node.u8[0], node.u8[1]);
+        LOG(TAG_PIGGY, "check addr %02x:%02x", node.u8[0], node.u8[1]);
         tree_connection tc;
         uint8_t i;
         for (i = 0; i < piggy_len; i++)
         {
                 memcpy(&tc,
-                       packetbuf_dataptr() + sizeof(enum packet_type) + sizeof(upward_data_packet_header),
+                       packetbuf_dataptr() +
+                           sizeof(enum packet_type) +
+                           sizeof(upward_data_packet_header) +
+                           (sizeof(tree_connection) * i),
                        sizeof(tree_connection));
                 if (linkaddr_cmp(&tc.node, &node))
                 {
-                        printf("ERROR: Checking piggy address found: %02x:%02x\n", node.u8[0], node.u8[1]);
+                        LOG(TAG_PIGGY, "duplicate addr in header: %02x:%02x", node.u8[0], node.u8[1]);
                         return true;
                 }
         }
         return false;
 }
 
-void forward_upward_data(my_collect_conn *conn, const linkaddr_t *sender)
+void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
 {
+        (void)sender;
         upward_data_packet_header hdr;
-        memcpy(&hdr, packetbuf_dataptr() + sizeof(enum packet_type), sizeof(upward_data_packet_header));
+        memcpy(&hdr, packetbuf_dataptr() + sizeof(enum packet_type),
+               sizeof(upward_data_packet_header));
 
         if (conn->is_sink == 1)
         {
@@ -271,13 +322,17 @@ void forward_upward_data(my_collect_conn *conn, const linkaddr_t *sender)
                         tree_connection tc;
                         if (hdr.piggy_len > MAX_PATH_LENGTH)
                         {
-                                printf("ERROR: Piggy len=%d, path is supposed to be max %d\n",
-                                       hdr.piggy_len, MAX_PATH_LENGTH);
+                                LOG(TAG_PIGGY, "drop (len=%u > max=%u)", (unsigned)hdr.piggy_len, (unsigned)MAX_PATH_LENGTH);
+                        }
+                        if (hdr.piggy_len > 0)
+                        {
+                                LOG(TAG_PIGGY, "apply %u entries at sink", (unsigned)hdr.piggy_len);
                         }
                         uint8_t i;
                         for (i = 0; i < hdr.piggy_len; i++)
                         {
-                                memcpy(&tc, packetbuf_dataptr() + sizeof(tree_connection) * i, sizeof(tree_connection));
+                                memcpy(&tc, packetbuf_dataptr() + sizeof(tree_connection) * i,
+                                       sizeof(tree_connection));
                                 dict_add(&conn->routing_table, tc.node, tc.parent);
                         }
                         packetbuf_hdrreduce(sizeof(tree_connection) * hdr.piggy_len);
@@ -287,15 +342,16 @@ void forward_upward_data(my_collect_conn *conn, const linkaddr_t *sender)
         else
         {
                 hdr.hops = hdr.hops + 1;
-                if (PIGGYBACKING == 1 && !check_address_in_piggyback_block(hdr.piggy_len, linkaddr_node_addr))
+                if (PIGGYBACKING == 1 &&
+                    !check_address_in_piggyback_block(hdr.piggy_len, linkaddr_node_addr))
                 {
                         packetbuf_hdralloc(sizeof(tree_connection));
                         packetbuf_compact();
                         tree_connection tc = {.node = linkaddr_node_addr, .parent = conn->parent};
                         hdr.piggy_len = hdr.piggy_len + 1;
 
-                        printf("Adding tree_connection to piggyinfo: key %02x:%02x value: %02x:%02x\n",
-                               tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]);
+                        LOG(TAG_PIGGY, "append (node=%02x:%02x parent=%02x:%02x)",
+                            tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]);
 
                         memcpy(packetbuf_hdrptr(), packetbuf_dataptr(), sizeof(enum packet_type));
                         memcpy(packetbuf_hdrptr() + sizeof(enum packet_type),
@@ -312,13 +368,14 @@ void forward_upward_data(my_collect_conn *conn, const linkaddr_t *sender)
         }
 }
 
-void forward_downward_data(my_collect_conn *conn, const linkaddr_t *sender)
+void forward_downward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
 {
         (void)sender;
         linkaddr_t addr;
         downward_data_packet_header hdr;
 
-        memcpy(&hdr, packetbuf_dataptr() + sizeof(enum packet_type), sizeof(downward_data_packet_header));
+        memcpy(&hdr, packetbuf_dataptr() + sizeof(enum packet_type),
+               sizeof(downward_data_packet_header));
         memcpy(&addr, packetbuf_dataptr() + sizeof(enum packet_type) + sizeof(downward_data_packet_header),
                sizeof(linkaddr_t));
 
@@ -326,9 +383,11 @@ void forward_downward_data(my_collect_conn *conn, const linkaddr_t *sender)
         {
                 if (hdr.path_len == 1)
                 {
-                        printf("PATH COMPLETE: Node %02x:%02x delivers packet from sink\n",
-                               linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
-                        packetbuf_hdrreduce(sizeof(enum packet_type) + sizeof(downward_data_packet_header) + sizeof(linkaddr_t));
+                        LOG(TAG_SRDCP, "path complete at %02x:%02x; deliver",
+                            linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
+                        packetbuf_hdrreduce(sizeof(enum packet_type) +
+                                            sizeof(downward_data_packet_header) +
+                                            sizeof(linkaddr_t));
                         conn->callbacks->sr_recv(conn, hdr.hops + 1);
                 }
                 else
@@ -337,7 +396,8 @@ void forward_downward_data(my_collect_conn *conn, const linkaddr_t *sender)
                         hdr.path_len = hdr.path_len - 1;
                         enum packet_type pt = downward_data_packet;
                         memcpy(packetbuf_dataptr(), &pt, sizeof(enum packet_type));
-                        memcpy(packetbuf_dataptr() + sizeof(enum packet_type), &hdr, sizeof(downward_data_packet_header));
+                        memcpy(packetbuf_dataptr() + sizeof(enum packet_type),
+                               &hdr, sizeof(downward_data_packet_header));
                         memcpy(&addr, packetbuf_dataptr() + sizeof(enum packet_type) + sizeof(downward_data_packet_header),
                                sizeof(linkaddr_t));
                         unicast_send(&conn->uc, &addr);
@@ -345,7 +405,7 @@ void forward_downward_data(my_collect_conn *conn, const linkaddr_t *sender)
         }
         else
         {
-                printf("ERROR: Node %02x:%02x received sr message. Was meant for node %02x:%02x\n",
-                       linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1], addr.u8[0], addr.u8[1]);
+                LOG(TAG_SRDCP, "drop (for=%02x:%02x; I'm=%02x:%02x)",
+                    addr.u8[0], addr.u8[1], linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
         }
 }

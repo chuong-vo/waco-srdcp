@@ -1,39 +1,72 @@
-[03:56:15 - AWT-EventQueue-1] [Cooja.java:2856] [INFO] - External tools default settings: /external_tools_linux_64.config
-[03:56:15 - AWT-EventQueue-1] [Cooja.java:2886] [INFO] - External tools user settings: /home/chuongvo/.cooja.user.properties
-[03:56:36 - Thread-1] [Simulation.java:426] [INFO] - Simulation random seed: 123456
-[03:56:36 - Thread-1] [CompileContiki.java:140] [INFO] - > make example-runicast-srdcp.sky TARGET=sky 
-[03:56:36 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
-[03:56:37 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
-[03:56:37 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
-[03:56:37 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
-[03:56:37 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
-[03:56:37 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
-[03:56:37 - Thread-1] [Visualizer.java:256] [INFO] - Registered external visualizer: org.contikios.cooja.plugins.skins.DGRMVisualizerSkin
-[03:56:37 - Thread-1] [TimeLine.java:568] [INFO] - Zoom level: 500.0 microseconds/pixel 
-[03:57:03 - Thread-2] [Simulation.java:255] [INFO] - Simulation main loop started, system time: 1756353423244
-[04:01:28 - Thread-2] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
-[04:01:28 - Thread-2] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
-[04:01:28 - Thread-2] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
-[04:01:28 - Thread-2] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
-[04:02:35 - Thread-2] [Simulation.java:314] [INFO] - Simulation main loop stopped, system time: 1756353755468	Duration: 332224 ms	Simulated time 3019810 ms	Ratio 9.08968045655943
-[04:02:51 - Thread-3] [Simulation.java:255] [INFO] - Simulation main loop started, system time: 1756353771694
-[04:03:15 - Thread-3] [Simulation.java:314] [INFO] - Simulation main loop stopped, system time: 1756353795245	Duration: 23551 ms	Simulated time 3589011 ms	Ratio 152.39314678782216
-[04:12:36 - Thread-4] [Simulation.java:426] [INFO] - Simulation random seed: 123456
-[04:12:36 - Thread-4] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:12:36 - Thread-4] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:12:36 - Thread-4] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:12:36 - Thread-4] [TimeLine.java:568] [INFO] - Zoom level: 20.0 microseconds/pixel 
-[04:13:07 - Thread-5] [Simulation.java:426] [INFO] - Simulation random seed: 123456
-[04:13:07 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:13:07 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:13:07 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:13:07 - Thread-5] [TimeLine.java:568] [INFO] - Zoom level: 20.0 microseconds/pixel 
-[04:13:09 - Thread-6] [Simulation.java:255] [INFO] - Simulation main loop started, system time: 1756354389310
-[04:13:16 - Thread-6] [Simulation.java:314] [INFO] - Simulation main loop stopped, system time: 1756354396767	Duration: 7457 ms	Simulated time 415622 ms	Ratio 55.735818693844706
-[04:13:28 - Thread-7] [Simulation.java:426] [INFO] - Simulation random seed: 123456
-[04:13:28 - Thread-7] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:13:28 - Thread-7] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:13:28 - Thread-7] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco/example-runicast.sky
-[04:13:28 - Thread-7] [TimeLine.java:568] [INFO] - Zoom level: 20.0 microseconds/pixel 
-[04:13:31 - Thread-8] [Simulation.java:255] [INFO] - Simulation main loop started, system time: 1756354411852
-[04:15:27 - Thread-8] [Simulation.java:314] [INFO] - Simulation main loop stopped, system time: 1756354527558	Duration: 115706 ms	Simulated time 106903 ms	Ratio 0.923919243600159
+[07:18:43 - AWT-EventQueue-1] [Cooja.java:2856] [INFO] - External tools default settings: /external_tools_linux_64.config
+[07:18:43 - AWT-EventQueue-1] [Cooja.java:2886] [INFO] - External tools user settings: /home/chuongvo/.cooja.user.properties
+[07:18:47 - Thread-1] [Simulation.java:426] [INFO] - Simulation random seed: 123456
+[07:18:47 - Thread-1] [CompileContiki.java:140] [INFO] - > make example-runicast-srdcp.sky TARGET=sky 
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:47 - Thread-1] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:18:48 - Thread-1] [Visualizer.java:256] [INFO] - Registered external visualizer: org.contikios.cooja.plugins.skins.DGRMVisualizerSkin
+[07:18:48 - Thread-1] [TimeLine.java:568] [INFO] - Zoom level: 500.0 microseconds/pixel 
+[07:18:49 - Thread-1] [ScriptRunner.java:430] [INFO] - Test script deactivated
+[07:18:53 - Thread-3] [Simulation.java:255] [INFO] - Simulation main loop started, system time: 1756624733237
+[07:19:27 - Thread-3] [Simulation.java:314] [INFO] - Simulation main loop stopped, system time: 1756624767672	Duration: 34435 ms	Simulated time 33245 ms	Ratio 0.965442137360244
+[07:19:42 - Thread-4] [Simulation.java:255] [INFO] - Simulation main loop started, system time: 1756624782042
+[07:20:09 - Thread-4] [Simulation.java:314] [INFO] - Simulation main loop stopped, system time: 1756624809826	Duration: 27784 ms	Simulated time 59861 ms	Ratio 2.1545133890008636
+[07:56:28 - AWT-EventQueue-1] [ScriptRunner.java:430] [INFO] - Test script deactivated
+[07:56:28 - Thread-5] [Simulation.java:426] [INFO] - Simulation random seed: 123456
+[07:56:28 - Thread-5] [CompileContiki.java:140] [INFO] - > make example-runicast-srdcp.sky TARGET=sky 
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [MspMote.java:235] [INFO] - Loading firmware from: /home/chuongvo/waco/examples/waco-srdcp/example-runicast-srdcp.sky
+[07:56:28 - Thread-5] [TimeLine.java:568] [INFO] - Zoom level: 500.0 microseconds/pixel 
+[07:56:29 - Thread-5] [ScriptRunner.java:430] [INFO] - Test script deactivated
+[07:56:31 - Thread-6] [Simulation.java:255] [INFO] - Simulation main loop started, system time: 1756626991516
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:34 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:35 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:35 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:35 - Thread-6] [WakeupRadio.java:124] [FATAL] - WUR: corrupted due to interference
+[07:56:47 - Thread-6] [Simulation.java:314] [INFO] - Simulation main loop stopped, system time: 1756627007287	Duration: 15771 ms	Simulated time 126467 ms	Ratio 8.018958848519434

@@ -9,7 +9,7 @@
   <project EXPORT="discard">[APPS_DIR]/radiologger-headless</project>
   <simulation>
     <title>waco-srdcp</title>
-    <speedlimit>10.0</speedlimit>
+    <speedlimit>1.0</speedlimit>
     <randomseed>123456</randomseed>
     <motedelay_us>1000000</motedelay_us>
     <radiomedium>
@@ -254,7 +254,7 @@
   <plugin>
     org.contikios.cooja.plugins.LogListener
     <plugin_config>
-      <filter>ID:5</filter>
+      <filter />
       <formatted_time />
       <coloring />
     </plugin_config>
