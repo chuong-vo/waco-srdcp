@@ -142,9 +142,9 @@ int find_route(my_collect_conn *conn, const linkaddr_t *dest)
                         return 0;
                 }
                 path_len++;
-        } while (!linkaddr_cmp(&parent, &sink_addr) && path_len < 10);
+        } while (!linkaddr_cmp(&parent, &sink_addr) && path_len < MAX_PATH_LENGTH);
 
-        if (path_len > 10)
+        if (path_len > MAX_PATH_LENGTH)
         {
                 // path too long
                 printf("PATH ERROR: Path too long for destination node: %02x:%02x\n",

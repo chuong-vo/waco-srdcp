@@ -53,7 +53,7 @@
 #define NEI_PRINT_PERIOD (60 * CLOCK_SECOND)
 #define PDR_PRINT_PERIOD (60 * CLOCK_SECOND)
 
-static const linkaddr_t SINK_ADDR = {{0x01, 0x00}};
+// static const linkaddr_t sink_addr = {{0x01, 0x00}};
 
 /*==================== App payload ====================*/
 typedef struct
@@ -363,7 +363,7 @@ static void pdr_dl_print_csv(void)
   APP_LOG("CSV,PDR_DL,local=%02x:%02x,%lu,%02x:%02x,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02x:%02x,%u\n",
           linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
           (unsigned long)(clock_time() / CLOCK_SECOND),
-          SINK_ADDR.u8[0], SINK_ADDR.u8[1],
+          sink_addr.u8[0], sink_addr.u8[1],
           pdr_dl.first_seq, pdr_dl.last_seq,
           (unsigned long)pdr_dl.received, (unsigned long)pdr_dl.gaps, (unsigned long)pdr_dl.dups,
           (unsigned long)expected,
@@ -558,7 +558,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
   powertrace_start(CLOCK_SECOND * 10);
   csv_print_headers_once();
 
-  if (linkaddr_cmp(&linkaddr_node_addr, &SINK_ADDR))
+  if (linkaddr_cmp(&linkaddr_node_addr, &sink_addr))
   {
     /*==================== SINK ====================*/
     APP_LOG("APP-ROLE[SINK]: started (local=%02x:%02x)\n",

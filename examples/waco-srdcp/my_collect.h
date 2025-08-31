@@ -23,8 +23,8 @@
 #define RSSI_THRESHOLD -95
 #define MAX_RETRANSMISSIONS 1
 
-static const linkaddr_t sink_addr = {{0x01, 0x00}}; // node 1 will be our sink
-
+// static const linkaddr_t sink_addr = {{0x01, 0x00 } }; // node 1 will be our sink
+extern const linkaddr_t sink_addr;
 enum packet_type
 {
         upward_data_packet = 0,

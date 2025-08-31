@@ -23,7 +23,7 @@
 #define TAG_UL "UL"
 
 #define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
-
+const linkaddr_t sink_addr = {{0x01, 0x00}};
 /*--------------------------------------------------------------------------------------*/
 /* Forward declarations (for clean initialization order) */
 void beacon_timer_cb(void *ptr);
