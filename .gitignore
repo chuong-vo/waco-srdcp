@@ -1,0 +1,40 @@
+
+---
+
+### `.gitignore` (drop in repo root)
+
+```gitignore
+# Build artifacts
+*.o
+*.d
+*.a
+*.out
+*.map
+*.elf
+*.bin
+*.hex
+
+# Contiki / Cooja
+*.sky
+*.z1
+obj_*/
+build*/
+*.class
+*.jar
+*.cooja
+*.csc.backup
+
+# Logs & temp
+COOJA.log
+log.log
+log*.log
+*.csv
+*.tmp
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*~
+
