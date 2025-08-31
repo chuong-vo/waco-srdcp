@@ -23,7 +23,7 @@
 #define RSSI_THRESHOLD -95
 #define MAX_RETRANSMISSIONS 1
 
-static const linkaddr_t sink_addr = {{0x01, 0x00}}; // node 1 will be our sink
+#//static const linkaddr_t sink_addr = {{0x01, 0x00}}; // node 1 will be our sink
 
 enum packet_type
 {
@@ -154,9 +154,10 @@ typedef struct downward_data_packet_header downward_data_packet_header;
  * The app may ignore this by not implementing the symbol; a weak
  * default definition is provided in my_collect.c.
  * ------------------------------------------------------------------ */
-void srdcp_app_beacon_observed(const linkaddr_t *sender,
-                               uint16_t metric,
-                               int16_t rssi,
-                               uint8_t lqi);
+
+__attribute__((weak)) void srdcp_app_beacon_observed(const linkaddr_t *sender,
+                                                     uint16_t metric,
+                                                     int16_t rssi,
+                                                     uint8_t lqi);
 
 #endif // MY_COLLECT_H

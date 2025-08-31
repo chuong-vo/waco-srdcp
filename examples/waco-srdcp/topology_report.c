@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include "my_collect.h"
 #include "routing_table.h"
-
+#include <string.h>
+#include <stdint.h>
 /* ------------------------------------ LOG Tags / Helper ------------------------------------ */
 #define TAG_TOPO "TOPO"
 #define TAG_ROUTING "ROUTING"

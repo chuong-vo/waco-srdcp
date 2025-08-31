@@ -23,7 +23,7 @@
 #include "net/netstack.h"
 #include "core/net/linkaddr.h"
 #include "powertrace.h"
-
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include "my_collect.h"

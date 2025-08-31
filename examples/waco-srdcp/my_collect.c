@@ -40,8 +40,8 @@ void forward_downward_data(struct my_collect_conn *conn, const linkaddr_t *sende
 
 /*--------------------------------------------------------------------------------------*/
 /* Callback structures */
-struct broadcast_callbacks bc_cb = {.recv = bc_recv};
-struct unicast_callbacks uc_cb = {.recv = uc_recv};
+static struct broadcast_callbacks bc_cb = {.recv = bc_recv};
+static struct unicast_callbacks uc_cb = {.recv = uc_recv};
 
 /* ------------------------------------------------------------------------------------- */
 
