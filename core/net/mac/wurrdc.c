@@ -27,7 +27,7 @@
 
 /* ===== Friendly logging toggle (no behavior change) ===== */
 #ifndef LOG_WUR
-#define LOG_WUR 1 /* 1: enable friendly logs; 0: disable */
+#define LOG_WUR 0 /* 1: enable friendly logs; 0: disable */
 #endif
 
 #if LOG_WUR
