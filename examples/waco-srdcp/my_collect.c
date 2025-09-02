@@ -21,8 +21,21 @@
 #define TAG_PIGGY "PIGGY"
 #define TAG_SRDCP "SRDCP"
 #define TAG_UL "UL"
+/* ===== Logging toggle for my_collect.c ===== */
+#ifndef LOG_COLLECT
+#define LOG_COLLECT 0 /* 1: bật log; 0: tắt log */
+#endif
 
+#if LOG_COLLECT
 #define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
+#else
+#define LOG(tag, fmt, ...) \
+        do                 \
+        {                  \
+        } while (0)
+#endif
+
+// #define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
 const linkaddr_t sink_addr = {{0x01, 0x00}};
 /*--------------------------------------------------------------------------------------*/
 /* Forward declarations (for clean initialization order) */

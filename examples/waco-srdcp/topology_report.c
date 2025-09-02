@@ -7,6 +7,19 @@
 /* ------------------------------------ LOG Tags / Helper ------------------------------------ */
 #define TAG_TOPO "TOPO"
 #define TAG_ROUTING "ROUTING"
+/* ===== Logging toggle for my_collect.c ===== */
+#ifndef LOG_TOPO
+#define LOG_TOPO 0 /* 1: bật log; 0: tắt log */
+#endif
+
+#if LOG_TOPO
+#define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
+#else
+#define LOG(tag, fmt, ...) \
+        do                 \
+        {                  \
+        } while (0)
+#endif
 
 #define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
 

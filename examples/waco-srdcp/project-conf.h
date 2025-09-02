@@ -10,8 +10,8 @@
 /* ===== Stack selection ===== */
 #undef NETSTACK_CONF_RDC
 // #define NETSTACK_CONF_RDC wurrdc_driver /* WaCo: Wake-up RDC */
-#define NETSTACK_CONF_RDC wurrdc_driver
-// #define NETSTACK_CONF_RDC contikimac_driver
+// #define NETSTACK_CONF_RDC wurrdc_driver
+#define NETSTACK_CONF_RDC contikimac_driver
 #undef NETSTACK_CONF_MAC
 #define NETSTACK_CONF_MAC csma_driver /* CSMA cho main radio */
 #undef NETSTACK_CONF_FRAMER

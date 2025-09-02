@@ -27,10 +27,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "my_collect.h"
+#include "shell.h"
+#include "serial-shell.h"
+#include "collect-view.h"
 
 /* ===== Application logging toggle (does not change behavior) ===== */
 #ifndef LOG_APP
-#define LOG_APP 1 /* 1: enable all app logs (including CSV); 0: silence */
+#define LOG_APP 0 /* 1: enable all app logs (including CSV); 0: silence */
 #endif
 #if LOG_APP
 #define APP_LOG(...) printf(__VA_ARGS__)
@@ -183,7 +186,7 @@ static linkaddr_t last_parent = {{0, 0}};
 static uint8_t have_last_parent = 0;
 
 /* Sink tracks last observed hops per originator (by low byte) */
-static uint8_t last_hops_by_node[256];
+static uint8_t last_hops_by_node[64];
 static uint8_t last_hops_inited = 0;
 
 /*==================== PDR UL at SINK (per source) ====================*/
@@ -545,11 +548,40 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
   static int ret;
 
   /* DL seq per-destination at sink (index by low byte) */
-  static uint16_t dl_seq_per_dest[256] = {0};
+  static uint16_t dl_seq_per_dest[64] = {0};
 
   int i;
 
   PROCESS_BEGIN();
+
+  serial_shell_init();
+  shell_blink_init();
+
+#if WITH_COFFEE
+  shell_file_init();
+  shell_coffee_init();
+#endif /* WITH_COFFEE */
+
+  /* shell_download_init(); */
+  /* shell_rime_sendcmd_init(); */
+  /* shell_ps_init(); */
+  shell_reboot_init();
+  shell_rime_init();
+  shell_rime_netcmd_init();
+  /* shell_rime_ping_init(); */
+  /* shell_rime_debug_init(); */
+  /* shell_rime_debug_runicast_init(); */
+  shell_powertrace_init();
+  /* shell_base64_init(); */
+  shell_text_init();
+  shell_time_init();
+  /* shell_sendtest_init(); */
+
+#if CONTIKI_TARGET_SKY
+  shell_sky_init();
+#endif /* CONTIKI_TARGET_SKY */
+
+  shell_collect_view_init();
 
   /* init neighbor table */
   for (i = 0; i < NEI_MAX; i++)
