@@ -18,8 +18,6 @@
   - `UL`: PDR tại sink, theo source.
   - `DL`: PDR tại node đích, theo dest/seq.
   - Bảng láng giềng: **hops ↑, RSSI ↓, last_seen ↓**.
-  - Thay đổi tuyến/parent/metric/retries.
-  - Hook beacon SRDCP: `metric`, `RSSI`, `LQI`.
 - **Wake-up Radio**: có thể bật log WUR (mặc định tắt để tránh nhiễu powertrace).
 
 ---
@@ -30,8 +28,8 @@ examples/waco-srdcp/
   example-runicast-srdcp.c    # App UL/DL + log CSV + powertrace
   my_collect.c / my_collect.h # API collect + hook quan sát beacon
   topology_report.c           # In bảng láng giềng/topology
-  routing_table.c             # Xây tuyến nguồn (source route) cho DL
-  project-conf.h              # Chọn wurrdc_driver, channel, log toggles
+  routing_table.c             # Xây định tuyến nguồn (source route) cho DL
+  project-conf.h              # Chọn wurrdc_driver, channel, log toggles, ...
 
 core/net/mac/
   wurrdc.c                    # LOG_WUR macro (không dùng wur_trace.h)
@@ -46,7 +44,7 @@ core/net/mac/
 - Ubuntu 20.04+ (đã test với 24.04).
 - Java + Ant để chạy **COOJA** (`tools/cooja`).
 - MSP430 toolchain (build cho TARGET=sky).
-- Contiki có tích hợp WaCo; source SRDCP nằm cùng repo hoặc kèm trong ví dụ.
+- Contiki có tích hợp WaCo
 
 ---
 
@@ -72,7 +70,8 @@ Trong COOJA:
 ---
 
 ## 5) Tuỳ chọn cấu hình (quan trọng)
-- **Bật/Tắt log WuR** (mặc định **tắt** để không nhiễu powertrace):
+- **Bật/Tắt log** (mặc định **tắt** để không nhiễu powertrace):
+- **Ví dụ**
   - Trong `project-conf.h` thêm:
     ```c
     #define LOG_WUR 1
@@ -81,12 +80,17 @@ Trong COOJA:
     ```bash
     make example-runicast-srdcp.sky TARGET=sky CFLAGS='-DLOG_WUR=1'
     ```
+- **Các macro log hỗ trợ**
+  - LOG_TOPO: log báo cáo topology (neighbor table, đường đi, route info).
+  - LOG_APP: log ứng dụng (luồng dữ liệu từ app, sự kiện chính trong demo).
+  - LOG_COLLECT: log dữ liệu thu thập (upward traffic từ node → sink).
+  - LOG_WUR: log hoạt động Wake-up Radio (bật/tắt, gói wake-up).
 - **Kỳ gửi & số node DL**: trong `example-runicast-srdcp.c`
   - `MSG_PERIOD` (chu kỳ gửi UL)
+  - `SR_MSG_PERIOD`
   - `APP_NODES` (số node quay vòng DL hoặc danh sách đích)
 - **Độ dài đường đi tối đa**: `MAX_PATH_LENGTH` trong `routing_table.c`.
-- **Chu kỳ in bảng láng giềng / PDR**: `NEI_PRINT_PERIOD`, `PDR_PRINT_PERIOD` (nếu bạn có define).
-- **Kênh radio, TX power, …**: chỉnh trong `project-conf.h` cho thống nhất mô phỏng.
+- **Chu kỳ in bảng láng giềng / PDR**: `NEI_PRINT_PERIOD`, `PDR_PRINT_PERIOD`.
 
 ---
 
