@@ -120,75 +120,12 @@ Trong COOJA:
 ## 9) Sơ đồ
 
 ### 9.1 Kiến trúc bậc cao
-```plantuml
-@startuml
-skinparam componentStyle rectangle
-skinparam shadowing false
-skinparam monochrome true
+<img width="860" height="584" alt="image" src="https://github.com/user-attachments/assets/68d432d0-77c6-4209-8037-3f25ced58fa9" />
 
-package "Contiki Node" {
-  [App: example-runicast-srdcp.c] as APP
-  [Collect API\nmy_collect.c/.h] as COL
-  [Topology Report\ntopology_report.c] as TOPO
-  [Source Route Builder\nrouting_table.c] as RT
-  [SRDCP Core] as SR
-  [RDC: wurrdc.c] as WURRDC
-  [Radio Driver] as RADIO
-
-  APP -down-> COL
-  APP -down-> TOPO
-  APP -down-> RT
-  COL -down-> SR
-  SR -down-> WURRDC
-  WURRDC -down-> RADIO
-}
-
-node "Sink (1.0)" as SINK
-node "Node i (2.0..N)" as NODES
-
-APP -right-> SINK : DL (source route)
-NODES -left-> APP : UL (many-to-one)
-
-note right of COL
- Hook beacon:
- srdcp_app_beacon_observed()
- updates neighbor table
-end note
-
-note bottom of WURRDC
- LOG_WUR macro
- (printf-based logging)
-end note
-@enduml
-```
 
 ### 9.2 Trình tự UL/DL + Wake-up
-```plantuml
-@startuml
-skinparam sequenceMessageAlign center
-skinparam monochrome true
+<img width="633" height="605" alt="image" src="https://github.com/user-attachments/assets/3ef0e478-eadd-4e0c-bf16-b1f4012475fe" />
 
-participant "Node (WuR + Main Radio)" as N
-participant "Sink (1.0)" as S
-
-== Upward (UL) ==
-N -> S : Data (runicast via SRDCP parent chain)
-S -> S : Update UL PDR / powertrace
-
-== Beacon ==
-S --> N : SRDCP Beacon (metric, RSSI, LQI)
-N -> N : Update neighbor table (hop metric)
-
-== Downward (DL) ==
-S -> S : Build source route (routing_table.c)
-S -> N : DL packet (SR header)
-N -> N : Update DL PDR / log
-
-== Wake-up Radio ==
-S --> N : WuS (pattern match)
-N -> N : Wake main radio\nthen receive data
-@enduml
-```
 
 ---
 
@@ -201,46 +138,6 @@ N -> N : Wake main radio\nthen receive data
 
 ---
 
-## 11) Vệ sinh repo (.gitignore gợi ý)
-```gitignore
-# Build artifacts
-*.o
-*.d
-*.a
-*.out
-*.map
-*.elf
-*.bin
-*.hex
-
-# Contiki / COOJA
-*.sky
-*.z1
-obj_*/
-build*/
-*.class
-*.jar
-*.cooja
-*.csc.backup
-
-# Logs & temp
-COOJA.log
-log.log
-log*.log
-*.csv
-*.tmp
-
-# IDE / OS
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*~
-```
-
----
-
-## 12) Bản quyền & nguồn
+## 12) Nguồn tham khảo
 - WaCo: https://github.com/waco-sim/waco  
 - SRDCP: https://github.com/StefanoFioravanzo/SRDCP  
-Repo này tuân theo giấy phép của các dự án gốc (xem LICENSE tương ứng nếu kèm theo).
