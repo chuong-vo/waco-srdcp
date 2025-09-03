@@ -1,6 +1,5 @@
 # WaCo × SRDCP – Runicast Example for Contiki/COOJA
 
-> **EN TL;DR:** Minimal integration of **SRDCP** (Source-Routing Data Collection Protocol) with **WaCo** (Wake-up Radio COOJA extension) on Contiki (TARGET=sky) focused on internship report experiments: UL/DL PDR, neighbor table, route changes, and energy (powertrace). Sink is **Node ID = 1** (addr 1.0).
 
 ## Mục tiêu
 - Tích hợp **SRDCP** vào **WaCo** chạy trên Contiki (TARGET=sky).
