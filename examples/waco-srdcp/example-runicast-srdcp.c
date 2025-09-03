@@ -27,9 +27,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "my_collect.h"
-#include "shell.h"
-#include "serial-shell.h"
-#include "collect-view.h"
 
 /* ===== Application logging toggle (does not change behavior) ===== */
 #ifndef LOG_APP
@@ -40,12 +37,20 @@
 #else
 #define APP_LOG(...)
 #endif
-
+/* ===== Collect-View toggle ===== */
+#ifndef ENABLE_COLLECT_VIEW
+#define ENABLE_COLLECT_VIEW 0 /* 1: bật collect-view-shell; 0: tắt */
+#endif
+#if ENABLE_COLLECT_VIEW
+#include "shell.h"
+#include "serial-shell.h"
+#include "collect-view.h"
+#endif
 /*==================== App configuration ====================*/
 #define APP_UPWARD_TRAFFIC 1   /* Nodes -> Sink */
 #define APP_DOWNWARD_TRAFFIC 1 /* Sink -> Nodes (source routing) */
 
-#define APP_NODES 10 /* rotate SR dest 2..APP_NODES */
+#define APP_NODES 6 /* rotate SR dest 2..APP_NODES */
 
 #define MSG_PERIOD (20 * CLOCK_SECOND)    /* uplink period */
 #define SR_MSG_PERIOD (10 * CLOCK_SECOND) /* downlink period at sink */
@@ -556,7 +561,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
 
   serial_shell_init();
   shell_blink_init();
-
+#if ENABLE_COLLECT_VIEW
 #if WITH_COFFEE
   shell_file_init();
   shell_coffee_init();
@@ -582,7 +587,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
 #endif /* CONTIKI_TARGET_SKY */
 
   shell_collect_view_init();
-
+#endif
   /* init neighbor table */
   for (i = 0; i < NEI_MAX; i++)
     nei_tab[i].used = 0;

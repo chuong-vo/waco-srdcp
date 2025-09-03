@@ -10,11 +10,11 @@ all: $(CONTIKI_PROJECT)
 # Nếu 3 file SRDCP nằm cùng thư mục với Makefile:
 PROJECT_SOURCEFILES += my_collect.c routing_table.c topology_report.c
 
-# Nếu bạn để SRDCP trong thư mục con (ví dụ ./srdcp/), bật 2 dòng dưới và
-# đổi đường dẫn tệp cho đúng:
-# PROJECTDIRS        += srdcp
-# PROJECT_SOURCEFILES += srdcp/my_collect.c srdcp/routing_table.c srdcp/topology_report.c
-
+# CFLAG += -DENABLE_COLLECT_VIEW = 1
+# CFLAG += -DLOG_TOPO = 1
+# CFLAG += -DLOG_APP = 1
+# CFLAG += -DLOG_COLLECT = 1
+# CFLAG += -DLOG_WUR = 1 
 # ---- Config ----
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
 
