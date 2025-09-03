@@ -11,10 +11,10 @@ all: $(CONTIKI_PROJECT)
 PROJECT_SOURCEFILES += my_collect.c routing_table.c topology_report.c
 
 # (Nếu muốn bật các flag này thì dùng CFLAGS và KHÔNG có dấu cách quanh '=')
-CFLAGS += -DENABLE_COLLECT_VIEW=1
-# CFLAGS += -DLOG_TOPO=1
-# CFLAGS += -DLOG_APP=1
-# CFLAGS += -DLOG_COLLECT=1
+# CFLAGS += -DENABLE_COLLECT_VIEW=1
+CFLAGS += -DLOG_TOPO=1
+CFLAGS += -DLOG_APP=1
+CFLAGS += -DLOG_COLLECT=1
 CFLAGS += -DLOG_WUR=1
 
 # ---- Config ----
