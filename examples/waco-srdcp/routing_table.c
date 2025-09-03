@@ -51,32 +51,42 @@ linkaddr_t dict_find(TreeDict *dict, const linkaddr_t *key)
         return ret;
 }
 
+/* ---- PATCH START (routing_table.c: dict_add) ---- */
 int dict_add(TreeDict *dict, const linkaddr_t key, linkaddr_t value)
 {
-        /*
-           Adds a new entry to the Dictionary
-           In case the key already exists, it replaces the value
-         */
-        printf("Dictionary add: key: %02x:%02x value: %02x:%02x\n",
-               key.u8[0], key.u8[1], value.u8[0], value.u8[1]);
-        int idx = dict_find_index(dict, key);
-        if (idx != -1)
-        { // Element already present, update its value
-                linkaddr_copy(&dict->entries[idx].value, &value);
+        /* Chuẩn hoá: byte cao = 0 để tránh rác/endianness */
+        linkaddr_t k = key;
+        linkaddr_t v = value;
+        k.u8[1] = 0x00;
+        v.u8[1] = 0x00;
+        /* Loại bỏ entry rỗng (node 00 hoặc parent 00) */
+        if (k.u8[0] == 0 || v.u8[0] == 0)
+        {
+                /* printf("Dictionary drop: key %02x:%02x value %02x:%02x\n", k.u8[0], k.u8[1], v.u8[0], v.u8[1]); */
                 return 0;
         }
-        // Try to insert new element
+        printf("Dictionary add: key: %02x:%02x value: %02x:%02x\n",
+               k.u8[0], k.u8[1], v.u8[0], v.u8[1]);
+
+        int idx = dict_find_index(dict, k);
+        if (idx != -1)
+        { /* cập nhật value */
+                linkaddr_copy(&dict->entries[idx].value, &v);
+                return 0;
+        }
+        /* chèn mới */
         if (dict->len == MAX_NODES)
         {
                 printf("Dictionary is full. MAX_NODES cap reached. Proposed key: %02x:%02x value: %02x:%02x\n",
-                       key.u8[0], key.u8[1], value.u8[0], value.u8[1]);
+                       k.u8[0], k.u8[1], v.u8[0], v.u8[1]);
                 return -1;
         }
-        linkaddr_copy(&dict->entries[dict->len].key, &key);
-        linkaddr_copy(&dict->entries[dict->len].value, &value);
+        linkaddr_copy(&dict->entries[dict->len].key, &k);
+        linkaddr_copy(&dict->entries[dict->len].value, &v);
         dict->len++;
         return 0;
 }
+/* ---- PATCH END ---- */
 
 // -------------------------------------------------------------------------------------------------
 //                                      ROUTING TABLE MANAGEMENT

@@ -561,7 +561,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
 
   serial_shell_init();
   shell_blink_init();
-#if ENABLE_COLLECT_VIEW
+// #if ENABLE_COLLECT_VIEW
 #if WITH_COFFEE
   shell_file_init();
   shell_coffee_init();
@@ -570,7 +570,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
   /* shell_download_init(); */
   /* shell_rime_sendcmd_init(); */
   /* shell_ps_init(); */
-  shell_reboot_init();
+  // shell_reboot_init();
   shell_rime_init();
   shell_rime_netcmd_init();
   /* shell_rime_ping_init(); */
@@ -587,7 +587,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
 #endif /* CONTIKI_TARGET_SKY */
 
   shell_collect_view_init();
-#endif
+  // #endif
   /* init neighbor table */
   for (i = 0; i < NEI_MAX; i++)
     nei_tab[i].used = 0;

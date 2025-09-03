@@ -144,13 +144,24 @@ void deliver_topology_report_to_sink(my_collect_conn *conn)
         LOG(TAG_TOPO, "[SINK]: received %u topology report(s)", (unsigned)len);
 
         uint8_t i;
+        /* ---- PATCH START (topology_report.c) ---- */
         for (i = 0; i < len; i++)
         {
                 memcpy(&tc, packetbuf_dataptr() + sizeof(tree_connection) * i, sizeof(tree_connection));
-                LOG(TAG_ROUTING, "[SINK]: set parent (node=%02x:%02x -> parent=%02x:%02x)",
-                    tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]);
+                /* vệ sinh byte cao và bỏ entry rác */
+                tc.node.u8[1] = 0x00;
+                tc.parent.u8[1] = 0x00;
+                if (tc.node.u8[0] == 0 || tc.parent.u8[0] == 0)
+                {
+                        /* printf("[TOPO] drop invalid entry node=%02x:%02x parent=%02x:%02x\n",
+                           tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]); */
+                        continue;
+                }
+                printf("Sink: received topology report. Updating parent of node %02x:%02x\n",
+                       tc.node.u8[0], tc.node.u8[1]);
                 dict_add(&conn->routing_table, tc.node, tc.parent);
         }
+        /* ---- PATCH END ---- */
 
         print_dict_state(&conn->routing_table);
 }
