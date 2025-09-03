@@ -15,7 +15,7 @@ CFLAGS += -DENABLE_COLLECT_VIEW=1
 # CFLAGS += -DLOG_TOPO=1
 # CFLAGS += -DLOG_APP=1
 # CFLAGS += -DLOG_COLLECT=1
-# CFLAGS += -DLOG_WUR=1
+CFLAGS += -DLOG_WUR=1
 
 # ---- Config ----
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
@@ -24,10 +24,3 @@ CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
 APPS = serial-shell powertrace collect-view
 
 include $(CONTIKI)/Makefile.include
-Makefile
-        modified:   example-runicast-srdcp.c
-        modified:   example-waco-srdcp.csc
-        modified:   my_collect.c
-        modified:   project-conf.h
-        modified:   routing_table.c
-        modified:   topology_report.c
