@@ -81,10 +81,10 @@ Trong COOJA:
     make example-runicast-srdcp.sky TARGET=sky CFLAGS='-DLOG_WUR=1'
     ```
 - **Các macro log hỗ trợ**
-  - LOG_TOPO: log báo cáo topology (neighbor table, đường đi, route info).
-  - LOG_APP: log ứng dụng (luồng dữ liệu từ app, sự kiện chính trong demo).
-  - LOG_COLLECT: log dữ liệu thu thập (upward traffic từ node → sink).
-  - LOG_WUR: log hoạt động Wake-up Radio (bật/tắt, gói wake-up).
+  - `LOG_TOPO:` log báo cáo topology (neighbor table, đường đi, route info).
+  - `LOG_APP:` log ứng dụng (luồng dữ liệu từ app, sự kiện chính trong demo).
+  - `LOG_COLLECT:` log dữ liệu thu thập (upward traffic từ node → sink).
+  - `LOG_WUR:` log hoạt động Wake-up Radio (bật/tắt, gói wake-up).
 - **Kỳ gửi & số node DL**: trong `example-runicast-srdcp.c`
   - `MSG_PERIOD` (chu kỳ gửi UL)
   - `SR_MSG_PERIOD`
@@ -94,17 +94,7 @@ Trong COOJA:
 
 ---
 
-## 6) Hook beacon SRDCP (ở phía app)
-Hàm app có thể định nghĩa (hoặc dùng **stub yếu** nếu muốn build ví dụ khác mà không cần hook):
-```c
-void srdcp_app_beacon_observed(const linkaddr_t *sender,
-                               uint16_t metric, int16_t rssi, uint8_t lqi);
-```
-- Mục đích: cập nhật bảng láng giềng bằng hop/metric khi **nghe beacon** từ hàng xóm.
-
----
-
-## 7) Ghi log & thu thập số liệu
+## 6) Ghi log & thu thập số liệu
 - **Powertrace**: đã bật trong app (chu kỳ mặc định 10s).  
   Lưu log qua **Log Listener → Save to file** để phân tích năng lượng.
 - **Tag log** (gợi ý lọc):
@@ -118,7 +108,7 @@ void srdcp_app_beacon_observed(const linkaddr_t *sender,
 
 ---
 
-## 8) Quy trình thí nghiệm mẫu (gợi ý)
+## 7) Quy trình thí nghiệm mẫu (gợi ý)
 1. **Baseline**: LOG_WUR=0, N=5 nodes, `MSG_PERIOD = 30 s`, kênh 26, TX power mặc định.
 2. **Bật WUR log**: LOG_WUR=1 → so sánh độ nhiễu log lên powertrace, điều chỉnh kỳ in nếu cần.
 3. **Tăng mật độ**: N=10–15 nodes, giữ `MSG_PERIOD`, đo PDR/energy.
@@ -127,9 +117,9 @@ void srdcp_app_beacon_observed(const linkaddr_t *sender,
 
 ---
 
-## 9) Sơ đồ (PlantUML)
+## 9) Sơ đồ
 
-### 9.1 Kiến trúc mức cao
+### 9.1 Kiến trúc bậc cao
 ```plantuml
 @startuml
 skinparam componentStyle rectangle
