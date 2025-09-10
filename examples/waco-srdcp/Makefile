@@ -15,7 +15,7 @@ PROJECT_SOURCEFILES += my_collect.c routing_table.c topology_report.c
 CFLAGS += -DLOG_TOPO=1
 CFLAGS += -DLOG_APP=1
 CFLAGS += -DLOG_COLLECT=1
-CFLAGS += -DLOG_WUR=1
+CFLAGS += -DLOG_WUR=0
 
 # ---- Config ----
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"

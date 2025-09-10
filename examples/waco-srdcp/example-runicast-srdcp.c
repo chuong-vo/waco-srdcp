@@ -1,26 +1,17 @@
 /*
  * SRDCP-integrated runicast-like example for WaCo + COOJA
- * - Upward traffic (many-to-one): nodes -> sink
- * - Downward traffic (source routing): sink -> selected node
- * - Powertrace (energy accounting)
- *
- * Logging/Telemetry (CSV via printf -> Cooja Log Listener saves to file):
- * - PDR UL at SINK (per source)
- * - PDR DL at NODE (per-destination seq -> correct per-node PDR)
- * - Neighbor table sorted by hop metric (hops asc, RSSI desc, last_seen desc)
- * - Route changes, parent, metric, retries
- *
- * IMPORTANT:
- * - We keep SRDCP logic unchanged.
- * - To show hop(metric) on NODE-side neighbor table, we hook SRDCP beacon:
- *   srdcp_app_beacon_observed(sender, metric, rssi, lqi)
- *   -> add prototype in my_collect.h and call in my_collect.c (see section 2).
+ * - Upward: nodes -> sink
+ * - Downward: source routing (sink -> node)
+ * - Powertrace
+ * - Neighbor table: Hop ↑ -> PRR_eff ↓ -> RSSI ↓ -> last_seen ↓
+ *   (PRR_eff = PRR% * freshness% / 100, freshness penalizes stale entries)
  */
 
 #include "contiki.h"
 #include "lib/random.h"
 #include "net/rime/rime.h"
 #include "net/netstack.h"
+#include "net/packetbuf.h"
 #include "core/net/linkaddr.h"
 #include "powertrace.h"
 #include <stdint.h>
@@ -28,45 +19,50 @@
 #include <string.h>
 #include "my_collect.h"
 
-/* ===== Application logging toggle (does not change behavior) ===== */
+/* ===== App logging toggle ===== */
 #ifndef LOG_APP
-#define LOG_APP 0 /* 1: enable all app logs (including CSV); 0: silence */
+#define LOG_APP 0
 #endif
 #if LOG_APP
 #define APP_LOG(...) printf(__VA_ARGS__)
 #else
 #define APP_LOG(...)
 #endif
-/* ===== Collect-View toggle ===== */
+
+/* ===== Collect-View (tùy chọn) ===== */
 #ifndef ENABLE_COLLECT_VIEW
-#define ENABLE_COLLECT_VIEW 0 /* 1: bật collect-view-shell; 0: tắt */
+#define ENABLE_COLLECT_VIEW 0
 #endif
 #if ENABLE_COLLECT_VIEW
 #include "shell.h"
 #include "serial-shell.h"
 #include "collect-view.h"
 #endif
+
 /*==================== App configuration ====================*/
-#define APP_UPWARD_TRAFFIC 1   /* Nodes -> Sink */
-#define APP_DOWNWARD_TRAFFIC 1 /* Sink -> Nodes (source routing) */
+#define APP_UPWARD_TRAFFIC 1
+#define APP_DOWNWARD_TRAFFIC 1
 
-#define APP_NODES 5 /* rotate SR dest 2..APP_NODES */
+#define APP_NODES 6 /* rotate SR dest 2..APP_NODES */
 
-#define MSG_PERIOD (20 * CLOCK_SECOND)    /* uplink period */
+#define MSG_PERIOD (25 * CLOCK_SECOND)    /* uplink period */
 #define SR_MSG_PERIOD (10 * CLOCK_SECOND) /* downlink period at sink */
 #define COLLECT_CHANNEL 0xAA              /* SRDCP uses C and C+1 */
 
-#define NEI_MAX 24
+/* Neighbor print & aging */
+#define NEI_MAX 32
 #define NEI_TOPK 5
 #define NEI_PRINT_PERIOD (60 * CLOCK_SECOND)
-#define PDR_PRINT_PERIOD (60 * CLOCK_SECOND)
 
-// static const linkaddr_t sink_addr = {{0x01, 0x00}};
+/* Freshness & aging thresholds (giây) */
+#define NEI_SOFT_SEC 60  /* <= soft: freshness = 100% */
+#define NEI_HARD_SEC 150 /* >= hard: evict */
+#define PARENT_TO_SEC 45 /* riêng parent: timeout rơi cây */
 
 /*==================== App payload ====================*/
 typedef struct
 {
-  uint16_t seqn; /* UL: per-source at node; DL: per-destination at sink */
+  uint16_t seqn; /* UL per-source at node; DL per-destination at sink */
 } __attribute__((packed)) test_msg_t;
 
 /*==================== SRDCP connection ====================*/
@@ -81,12 +77,18 @@ typedef struct
   clock_time_t last_seen;
   uint16_t last_seq; /* last app seq observed (if any) */
   uint16_t metric;   /* hops to sink reported by neighbor (0xFFFF unknown) */
+  uint16_t prr;      /* % (0..100) đọc từ my_collect */
+  uint16_t prr_eff;  /* prr * freshness / 100 (tính lúc in) */
   uint8_t used;
+  uint8_t is_parent; /* flag để không evict parent */
 } nei_entry_t;
 
 static nei_entry_t nei_tab[NEI_MAX];
 
-/* Lookup or add neighbor */
+/* Sink address */
+// static const linkaddr_t sink_addr = {{0x01, 0x00}};
+
+/* Lookup or add neighbor (nếu đầy: thay entry cũ nhất) */
 static nei_entry_t *nei_lookup_or_add(const linkaddr_t *addr)
 {
   int i;
@@ -102,20 +104,27 @@ static nei_entry_t *nei_lookup_or_add(const linkaddr_t *addr)
   {
     memset(free_e, 0, sizeof(*free_e));
     linkaddr_copy(&free_e->addr, addr);
-    free_e->metric = 0xFFFF; /* unknown initially */
+    free_e->metric = 0xFFFF;
     free_e->used = 1;
     return free_e;
   }
-  /* replace oldest if full */
+  /* full: evict oldest non-parent */
   clock_time_t oldest = (clock_time_t)-1;
-  nei_entry_t *victim = &nei_tab[0];
+  nei_entry_t *victim = NULL;
   for (i = 0; i < NEI_MAX; i++)
   {
+    if (nei_tab[i].is_parent)
+      continue; /* không thay parent */
     if (nei_tab[i].last_seen < oldest)
     {
       oldest = nei_tab[i].last_seen;
       victim = &nei_tab[i];
     }
+  }
+  if (!victim)
+  {
+    /* nếu mọi entry đều là parent (gần như không thể) -> thay idx 0 */
+    victim = &nei_tab[0];
   }
   memset(victim, 0, sizeof(*victim));
   linkaddr_copy(&victim->addr, addr);
@@ -136,9 +145,10 @@ static void nei_update_from_rx(const linkaddr_t *sender, uint16_t app_seq, int m
   e->last_seq = app_seq;
   if (metric_hint >= 0)
     e->metric = (uint16_t)metric_hint;
+  e->prr = my_collect_get_prr_percent(sender);
 }
 
-/* Update from beacon hook (we receive metric and rssi/lqi explicitly) */
+/* Update from beacon hook */
 static void nei_update_from_beacon(const linkaddr_t *sender, uint16_t metric, int16_t rssi, uint8_t lqi)
 {
   nei_entry_t *e = nei_lookup_or_add(sender);
@@ -146,9 +156,68 @@ static void nei_update_from_beacon(const linkaddr_t *sender, uint16_t metric, in
   e->rssi = rssi;
   e->lqi = lqi;
   e->last_seen = clock_time();
+  e->prr = my_collect_get_prr_percent(sender);
 }
 
-/* Partial selection sort on pointers by (metric asc, RSSI desc, last_seen desc) */
+/* Refresh PRR cho tất cả entry trước khi in/sort */
+static void nei_refresh_prr_all(void)
+{
+  int i;
+  for (i = 0; i < NEI_MAX; i++)
+  {
+    if (nei_tab[i].used)
+    {
+      nei_tab[i].prr = my_collect_get_prr_percent(&nei_tab[i].addr);
+    }
+  }
+}
+
+/* Aging sweeper: evict hard-stale (trừ parent) */
+static void nei_sweep_aging(void)
+{
+  clock_time_t now = clock_time();
+  int i;
+  for (i = 0; i < NEI_MAX; i++)
+  {
+    if (!nei_tab[i].used)
+      continue;
+    clock_time_t age_ticks = now - nei_tab[i].last_seen;
+    unsigned long age_sec = (unsigned long)(age_ticks / CLOCK_SECOND);
+
+    /* cập nhật cờ parent theo trạng thái hiện tại */
+    nei_tab[i].is_parent = linkaddr_cmp(&nei_tab[i].addr, &my_collect.parent) ? 1 : 0;
+
+    if (age_sec >= NEI_HARD_SEC && !nei_tab[i].is_parent)
+    {
+      APP_LOG("CSV,NEI_EVICT,local=%02u:%02u,%lu,%02u:%02u,age=%lus,hop=%u,prr=%u,reason=HARD_STALE\n",
+              linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
+              (unsigned long)(now / CLOCK_SECOND),
+              nei_tab[i].addr.u8[0], nei_tab[i].addr.u8[1],
+              age_sec, nei_tab[i].metric, nei_tab[i].prr);
+      nei_tab[i].used = 0;
+    }
+  }
+}
+
+/* Tính freshness% (0..100) từ tuổi (giây) */
+static uint16_t freshness_percent(clock_time_t last_seen)
+{
+  clock_time_t now = clock_time();
+  unsigned long age = (unsigned long)((now - last_seen) / CLOCK_SECOND);
+  if (age <= NEI_SOFT_SEC)
+    return 100;
+  if (age >= NEI_HARD_SEC)
+    return 0;
+  /* tuyến tính không float: 100 - ((age-soft)*100)/(hard-soft) */
+  unsigned long num = (age - NEI_SOFT_SEC) * 100UL;
+  unsigned long den = (NEI_HARD_SEC - NEI_SOFT_SEC);
+  unsigned long sub = num / den;
+  if (sub > 100)
+    sub = 100;
+  return (uint16_t)(100UL - sub);
+}
+
+/* Partial selection sort pointers by Hop↑ -> PRR_eff↓ -> RSSI↓ -> last_seen↓ */
 static void nei_sorted_ptrs(nei_entry_t *ptrs[], int *out_cnt)
 {
   int i, j, cnt = 0;
@@ -156,24 +225,37 @@ static void nei_sorted_ptrs(nei_entry_t *ptrs[], int *out_cnt)
     if (nei_tab[i].used)
       ptrs[cnt++] = &nei_tab[i];
   *out_cnt = cnt;
-  /* selection-like sort up to N (full since CSV wants all) */
+
+  /* tính prr_eff trước */
+  for (i = 0; i < cnt; i++)
+  {
+    uint16_t fresh = freshness_percent(ptrs[i]->last_seen);
+    ptrs[i]->prr_eff = (uint16_t)(((uint32_t)ptrs[i]->prr * (uint32_t)fresh) / 100U);
+  }
+
+  /* selection-like sort */
   for (i = 0; i < cnt; i++)
   {
     int best = i;
     for (j = i + 1; j < cnt; j++)
     {
-      uint16_t mi = ptrs[best]->metric;
-      uint16_t mj = ptrs[j]->metric;
-      if (mj < mi)
+      uint16_t hop_b = ptrs[best]->metric == 0xFFFF ? 0x7FFF : ptrs[best]->metric;
+      uint16_t hop_j = ptrs[j]->metric == 0xFFFF ? 0x7FFF : ptrs[j]->metric;
+      if (hop_j < hop_b)
         best = j;
-      else if (mj == mi)
+      else if (hop_j == hop_b)
       {
-        if (ptrs[j]->rssi > ptrs[best]->rssi)
+        if (ptrs[j]->prr_eff > ptrs[best]->prr_eff)
           best = j;
-        else if (ptrs[j]->rssi == ptrs[best]->rssi)
+        else if (ptrs[j]->prr_eff == ptrs[best]->prr_eff)
         {
-          if (ptrs[j]->last_seen > ptrs[best]->last_seen)
+          if (ptrs[j]->rssi > ptrs[best]->rssi)
             best = j;
+          else if (ptrs[j]->rssi == ptrs[best]->rssi)
+          {
+            if (ptrs[j]->last_seen > ptrs[best]->last_seen)
+              best = j;
+          }
         }
       }
     }
@@ -190,10 +272,6 @@ static void nei_sorted_ptrs(nei_entry_t *ptrs[], int *out_cnt)
 static linkaddr_t last_parent = {{0, 0}};
 static uint8_t have_last_parent = 0;
 
-/* Sink tracks last observed hops per originator (by low byte) */
-static uint8_t last_hops_by_node[64];
-static uint8_t last_hops_inited = 0;
-
 /*==================== PDR UL at SINK (per source) ====================*/
 #define PDR_MAX_SRC 32
 typedef struct
@@ -209,6 +287,7 @@ typedef struct
 
 static pdr_ul_t pdr_ul[PDR_MAX_SRC];
 static clock_time_t pdr_ul_last_print = 0;
+#define PDR_PRINT_PERIOD (60 * CLOCK_SECOND)
 static uint8_t csv_ul_header_printed = 0;
 
 static pdr_ul_t *pdr_ul_find_or_add(const linkaddr_t *id)
@@ -276,7 +355,7 @@ static void pdr_ul_print_csv(void)
   int i;
   if (!csv_ul_header_printed)
   {
-    APP_LOG("CSV,PDR_UL,local=%02x:%02x,time,peer,first,last,recv,gaps,dups,expected,PDR%%,parent,my_metric\n",
+    APP_LOG("CSV,PDR_UL,local=%02u:%02u,time,peer,first,last,recv,gaps,dups,expected,PDR%%,parent,my_metric\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
     csv_ul_header_printed = 1;
   }
@@ -289,7 +368,7 @@ static void pdr_ul_print_csv(void)
         expected = 1;
       uint32_t recv = pdr_ul[i].received;
       uint32_t pdrx = (recv * 10000UL) / expected;
-      APP_LOG("CSV,PDR_UL,local=%02x:%02x,%lu,%02x:%02x,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02x:%02x,%u\n",
+      APP_LOG("CSV,PDR_UL,local=%02u:%02u,%lu,%02u:%02u,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02u:%02u,%u\n",
               linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
               (unsigned long)(clock_time() / CLOCK_SECOND),
               pdr_ul[i].id.u8[0], pdr_ul[i].id.u8[1],
@@ -304,7 +383,6 @@ static void pdr_ul_print_csv(void)
 }
 
 /*==================== PDR DL at NODE (self) ====================*/
-/* We use per-destination seq at SINK, so node sees contiguous seq for itself */
 typedef struct
 {
   uint8_t inited;
@@ -316,7 +394,7 @@ typedef struct
 } pdr_dl_t;
 
 static pdr_dl_t pdr_dl;
-static clock_time_t pdr_dl_last_print = 0;
+// static clock_time_t pdr_dl_last_print = 0;
 static uint8_t csv_dl_header_printed = 0;
 
 static void pdr_dl_maybe_reset(uint16_t seq)
@@ -358,7 +436,7 @@ static void pdr_dl_print_csv(void)
 {
   if (!csv_dl_header_printed)
   {
-    APP_LOG("CSV,PDR_DL,local=%02x:%02x,time,peer,first,last,recv,gaps,dups,expected,PDR%%,parent,my_metric\n",
+    APP_LOG("CSV,PDR_DL,local=%02u:%02u,time,peer,first,last,recv,gaps,dups,expected,PDR%%,parent,my_metric\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
     csv_dl_header_printed = 1;
   }
@@ -368,7 +446,7 @@ static void pdr_dl_print_csv(void)
   if (expected == 0)
     expected = 1;
   uint32_t pdrx = (pdr_dl.received * 10000UL) / expected;
-  APP_LOG("CSV,PDR_DL,local=%02x:%02x,%lu,%02x:%02x,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02x:%02x,%u\n",
+  APP_LOG("CSV,PDR_DL,local=%02u:%02u,%lu,%02u:%02u,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02u:%02u,%u\n",
           linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
           (unsigned long)(clock_time() / CLOCK_SECOND),
           sink_addr.u8[0], sink_addr.u8[1],
@@ -386,11 +464,15 @@ static void nei_print_csv_all(const char *who)
 {
   nei_entry_t *ptrs[NEI_MAX];
   int cnt, i;
+
+  /* trước khi in: sweep + refresh PRR + sort */
+  nei_sweep_aging();
+  nei_refresh_prr_all();
   nei_sorted_ptrs(ptrs, &cnt);
 
   if (!csv_nei_header_printed)
   {
-    APP_LOG("CSV,NEI,local=%02x:%02x,who,time,rank,neigh,hop,rssi,lqi,last_seen,neigh_last_seq,parent,my_metric\n",
+    APP_LOG("CSV,NEI,local=%02u:%02u,who,time,rank,neigh,hop,prr,prr_eff,rssi,lqi,last_seen,neigh_last_seq,parent,my_metric\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
     csv_nei_header_printed = 1;
   }
@@ -398,43 +480,56 @@ static void nei_print_csv_all(const char *who)
   for (i = 0; i < cnt; i++)
   {
     nei_entry_t *e = ptrs[i];
+
+    /* ép kiểu đúng với format để hết cảnh báo */
+    unsigned long now_s = (unsigned long)(clock_time() / CLOCK_SECOND);
     unsigned long last_s = (unsigned long)(e->last_seen / CLOCK_SECOND);
-    uint16_t hop = e->metric;
-    APP_LOG("CSV,NEI,local=%02x:%02x,%s,%lu,%d,%02x:%02x,%u,%d,%u,%lu,%u,%02x:%02x,%u\n",
-            linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
-            who,
-            (unsigned long)(clock_time() / CLOCK_SECOND),
-            i + 1,
-            e->addr.u8[0], e->addr.u8[1],
-            hop,
-            (int)e->rssi,
-            e->lqi,
-            last_s,
-            e->last_seq,
-            my_collect.parent.u8[0], my_collect.parent.u8[1],
-            my_collect.metric);
+    unsigned hop = (unsigned)(e->metric == 0xFFFF ? 0xFFFF : e->metric);
+
+    APP_LOG(
+        "CSV,NEI,local=%02u:%02u,%s,%lu,%d,%02u:%02u,%u,%u,%u,%d,%u,%lu,%u,%02u:%02u,%u\n",
+        (unsigned)linkaddr_node_addr.u8[0], /* %02u */
+        (unsigned)linkaddr_node_addr.u8[1], /* %02u */
+        who,                                /* %s   */
+        now_s,                              /* %lu  */
+        i + 1,                              /* %d   */
+        (unsigned)e->addr.u8[0],            /* %02u */
+        (unsigned)e->addr.u8[1],            /* %02u */
+        hop,                                /* %u   */
+        (unsigned)e->prr,                   /* %u   */
+        (unsigned)e->prr_eff,               /* %u   <-- đã thêm prr_eff */
+        (int)e->rssi,                       /* %d   */
+        (unsigned)e->lqi,                   /* %u   */
+        last_s,                             /* %lu  */
+        (unsigned)e->last_seq,              /* %u   */
+        (unsigned)my_collect.parent.u8[0],  /* %02u */
+        (unsigned)my_collect.parent.u8[1],  /* %02u */
+        (unsigned)my_collect.metric         /* %u   */
+    );
   }
 
-  /* Optional: also show a short human table TOPK for quick console view */
+  /* bảng ASCII TOPK */
   if (cnt > 0)
   {
     int topn = (cnt < NEI_TOPK) ? cnt : NEI_TOPK;
     int k;
-    APP_LOG("NEI[%s]-TOP%d: +------+------+-----+----------+------+------+\n", who, topn);
-    APP_LOG("NEI[%s]-TOP%d: |  ID  | LQI | RSSI| last_seen| seq  | hop  |\n", who, topn);
-    APP_LOG("NEI[%s]-TOP%d: +------+------+-----+----------+------+------+\n", who, topn);
+    APP_LOG("NEI[%s]-TOP%d: +------+------+-----+-----+-----+----------+------+------+\n", who, topn);
+    APP_LOG("NEI[%s]-TOP%d: |  ID  | LQI | RSSI| PRR |Eff%%| last_seen| seq  | hop  |\n", who, topn);
+    APP_LOG("NEI[%s]-TOP%d: +------+------+-----+-----+-----+----------+------+------+\n", who, topn);
     for (k = 0; k < topn; k++)
     {
       nei_entry_t *e = ptrs[k];
       unsigned long last_s = (unsigned long)(e->last_seen / CLOCK_SECOND);
       if (e->metric == 0xFFFF)
-        APP_LOG("NEI[%s]-TOP%d: | %02x:%02x | %3u | %4d| %8lus | %4u |  --  |\n",
-                who, topn, e->addr.u8[0], e->addr.u8[1], e->lqi, (int)e->rssi, last_s, e->last_seq);
+        APP_LOG("NEI[%s]-TOP%d: | %02u:%02u | %3u | %4d| %3u | %3u | %8lus | %4u |  --  |\n",
+                who, topn, e->addr.u8[0], e->addr.u8[1],
+                e->lqi, (int)e->rssi, e->prr, e->prr_eff, last_s, e->last_seq);
       else
-        APP_LOG("NEI[%s]-TOP%d: | %02x:%02x | %3u | %4d| %8lus | %4u | %4u |\n",
-                who, topn, e->addr.u8[0], e->addr.u8[1], e->lqi, (int)e->rssi, last_s, e->last_seq, e->metric);
+        APP_LOG("NEI[%s]-TOP%d: | %02u:%02u | %3u | %4d| %3u | %3u | %8lus | %4u | %4u |\n",
+                who, topn, e->addr.u8[0], e->addr.u8[1],
+                e->lqi, (int)e->rssi, e->prr, e->prr_eff, last_s, e->last_seq, e->metric);
     }
-    APP_LOG("NEI[%s]-TOP%d: +------+------+-----+----------+------+------+\n", who, topn);
+    APP_LOG("NEI[%s]-TOP%d: +------+------+-----+-----+-----+----------+------+------+\n", who, topn);
   }
 }
 
@@ -450,39 +545,22 @@ static void recv_cb(const linkaddr_t *originator, uint8_t hops)
   }
   memcpy(&msg, packetbuf_dataptr(), sizeof(msg));
 
-  /* update neighbor table (include metric=hops for originator as seen by sink) */
-  nei_update_from_rx(originator, msg.seqn, (int)hops);
+  /* 1) cập nhật láng giềng 1-hop thực (last hop) với RSSI/LQI */
+  const linkaddr_t *last_hop = packetbuf_addr(PACKETBUF_ADDR_SENDER);
+  if (last_hop)
+  {
+    nei_update_from_rx(last_hop, msg.seqn, -1);
+  }
 
-  APP_LOG("APP-UL[SINK]: got seq=%u from %02x:%02x hops=%u my_metric=%u\n",
+  /* 2) originator: chỉ cập nhật hop (hops) & last_seen (không đụng RSSI) */
+  nei_entry_t *o = nei_lookup_or_add(originator);
+  o->metric = hops;
+  o->last_seen = clock_time();
+
+  APP_LOG("APP-UL[SINK]: got seq=%u from %02u:%02u hops=%u my_metric=%u\n",
           msg.seqn, originator->u8[0], originator->u8[1], hops, my_collect.metric);
 
-  /* Track path length changes to trigger a quick NEI dump (optional) */
-  if (!last_hops_inited)
-  {
-    int i;
-    for (i = 0; i < 256; i++)
-      last_hops_by_node[i] = 0xFF;
-    last_hops_inited = 1;
-  }
-  if (last_hops_by_node[originator->u8[0]] != hops)
-  {
-    if (last_hops_by_node[originator->u8[0]] != 0xFF)
-    {
-      APP_LOG("TOPO[SINK]: %02x:%02x hops %u -> %u\n",
-              originator->u8[0], originator->u8[1],
-              last_hops_by_node[originator->u8[0]], hops);
-    }
-    else
-    {
-      APP_LOG("TOPO[SINK]: %02x:%02x initial hops -> %u\n",
-              originator->u8[0], originator->u8[1], hops);
-    }
-    last_hops_by_node[originator->u8[0]] = hops;
-    /* small immediate NEI snapshot for visibility */
-    nei_print_csv_all("SINK");
-  }
-
-  /* PDR UL at sink */
+  /* PDR UL */
   pdr_ul_update(originator, msg.seqn);
   if (clock_time() - pdr_ul_last_print >= PDR_PRINT_PERIOD)
   {
@@ -497,7 +575,7 @@ static void sr_recv_cb(struct my_collect_conn *ptr, uint8_t hops)
   const linkaddr_t *sender_ll = packetbuf_addr(PACKETBUF_ADDR_SENDER);
   if (packetbuf_datalen() != sizeof(test_msg_t))
   {
-    APP_LOG("APP-DL[NODE %02x:%02x]: wrong length %d B (expected %u B)\n",
+    APP_LOG("APP-DL[NODE %02u:%02u]: wrong length %d B (expected %u B)\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
             packetbuf_datalen(), (unsigned)sizeof(test_msg_t));
     return;
@@ -507,20 +585,15 @@ static void sr_recv_cb(struct my_collect_conn *ptr, uint8_t hops)
   if (sender_ll)
     nei_update_from_rx(sender_ll, sr_msg.seqn, -1);
 
-  APP_LOG("APP-DL[NODE %02x:%02x]: got SR seq=%u hops=%u my_metric=%u parent=%02x:%02x\n",
+  APP_LOG("APP-DL[NODE %02u:%02u]: got SR seq=%u hops=%u my_metric=%u parent=%02u:%02u\n",
           linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
           sr_msg.seqn, hops, ptr->metric, ptr->parent.u8[0], ptr->parent.u8[1]);
 
-  /* PDR DL at node */
+  /* PDR DL */
   pdr_dl_update(sr_msg.seqn);
-  if (clock_time() - pdr_dl_last_print >= PDR_PRINT_PERIOD)
-  {
-    pdr_dl_print_csv();
-    pdr_dl_last_print = clock_time();
-  }
 
-  /* Periodic NEI CSV is handled in main loop; here we can print quick TOPK */
-  nei_print_csv_all("NODE");
+  /* Bảng định kỳ do timer, ở đây có thể in TOPK nếu muốn */
+  /* nei_print_csv_all("NODE"); */
 }
 
 /* Callback sets */
@@ -530,14 +603,13 @@ static const struct my_collect_callbacks node_cb = {.recv = NULL, .sr_recv = sr_
 /*==================== CSV headers once at boot ====================*/
 static void csv_print_headers_once(void)
 {
-  /* Print a static header once for INFO rows (data rows printed after role known) */
   APP_LOG("CSV,INFO_HDR,fields=local,time,role,parent,my_metric\n");
 }
 
 /*==================== SR beacon hook (from my_collect.c) ====================*/
 void srdcp_app_beacon_observed(const linkaddr_t *sender, uint16_t metric, int16_t rssi, uint8_t lqi)
 {
-  /* Update neighbor metric at NODE/SINK when we overhear a beacon */
+  /* cập nhật neighbor khi overhear beacon */
   nei_update_from_beacon(sender, metric, rssi, lqi);
 }
 
@@ -552,43 +624,31 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
   static linkaddr_t dest;
   static int ret;
 
-  /* DL seq per-destination at sink (index by low byte) */
+  /* DL seq per-destination tại sink (chỉ dùng low byte) */
   static uint16_t dl_seq_per_dest[64] = {0};
 
   int i;
 
   PROCESS_BEGIN();
 
+#if ENABLE_COLLECT_VIEW
   serial_shell_init();
   shell_blink_init();
-#if ENABLE_COLLECT_VIEW
 #if WITH_COFFEE
   shell_file_init();
   shell_coffee_init();
-#endif /* WITH_COFFEE */
-
-  /* shell_download_init(); */
-  /* shell_rime_sendcmd_init(); */
-  /* shell_ps_init(); */
-  // shell_reboot_init();
+#endif
   shell_rime_init();
   shell_rime_netcmd_init();
-  /* shell_rime_ping_init(); */
-  /* shell_rime_debug_init(); */
-  /* shell_rime_debug_runicast_init(); */
   shell_powertrace_init();
-  /* shell_base64_init(); */
   shell_text_init();
   shell_time_init();
-  /* shell_sendtest_init(); */
-
 #if CONTIKI_TARGET_SKY
   shell_sky_init();
-#endif /* CONTIKI_TARGET_SKY */
-
+#endif
   shell_collect_view_init();
 #endif
-  /* init neighbor table */
+
   for (i = 0; i < NEI_MAX; i++)
     nei_tab[i].used = 0;
 
@@ -597,19 +657,19 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
 
   if (linkaddr_cmp(&linkaddr_node_addr, &sink_addr))
   {
-    /*==================== SINK ====================*/
-    APP_LOG("APP-ROLE[SINK]: started (local=%02x:%02x)\n",
+    /* ==================== SINK ==================== */
+    APP_LOG("APP-ROLE[SINK]: started (local=%02u:%02u)\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
 
     my_collect_open(&my_collect, COLLECT_CHANNEL, true, &sink_cb);
-    APP_LOG("CSV,INFO,local=%02x:%02x,%lu,SINK,%02x:%02x,%u\n",
+    APP_LOG("CSV,INFO,local=%02u:%02u,%lu,SINK,%02u:%02u,%u\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
             (unsigned long)(clock_time() / CLOCK_SECOND),
             my_collect.parent.u8[0], my_collect.parent.u8[1],
             my_collect.metric);
 
 #if APP_DOWNWARD_TRAFFIC
-    etimer_set(&periodic, 45 * CLOCK_SECOND); /* warm-up topology */
+    etimer_set(&periodic, 180 * CLOCK_SECOND); /* warm-up topology */
     etimer_set(&nei_tick, NEI_PRINT_PERIOD);
 
     dest.u8[0] = 0x02;
@@ -627,20 +687,18 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&rnd));
 
         packetbuf_clear();
-        /* per-destination seq so each target sees contiguous seq */
         msg.seqn = ++dl_seq_per_dest[dest.u8[0]];
         packetbuf_copyfrom(&msg, sizeof(msg));
 
-        APP_LOG("APP-DL[SINK]: send SR seq=%u -> %02x:%02x\n",
+        APP_LOG("APP-DL[SINK]: send SR seq=%u -> %02u:%02u\n",
                 msg.seqn, dest.u8[0], dest.u8[1]);
 
         ret = sr_send(&my_collect, &dest);
         if (ret == 0)
         {
-          APP_LOG("ERR,SINK,sr_send,seq=%u,dst=%02x:%02x\n", msg.seqn, dest.u8[0], dest.u8[1]);
+          APP_LOG("ERR,SINK,sr_send,seq=%u,dst=%02u:%02u\n", msg.seqn, dest.u8[0], dest.u8[1]);
         }
 
-        /* rotate 2..APP_NODES */
         if (dest.u8[0] < APP_NODES)
           dest.u8[0]++;
         else
@@ -662,12 +720,12 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
   }
   else
   {
-    /*==================== NODE ====================*/
-    APP_LOG("APP-ROLE[NODE %02x:%02x]: started\n",
+    /* ==================== NODE ==================== */
+    APP_LOG("APP-ROLE[NODE %02u:%02u]: started\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
 
     my_collect_open(&my_collect, COLLECT_CHANNEL, false, &node_cb);
-    APP_LOG("CSV,INFO,local=%02x:%02x,%lu,NODE,%02x:%02x,%u\n",
+    APP_LOG("CSV,INFO,local=%02u:%02u,%lu,NODE,%02u:%02u,%u\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
             (unsigned long)(clock_time() / CLOCK_SECOND),
             my_collect.parent.u8[0], my_collect.parent.u8[1],
@@ -687,7 +745,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
       {
         etimer_reset(&periodic);
 
-        /* route change watch before send */
+        /* watch parent change */
         if (!have_last_parent)
         {
           linkaddr_copy(&last_parent, &my_collect.parent);
@@ -695,7 +753,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         }
         else if (!linkaddr_cmp(&last_parent, &my_collect.parent))
         {
-          APP_LOG("ROUTE[NODE %02x:%02x]: parent %02x:%02x -> %02x:%02x metric=%u\n",
+          APP_LOG("ROUTE[NODE %02u:%02u]: parent %02u:%02u -> %02u:%02u metric=%u\n",
                   linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
                   last_parent.u8[0], last_parent.u8[1],
                   my_collect.parent.u8[0], my_collect.parent.u8[1],
@@ -707,11 +765,10 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         etimer_set(&rnd, (uint16_t)(random_rand() % (MSG_PERIOD / 2)));
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&rnd));
 
-        /* uplink send */
         packetbuf_clear();
         packetbuf_copyfrom(&msg, sizeof(msg));
 
-        APP_LOG("APP-UL[NODE %02x:%02x]: send seq=%u metric=%u parent=%02x:%02x\n",
+        APP_LOG("APP-UL[NODE %02u:%02u]: send seq=%u metric=%u parent=%02u:%02u\n",
                 linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
                 msg.seqn, my_collect.metric, my_collect.parent.u8[0], my_collect.parent.u8[1]);
 
@@ -726,7 +783,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
       if (etimer_expired(&nei_tick))
       {
         nei_print_csv_all("NODE");
-        pdr_dl_print_csv(); /* periodically dump DL PDR as well */
+        pdr_dl_print_csv();
         etimer_reset(&nei_tick);
       }
     }
