@@ -28,6 +28,11 @@
  * -------------------------------------------------------------------------- */
 
 /* Called when the waiting time to forward a topology report has ended. */
+/**
+ * @brief Timer hết hạn để gửi topology report nếu chưa piggy được.
+ * @param ptr Trỏ về cấu trúc my_collect_conn.
+ * @note Khi hết hạn và còn treport_hold, sẽ gửi report gốc (forward=0).
+ */
 void topology_report_hold_cb(void *ptr)
 {
         struct my_collect_conn *conn = ptr;
@@ -44,6 +49,13 @@ void topology_report_hold_cb(void *ptr)
  * -------------------------------------------------------------------------- */
 
 /* Check whether 'node' already appears in the report block (length = len entries). */
+/**
+ * @brief Kiểm tra node đã xuất hiện trong block topology report hay chưa.
+ * @param conn Không sử dụng (giữ chữ ký đồng bộ).
+ * @param node Địa chỉ node cần kiểm tra.
+ * @param len  Số entry trong block hiện tại.
+ * @return true nếu đã có; false nếu chưa.
+ */
 bool check_topology_report_address(my_collect_conn *conn, linkaddr_t node, uint8_t len)
 {
         (void)conn;
@@ -70,6 +82,12 @@ bool check_topology_report_address(my_collect_conn *conn, linkaddr_t node, uint8
  * Send a topology report to the parent.
  * - Sent when parent changes, or when no piggyback has happened for a while.
  * - Also used to forward a report received from a child toward the sink.
+ */
+/**
+ * @brief Gửi topology report lên parent.
+ * @param conn    Cấu trúc kết nối collect.
+ * @param forward 1 nếu đang forward report nhận được; 0 nếu gửi report gốc.
+ * @details Khi forward=1 và đang treport_hold, có thể chèn (node,parent) để gộp.
  */
 void send_topology_report(my_collect_conn *conn, uint8_t forward)
 {
@@ -131,6 +149,11 @@ void send_topology_report(my_collect_conn *conn, uint8_t forward)
 
 /*
  * At the sink: parse the tree_connection block and update parents.
+ */
+/**
+ * @brief SINK nhận topology report và cập nhật dict parent.
+ * @param conn Cấu trúc kết nối collect (tại SINK).
+ * @details Lọc bỏ entry rác, chuẩn hoá địa chỉ, cập nhật và in dict sau khi xử lý.
  */
 void deliver_topology_report_to_sink(my_collect_conn *conn)
 {

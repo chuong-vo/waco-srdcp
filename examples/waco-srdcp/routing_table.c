@@ -8,6 +8,10 @@
 //                                      DICT IMPLEMENTATION
 // -------------------------------------------------------------------------------------------------
 
+/**
+ * @brief In toàn bộ nội dung bảng parent (dict) tại SINK.
+ * @param dict Bảng parent cần in.
+ */
 void print_dict_state(TreeDict *dict)
 {
         int i;
@@ -22,6 +26,12 @@ void print_dict_state(TreeDict *dict)
         }
 }
 
+/**
+ * @brief Tìm vị trí entry theo key (địa chỉ node) trong dict.
+ * @param dict Bảng parent.
+ * @param key  Địa chỉ node.
+ * @return Chỉ số entry hoặc -1 nếu không thấy.
+ */
 int dict_find_index(TreeDict *dict, const linkaddr_t key)
 {
         int i;
@@ -36,6 +46,12 @@ int dict_find_index(TreeDict *dict, const linkaddr_t key)
         return -1;
 }
 
+/**
+ * @brief Tra cứu parent của node trong dict.
+ * @param dict Bảng parent.
+ * @param key  Con trỏ địa chỉ node cần tra.
+ * @return Địa chỉ parent hoặc linkaddr_null nếu không có.
+ */
 linkaddr_t dict_find(TreeDict *dict, const linkaddr_t *key)
 {
         int idx = dict_find_index(dict, *key);
@@ -52,6 +68,14 @@ linkaddr_t dict_find(TreeDict *dict, const linkaddr_t *key)
 }
 
 /* ---- PATCH START (routing_table.c: dict_add) ---- */
+/**
+ * @brief Thêm/cập nhật entry (node -> parent) vào dict.
+ * @param dict  Bảng parent.
+ * @param key   Địa chỉ node.
+ * @param value Địa chỉ parent của node.
+ * @return 0 nếu thành công; -1 nếu dict đầy.
+ * @details Chuẩn hoá byte cao, bỏ entry rỗng; thay thế nếu key đã tồn tại.
+ */
 int dict_add(TreeDict *dict, const linkaddr_t key, linkaddr_t value)
 {
         /* Chuẩn hoá: byte cao = 0 để tránh rác/endianness */
@@ -95,6 +119,10 @@ int dict_add(TreeDict *dict, const linkaddr_t key, linkaddr_t value)
 /*
     Initialize the path by setting each entry to linkaddr_null
  */
+/**
+ * @brief Khởi tạo mảng path (tree_path) về linkaddr_null.
+ * @param conn Cấu trúc kết nối collect (sử dụng routing_table.tree_path).
+ */
 void init_routing_path(my_collect_conn *conn)
 {
         int i = 0;
@@ -110,6 +138,13 @@ void init_routing_path(my_collect_conn *conn)
 /*
     Check if target is already in the path.
     len: number of linkaddr_t elements already present in the path.
+ */
+/**
+ * @brief Kiểm tra target đã xuất hiện trong path hay chưa (phát hiện vòng).
+ * @param conn  Cấu trúc kết nối collect (chứa tree_path).
+ * @param len   Số phần tử hiện có trong path.
+ * @param target Con trỏ địa chỉ cần kiểm tra.
+ * @return true nếu đã có; false nếu chưa.
  */
 int already_in_route(my_collect_conn *conn, uint8_t len, linkaddr_t *target)
 {
@@ -130,6 +165,13 @@ int already_in_route(my_collect_conn *conn, uint8_t len, linkaddr_t *target)
     otherwise the path length.
     The linkddr_t addresses of the nodes in the path are written to the tree_path
     array in the conn object.
+ */
+/**
+ * @brief Tìm đường từ SINK tới dest bằng cách lần ngược parent.
+ * @param conn Cấu trúc kết nối collect (tại SINK).
+ * @param dest Địa chỉ đích.
+ * @return Độ dài đường (path_len) hoặc 0 nếu lỗi.
+ * @details Dừng khi gặp NULL hoặc phát hiện vòng; giới hạn MAX_PATH_LENGTH.
  */
 int find_route(my_collect_conn *conn, const linkaddr_t *dest)
 {
@@ -164,6 +206,12 @@ int find_route(my_collect_conn *conn, const linkaddr_t *dest)
         return path_len;
 }
 
+/**
+ * @brief In đường (tree_path) vừa tìm được tới dest.
+ * @param conn      Cấu trúc kết nối collect.
+ * @param route_len Độ dài đường.
+ * @param dest      Địa chỉ đích.
+ */
 void print_route(my_collect_conn *conn, uint8_t route_len, const linkaddr_t *dest)
 {
         uint8_t i;

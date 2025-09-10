@@ -21,6 +21,8 @@
 #define TAG_PIGGY "PIGGY"
 #define TAG_SRDCP "SRDCP"
 #define TAG_UL "UL"
+#define TAG_PRR "PRR"
+#define TAG_STAB "STAB"
 /* ===== Logging toggle for my_collect.c ===== */
 #ifndef LOG_COLLECT
 #define LOG_COLLECT 0 /* 1: bật log; 0: tắt log */
@@ -37,6 +39,135 @@
 
 // #define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
 const linkaddr_t sink_addr = {{0x01, 0x00}};
+/* ---- PRR tie-break config ---- */
+#ifndef PRR_NEI_MAX
+#define PRR_NEI_MAX 24
+#endif
+#ifndef PRR_HYSTERESIS
+/* Require PRR to be better by this many percentage points to switch on tie */
+#define PRR_HYSTERESIS 25
+#endif
+/* Absolute PRR requirement for a candidate (percent) */
+#ifndef PRR_ABS_MIN
+#define PRR_ABS_MIN 80
+#endif
+/* Minimum PRR required to accept an improved-hops parent (percent) */
+#ifndef PRR_IMPROVE_MIN
+#define PRR_IMPROVE_MIN 60
+#endif
+/* Minimum time to keep chosen parent before tie-break switches (ticks) */
+#ifndef MIN_PARENT_DWELL
+#define MIN_PARENT_DWELL (60 * CLOCK_SECOND)
+#endif
+/* Parent timeout (no beacon from parent for too long -> stale) */
+#ifndef PARENT_TIMEOUT
+#define PARENT_TIMEOUT (4 * BEACON_INTERVAL)
+#endif
+
+typedef struct
+{
+        uint8_t used;
+        linkaddr_t addr;
+        uint16_t last_tx_seq;
+        uint32_t expected;      /* beacons expected based on tx_seq deltas */
+        uint32_t received;      /* beacons actually received */
+        clock_time_t last_seen; /* last time a beacon was observed from this neighbor */
+} prr_entry_t;
+
+static prr_entry_t prr_tab[PRR_NEI_MAX];
+
+static prr_entry_t *prr_lookup_or_add(const linkaddr_t *addr)
+{
+        int i;
+        int free_i = -1;
+        for (i = 0; i < PRR_NEI_MAX; i++)
+        {
+                if (prr_tab[i].used && linkaddr_cmp(&prr_tab[i].addr, addr))
+                        return &prr_tab[i];
+                if (!prr_tab[i].used && free_i < 0)
+                        free_i = i;
+        }
+        if (free_i >= 0)
+        {
+                memset(&prr_tab[free_i], 0, sizeof(prr_tab[free_i]));
+                prr_tab[free_i].used = 1;
+                linkaddr_copy(&prr_tab[free_i].addr, addr);
+                return &prr_tab[free_i];
+        }
+        /* replace the one with smallest expected to keep table fresh */
+        int victim = 0;
+        for (i = 1; i < PRR_NEI_MAX; i++)
+                if (prr_tab[i].expected < prr_tab[victim].expected)
+                        victim = i;
+        memset(&prr_tab[victim], 0, sizeof(prr_tab[victim]));
+        prr_tab[victim].used = 1;
+        linkaddr_copy(&prr_tab[victim].addr, addr);
+        return &prr_tab[victim];
+}
+
+static void prr_update_on_beacon(const linkaddr_t *addr, uint16_t tx_seq)
+{
+        prr_entry_t *e = prr_lookup_or_add(addr);
+        uint16_t delta = 0;
+        if (e->expected == 0 && e->received == 0)
+        {
+                /* first observation */
+                e->last_tx_seq = tx_seq;
+                e->expected = 1;
+                e->received = 1;
+                e->last_seen = clock_time();
+                return;
+        }
+        else
+        {
+                delta = (uint16_t)(tx_seq - e->last_tx_seq); /* handles wrap-around */
+                if (delta == 0)
+                        delta = 1; /* at least account for current beacon */
+                e->expected += delta;
+                e->received += 1;
+                e->last_tx_seq = tx_seq;
+                e->last_seen = clock_time();
+        }
+}
+
+static uint8_t prr_percent(const linkaddr_t *addr)
+{
+        int i;
+        for (i = 0; i < PRR_NEI_MAX; i++)
+        {
+                if (prr_tab[i].used && linkaddr_cmp(&prr_tab[i].addr, addr))
+                {
+                        if (prr_tab[i].expected == 0)
+                                return 0;
+                        uint32_t prr = (prr_tab[i].received * 100UL) / prr_tab[i].expected;
+                        if (prr > 100)
+                                prr = 100;
+                        return (uint8_t)prr;
+                }
+        }
+        return 0; /* unknown -> 0 */
+}
+
+static clock_time_t prr_last_seen_time(const linkaddr_t *addr)
+{
+        int i;
+        for (i = 0; i < PRR_NEI_MAX; i++)
+        {
+                if (prr_tab[i].used && linkaddr_cmp(&prr_tab[i].addr, addr))
+                        return prr_tab[i].last_seen;
+        }
+        return 0;
+}
+
+/**
+ * @brief Trả về PRR (0..100) đã quan sát cho một hàng xóm.
+ * @param addr Địa chỉ hàng xóm cần tra cứu.
+ * @return Giá trị PRR phần trăm (0..100); 0 nếu chưa có thống kê.
+ */
+uint8_t my_collect_prr_percent(const linkaddr_t *addr)
+{
+        return prr_percent(addr);
+}
 /*--------------------------------------------------------------------------------------*/
 /* Forward declarations (for clean initialization order) */
 void beacon_timer_cb(void *ptr);
@@ -58,15 +189,25 @@ static struct unicast_callbacks uc_cb = {.recv = uc_recv};
 
 /* ------------------------------------------------------------------------------------- */
 
+/**
+ * @brief Khởi tạo kết nối SRDCP (collect) cho NODE hoặc SINK.
+ * @param conn      Cấu trúc kết nối collect.
+ * @param channels  Kênh C (SRDCP dùng C và C+1).
+ * @param is_sink   true nếu là SINK, false nếu là NODE.
+ * @param callbacks Bộ callback cho UL/DL (recv, sr_recv).
+ * @note Nếu là SINK, hàm sẽ khởi động timer beacon định kỳ.
+ */
 void my_collect_open(struct my_collect_conn *conn, uint16_t channels,
                      bool is_sink, const struct my_collect_callbacks *callbacks)
 {
         linkaddr_copy(&conn->parent, &linkaddr_null);
         conn->metric = 65535; /* not connected yet */
         conn->beacon_seqn = 0;
+        conn->beacon_tx_seq = 0;
         conn->callbacks = callbacks;
         conn->treport_hold = 0;
         conn->is_sink = is_sink ? 1 : 0;
+        conn->parent_lock_until = 0;
 
         broadcast_open(&conn->bc, channels, &bc_cb);
         unicast_open(&conn->uc, channels + 1, &uc_cb);
@@ -81,6 +222,11 @@ void my_collect_open(struct my_collect_conn *conn, uint16_t channels,
 
 /* ------------------------------------ BEACON Management ------------------------------------ */
 
+/**
+ * @brief Callback timer beacon: gửi beacon và gia hạn theo cấu hình.
+ * @param ptr Trỏ về cấu trúc my_collect_conn.
+ * @note Nếu là SINK: gia hạn timer theo BEACON_INTERVAL và tăng seqn.
+ */
 void beacon_timer_cb(void *ptr)
 {
         struct my_collect_conn *conn = ptr;
@@ -92,9 +238,17 @@ void beacon_timer_cb(void *ptr)
         }
 }
 
+/**
+ * @brief Gửi beacon SRDCP.
+ * @param conn Cấu trúc kết nối collect.
+ * @details Tăng bộ đếm tx_seq (per-sender) để láng giềng ước lượng PRR.
+ *          Payload beacon gồm {seqn, tx_seq, metric}.
+ */
 void send_beacon(struct my_collect_conn *conn)
 {
-        struct beacon_msg beacon = {.seqn = conn->beacon_seqn, .metric = conn->metric};
+        /* increase per-sender beacon counter for PRR estimation */
+        conn->beacon_tx_seq++;
+        struct beacon_msg beacon = {.seqn = conn->beacon_seqn, .tx_seq = conn->beacon_tx_seq, .metric = conn->metric};
 
         packetbuf_clear();
         packetbuf_copyfrom(&beacon, sizeof(beacon));
@@ -102,6 +256,15 @@ void send_beacon(struct my_collect_conn *conn)
         broadcast_send(&conn->bc);
 }
 
+/**
+ * @brief Xử lý beacon nhận được (broadcast callback).
+ * @param bc_conn Con trỏ kết nối broadcast.
+ * @param sender  Địa chỉ hàng xóm gửi beacon.
+ * @details Lọc theo RSSI_THRESHOLD; cập nhật PRR(sender). Với epoch mới, chỉ
+ *          đổi parent nếu chưa có parent hoặc hop tốt hơn. Cùng epoch, nếu
+ *          hòa hop thì tie-break theo PRR (hysteresis, PRR_ABS_MIN, dwell).
+ *          Cuối cùng, lên lịch forward beacon sau BEACON_FORWARD_DELAY.
+ */
 void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
 {
         struct beacon_msg beacon;
@@ -120,9 +283,9 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
         rssi = packetbuf_attr(PACKETBUF_ATTR_RSSI);
         lqi = packetbuf_attr(PACKETBUF_ATTR_LINK_QUALITY);
 
-        LOG(TAG_BEACON, "rx from=%02u:%02u seq=%u metric=%u rssi=%d lqi=%u",
+        LOG(TAG_BEACON, "rx from=%02u:%02u seq=%u tx=%u metric=%u rssi=%d lqi=%u",
             sender->u8[0], sender->u8[1],
-            (unsigned)beacon.seqn, (unsigned)beacon.metric, (int)rssi, (unsigned)lqi);
+            (unsigned)beacon.seqn, (unsigned)beacon.tx_seq, (unsigned)beacon.metric, (int)rssi, (unsigned)lqi);
 
         /* Application hook: implemented in example-runicast-srdcp.c */
         srdcp_app_beacon_observed(sender, beacon.metric, rssi, lqi);
@@ -133,29 +296,165 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
                 return;
         }
 
+        /* Update PRR estimator for this neighbor */
+        prr_update_on_beacon(sender, beacon.tx_seq);
+        /* Log integer-only PRR (no floats: Sky has no FPU) */
+        {
+                prr_entry_t *dbg = prr_lookup_or_add(sender);
+                uint8_t prr = prr_percent(sender);
+                LOG(TAG_PRR, "nei=%02u:%02u prr=%u recv=%lu exp=%lu tx=%u",
+                    sender->u8[0], sender->u8[1],
+                    (unsigned)prr,
+                    (unsigned long)dbg->received,
+                    (unsigned long)dbg->expected,
+                    (unsigned)beacon.tx_seq);
+        }
+
+        uint16_t new_metric = (uint16_t)(beacon.metric + 1);
+        clock_time_t now = clock_time();
+        /* Parent stale detection: no beacon from current parent for too long */
+        bool parent_stale = false;
+        if (!linkaddr_cmp(&conn->parent, &linkaddr_null))
+        {
+                clock_time_t ls = prr_last_seen_time(&conn->parent);
+                if (ls > 0 && (now - ls) > PARENT_TIMEOUT)
+                {
+                        parent_stale = true;
+                        LOG(TAG_STAB, "parent stale: last_seen=%lu ago > timeout=%lu",
+                            (unsigned long)(now - ls), (unsigned long)PARENT_TIMEOUT);
+                }
+        }
         if (conn->beacon_seqn < beacon.seqn)
         {
-                conn->beacon_seqn = beacon.seqn; /* new tree */
+                /* New tree epoch: update seq/metric; switch parent only if better hops or none */
+                uint16_t old_metric = conn->metric;
+                conn->beacon_seqn = beacon.seqn;
+                conn->metric = new_metric;
+
+                if (linkaddr_cmp(&conn->parent, &linkaddr_null))
+                {
+                        linkaddr_copy(&conn->parent, sender);
+                        conn->parent_lock_until = now + MIN_PARENT_DWELL;
+                        LOG(TAG_STAB, "new-tree adopt parent=%02u:%02u metric=%u dwell_until=%lu",
+                            conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric, (unsigned long)conn->parent_lock_until);
+                        if (TOPOLOGY_REPORT)
+                        {
+                                conn->treport_hold = 1;
+                                ctimer_stop(&conn->treport_hold_timer);
+                                ctimer_set(&conn->treport_hold_timer, TOPOLOGY_REPORT_HOLD_TIME,
+                                           topology_report_hold_cb, conn);
+                        }
+                }
+                else if (new_metric < old_metric)
+                {
+                        /* Only accept improved hops if link PRR is decent */
+                        uint8_t prr_sender = prr_percent(sender);
+                        if (prr_sender < PRR_IMPROVE_MIN && !linkaddr_cmp(&conn->parent, &linkaddr_null) && !parent_stale)
+                        {
+                                LOG(TAG_STAB, "improve-hop blocked: sender prr=%u < min=%u (keep %02u:%02u)",
+                                    (unsigned)prr_sender, (unsigned)PRR_IMPROVE_MIN, conn->parent.u8[0], conn->parent.u8[1]);
+                        }
+                        else if (!linkaddr_cmp(&conn->parent, sender))
+                        {
+                                linkaddr_copy(&conn->parent, sender);
+                                conn->parent_lock_until = now + MIN_PARENT_DWELL;
+                                LOG(TAG_COLLECT, "parent set (new tree) to %02u:%02u (metric=%u)",
+                                    conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric);
+                                LOG(TAG_STAB, "dwell set until %lu (improved hops on new-tree)", (unsigned long)conn->parent_lock_until);
+                                if (TOPOLOGY_REPORT)
+                                {
+                                        conn->treport_hold = 1;
+                                        ctimer_stop(&conn->treport_hold_timer);
+                                        ctimer_set(&conn->treport_hold_timer, TOPOLOGY_REPORT_HOLD_TIME,
+                                                   topology_report_hold_cb, conn);
+                                }
+                        }
+                }
+                else if (parent_stale)
+                {
+                        /* Parent is stale: adopt sender even if hops not better (we already passed RSSI filter) */
+                        if (!linkaddr_cmp(&conn->parent, sender))
+                        {
+                                linkaddr_copy(&conn->parent, sender);
+                                conn->parent_lock_until = now + MIN_PARENT_DWELL;
+                                LOG(TAG_COLLECT, "parent set (new tree, stale) to %02u:%02u (metric=%u)",
+                                    conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric);
+                                LOG(TAG_STAB, "parent stale -> adopt sender; dwell until %lu", (unsigned long)conn->parent_lock_until);
+                                if (TOPOLOGY_REPORT)
+                                {
+                                        conn->treport_hold = 1;
+                                        ctimer_stop(&conn->treport_hold_timer);
+                                        ctimer_set(&conn->treport_hold_timer, TOPOLOGY_REPORT_HOLD_TIME,
+                                                   topology_report_hold_cb, conn);
+                                }
+                        }
+                }
+                else
+                {
+                        LOG(TAG_STAB, "new-tree keep parent=%02u:%02u my_metric=%u sender_hops=%u",
+                            conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric, (unsigned)new_metric);
+                }
         }
         else
         {
-                if (conn->metric <= beacon.metric + 1)
+                if (new_metric < conn->metric)
                 {
-                        LOG(TAG_COLLECT, "ignore beacon (my_metric=%u, neigh_metric=%u)",
-                            (unsigned)conn->metric, (unsigned)beacon.metric);
+                        /* strictly better hops: require minimal PRR to avoid flapping */
+                        uint8_t prr_sender = prr_percent(sender);
+                        if (prr_sender < PRR_IMPROVE_MIN && !linkaddr_cmp(&conn->parent, &linkaddr_null) && !parent_stale)
+                        {
+                                LOG(TAG_STAB, "improve-hop blocked: sender prr=%u < min=%u (keep %02u:%02u)",
+                                    (unsigned)prr_sender, (unsigned)PRR_IMPROVE_MIN, conn->parent.u8[0], conn->parent.u8[1]);
+                        }
+                        else
+                        {
+                                conn->metric = new_metric;
+                                if (!linkaddr_cmp(&conn->parent, sender))
+                                {
+                                        linkaddr_copy(&conn->parent, sender);
+                                        LOG(TAG_COLLECT, "parent set to %02u:%02u (new_metric=%u)",
+                                            conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric);
+                                        conn->parent_lock_until = now + MIN_PARENT_DWELL;
+                                        LOG(TAG_STAB, "dwell set until %lu (better hops)", (unsigned long)conn->parent_lock_until);
+                                }
+                        }
+                }
+                else if (new_metric == conn->metric)
+                {
+                        /* tie-break by PRR with hysteresis */
+                        uint8_t prr_sender = prr_percent(sender);
+                        uint8_t prr_parent = prr_percent(&conn->parent);
+                        if (!linkaddr_cmp(&conn->parent, &linkaddr_null) && now < conn->parent_lock_until && !parent_stale)
+                        {
+                                LOG(TAG_STAB, "dwell active: keep parent until %lu (prr_parent=%u prr_sender=%u)",
+                                    (unsigned long)conn->parent_lock_until, (unsigned)prr_parent, (unsigned)prr_sender);
+                        }
+                        else if (prr_sender < PRR_ABS_MIN)
+                        {
+                                LOG(TAG_STAB, "tie: sender prr=%u < abs_min=%u; keep parent", (unsigned)prr_sender, (unsigned)PRR_ABS_MIN);
+                        }
+                        else if (linkaddr_cmp(&conn->parent, &linkaddr_null) || (prr_sender >= (uint8_t)(prr_parent + PRR_HYSTERESIS)))
+                        {
+                                if (!linkaddr_cmp(&conn->parent, sender))
+                                {
+                                        linkaddr_copy(&conn->parent, sender);
+                                        LOG(TAG_COLLECT, "parent tie-break to %02u:%02u (metric=%u prr_parent=%u prr_sender=%u)",
+                                            conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric, (unsigned)prr_parent, (unsigned)prr_sender);
+                                        conn->parent_lock_until = now + MIN_PARENT_DWELL;
+                                        LOG(TAG_STAB, "dwell set until %lu (tie-break)", (unsigned long)conn->parent_lock_until);
+                                }
+                        }
+                        else
+                        {
+                                LOG(TAG_COLLECT, "keep parent (tie) my_metric=%u prr_parent=%u prr_sender=%u",
+                                    (unsigned)conn->metric, (unsigned)prr_parent, (unsigned)prr_sender);
+                        }
+                }
+                else
+                {
+                        LOG(TAG_COLLECT, "ignore beacon (worse hops: my=%u, neigh+1=%u)", (unsigned)conn->metric, (unsigned)new_metric);
                         return;
                 }
-        }
-
-        /* update metric (hop count) */
-        conn->metric = beacon.metric + 1;
-
-        /* update parent */
-        if (!linkaddr_cmp(&conn->parent, sender))
-        {
-                linkaddr_copy(&conn->parent, sender);
-                LOG(TAG_COLLECT, "parent set to %02u:%02u (new_metric=%u)",
-                    conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric);
 
                 if (TOPOLOGY_REPORT)
                 {
@@ -173,6 +472,12 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
 
 /* ------------------------------------ Send / Receive ------------------------------------ */
 
+/**
+ * @brief Gửi UL data từ NODE lên parent.
+ * @param conn Cấu trúc kết nối collect.
+ * @return Khác 0 nếu gửi thành công; 0 nếu không có parent.
+ * @note Có thể piggy (node,parent) kèm gói để SINK học topology.
+ */
 int my_collect_send(struct my_collect_conn *conn)
 {
         uint8_t piggy_len = 0;
@@ -215,6 +520,13 @@ int my_collect_send(struct my_collect_conn *conn)
         return unicast_send(&conn->uc, &conn->parent);
 }
 
+/**
+ * @brief Gửi DL theo SRDCP (source routing) từ SINK tới dest.
+ * @param conn Cấu trúc kết nối collect (tại SINK).
+ * @param dest Địa chỉ đích.
+ * @return Khác 0 nếu gửi thành công; 0 nếu không có đường.
+ * @details Tìm đường bằng dict parent tại SINK và đóng gói full path vào header.
+ */
 int sr_send(struct my_collect_conn *conn, const linkaddr_t *dest)
 {
         if (!conn->is_sink)
@@ -250,6 +562,14 @@ int sr_send(struct my_collect_conn *conn, const linkaddr_t *dest)
         return unicast_send(&conn->uc, &conn->routing_table.tree_path[path_len - 1]);
 }
 
+/**
+ * @brief Xử lý gói unicast đến (theo loại payload SRDCP).
+ * @param uc_conn Con trỏ kết nối unicast.
+ * @param sender  Địa chỉ sender.
+ * @details upward_data_packet: chuyển tiếp lên (hoặc giao app tại SINK).
+ *          topology_report: SINK cập nhật dict; NODE forward lên parent.
+ *          downward_data_packet: thực thi source routing đi xuống.
+ */
 void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender)
 {
         struct my_collect_conn *conn =
@@ -298,6 +618,12 @@ void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender)
 
 /* ----------------------------- Helpers for upward/downward ----------------------------- */
 
+/**
+ * @brief Kiểm tra một địa chỉ node đã có trong block piggyback hay chưa.
+ * @param piggy_len Số entry piggy hiện có trong gói.
+ * @param node      Địa chỉ node cần kiểm tra.
+ * @return true nếu đã tồn tại; false nếu chưa.
+ */
 bool check_address_in_piggyback_block(uint8_t piggy_len, linkaddr_t node)
 {
         printf("Checking piggy address: %02u:%02u\n", node.u8[0], node.u8[1]);
@@ -319,6 +645,13 @@ bool check_address_in_piggyback_block(uint8_t piggy_len, linkaddr_t node)
         return false;
 }
 
+/**
+ * @brief Xử lý gói UL đến và chuyển tiếp lên parent.
+ * @param conn   Cấu trúc kết nối collect.
+ * @param sender Địa chỉ sender (bỏ qua đối với xử lý nội bộ).
+ * @details SINK: bỏ header, áp dụng piggy, giao payload cho app.
+ *          NODE: tăng hops; có thể chèn (node,parent) vào piggy nếu hợp lệ.
+ */
 void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
 {
         (void)sender;
@@ -396,6 +729,13 @@ void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
         }
 }
 
+/**
+ * @brief Xử lý gói DL SRDCP đi xuống (source routing).
+ * @param conn   Cấu trúc kết nối collect.
+ * @param sender Địa chỉ sender (không dùng).
+ * @details Nếu là đích cuối: giao app. Ngược lại: pop next-hop, giảm path_len,
+ *          cập nhật header và chuyển tiếp tới hop kế tiếp.
+ */
 void forward_downward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
 {
         (void)sender;
