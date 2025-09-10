@@ -13,7 +13,7 @@ void print_dict_state(TreeDict *dict)
         int i;
         for (i = 0; i < dict->len; i++)
         {
-                printf("\tDictEntry %d: node %02x:%02x - parent %02x:%02x\n",
+                printf("\tDictEntry %d: node %02u:%02u - parent %02u:%02u\n",
                        i,
                        dict->entries[i].key.u8[0],
                        dict->entries[i].key.u8[1],
@@ -62,10 +62,10 @@ int dict_add(TreeDict *dict, const linkaddr_t key, linkaddr_t value)
         /* Loại bỏ entry rỗng (node 00 hoặc parent 00) */
         if (k.u8[0] == 0 || v.u8[0] == 0)
         {
-                /* printf("Dictionary drop: key %02x:%02x value %02x:%02x\n", k.u8[0], k.u8[1], v.u8[0], v.u8[1]); */
+                /* printf("Dictionary drop: key %02u:%02u value %02u:%02u\n", k.u8[0], k.u8[1], v.u8[0], v.u8[1]); */
                 return 0;
         }
-        printf("Dictionary add: key: %02x:%02x value: %02x:%02x\n",
+        printf("Dictionary add: key: %02u:%02u value: %02u:%02u\n",
                k.u8[0], k.u8[1], v.u8[0], v.u8[1]);
 
         int idx = dict_find_index(dict, k);
@@ -77,7 +77,7 @@ int dict_add(TreeDict *dict, const linkaddr_t key, linkaddr_t value)
         /* chèn mới */
         if (dict->len == MAX_NODES)
         {
-                printf("Dictionary is full. MAX_NODES cap reached. Proposed key: %02x:%02x value: %02x:%02x\n",
+                printf("Dictionary is full. MAX_NODES cap reached. Proposed key: %02u:%02u value: %02u:%02u\n",
                        k.u8[0], k.u8[1], v.u8[0], v.u8[1]);
                 return -1;
         }
@@ -147,7 +147,7 @@ int find_route(my_collect_conn *conn, const linkaddr_t *dest)
                 if (linkaddr_cmp(&parent, &linkaddr_null) ||
                     already_in_route(conn, path_len, &parent))
                 {
-                        printf("PATH ERROR: cannot build path for destination node: %02x:%02x. Loop detected.\n",
+                        printf("PATH ERROR: cannot build path for destination node: %02u:%02u. Loop detected.\n",
                                (*dest).u8[0], (*dest).u8[1]);
                         return 0;
                 }
@@ -157,7 +157,7 @@ int find_route(my_collect_conn *conn, const linkaddr_t *dest)
         if (path_len > MAX_PATH_LENGTH)
         {
                 // path too long
-                printf("PATH ERROR: Path too long for destination node: %02x:%02x\n",
+                printf("PATH ERROR: Path too long for destination node: %02u:%02u\n",
                        (*dest).u8[0], (*dest).u8[1]);
                 return 0;
         }
@@ -167,10 +167,10 @@ int find_route(my_collect_conn *conn, const linkaddr_t *dest)
 void print_route(my_collect_conn *conn, uint8_t route_len, const linkaddr_t *dest)
 {
         uint8_t i;
-        printf("Sink route to node %02x:%02x:\n", (*dest).u8[0], (*dest).u8[1]);
+        printf("Sink route to node %02u:%02u:\n", (*dest).u8[0], (*dest).u8[1]);
         for (i = 0; i < route_len; i++)
         {
-                printf("\t%d: %02x:%02x\n",
+                printf("\t%d: %02u:%02u\n",
                        i,
                        conn->routing_table.tree_path[i].u8[0],
                        conn->routing_table.tree_path[i].u8[1]);

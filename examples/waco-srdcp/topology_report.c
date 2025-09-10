@@ -47,7 +47,7 @@ void topology_report_hold_cb(void *ptr)
 bool check_topology_report_address(my_collect_conn *conn, linkaddr_t node, uint8_t len)
 {
         (void)conn;
-        LOG(TAG_TOPO, "checking report block for %02x:%02x", node.u8[0], node.u8[1]);
+        LOG(TAG_TOPO, "checking report block for %02u:%02u", node.u8[0], node.u8[1]);
 
         tree_connection tc;
         uint8_t i;
@@ -59,7 +59,7 @@ bool check_topology_report_address(my_collect_conn *conn, linkaddr_t node, uint8
                 /* Compare against the provided 'node' (correct semantics) */
                 if (linkaddr_cmp(&tc.node, &node))
                 {
-                        LOG(TAG_TOPO, "already contains %02x:%02x", node.u8[0], node.u8[1]);
+                        LOG(TAG_TOPO, "already contains %02u:%02u", node.u8[0], node.u8[1]);
                         return true;
                 }
         }
@@ -84,7 +84,7 @@ void send_topology_report(my_collect_conn *conn, uint8_t forward)
                     !check_topology_report_address(conn, linkaddr_node_addr, len))
                 {
 
-                        LOG(TAG_TOPO, "append (node=%02x:%02x parent=%02x:%02x)",
+                        LOG(TAG_TOPO, "append (node=%02u:%02u parent=%02u:%02u)",
                             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
                             conn->parent.u8[0], conn->parent.u8[1]);
 
@@ -111,7 +111,7 @@ void send_topology_report(my_collect_conn *conn, uint8_t forward)
         }
 
         /* Build this node's topology report and send to parent */
-        LOG(TAG_TOPO, "node %02x:%02x sending topology report",
+        LOG(TAG_TOPO, "node %02u:%02u sending topology report",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
 
         enum packet_type pt = topology_report;
@@ -153,11 +153,11 @@ void deliver_topology_report_to_sink(my_collect_conn *conn)
                 tc.parent.u8[1] = 0x00;
                 if (tc.node.u8[0] == 0 || tc.parent.u8[0] == 0)
                 {
-                        /* printf("[TOPO] drop invalid entry node=%02x:%02x parent=%02x:%02x\n",
+                        /* printf("[TOPO] drop invalid entry node=%02u:%02u parent=%02u:%02u\n",
                            tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]); */
                         continue;
                 }
-                printf("Sink: received topology report. Updating parent of node %02x:%02x\n",
+                printf("Sink: received topology report. Updating parent of node %02u:%02u\n",
                        tc.node.u8[0], tc.node.u8[1]);
                 dict_add(&conn->routing_table, tc.node, tc.parent);
         }

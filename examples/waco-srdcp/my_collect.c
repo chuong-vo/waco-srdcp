@@ -120,7 +120,7 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
         rssi = packetbuf_attr(PACKETBUF_ATTR_RSSI);
         lqi = packetbuf_attr(PACKETBUF_ATTR_LINK_QUALITY);
 
-        LOG(TAG_BEACON, "rx from=%02x:%02x seq=%u metric=%u rssi=%d lqi=%u",
+        LOG(TAG_BEACON, "rx from=%02u:%02u seq=%u metric=%u rssi=%d lqi=%u",
             sender->u8[0], sender->u8[1],
             (unsigned)beacon.seqn, (unsigned)beacon.metric, (int)rssi, (unsigned)lqi);
 
@@ -154,7 +154,7 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
         if (!linkaddr_cmp(&conn->parent, sender))
         {
                 linkaddr_copy(&conn->parent, sender);
-                LOG(TAG_COLLECT, "parent set to %02x:%02x (new_metric=%u)",
+                LOG(TAG_COLLECT, "parent set to %02u:%02u (new_metric=%u)",
                     conn->parent.u8[0], conn->parent.u8[1], (unsigned)conn->metric);
 
                 if (TOPOLOGY_REPORT)
@@ -224,7 +224,7 @@ int sr_send(struct my_collect_conn *conn, const linkaddr_t *dest)
         print_route(conn, path_len, dest);
         if (path_len == 0)
         {
-                LOG(TAG_SRDCP, "no route to %02x:%02x (downlink dropped)", dest->u8[0], dest->u8[1]);
+                LOG(TAG_SRDCP, "no route to %02u:%02u (downlink dropped)", dest->u8[0], dest->u8[1]);
                 return 0;
         }
 
@@ -258,7 +258,7 @@ void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender)
         enum packet_type pt;
         memcpy(&pt, packetbuf_dataptr(), sizeof(enum packet_type));
 
-        LOG(TAG_UC, "rx type=%d from=%02x:%02x", (int)pt, sender->u8[0], sender->u8[1]);
+        LOG(TAG_UC, "rx type=%d from=%02u:%02u", (int)pt, sender->u8[0], sender->u8[1]);
 
         switch (pt)
         {
@@ -300,7 +300,7 @@ void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender)
 
 bool check_address_in_piggyback_block(uint8_t piggy_len, linkaddr_t node)
 {
-        printf("Checking piggy address: %02x:%02x\n", node.u8[0], node.u8[1]);
+        printf("Checking piggy address: %02u:%02u\n", node.u8[0], node.u8[1]);
         uint8_t i;
         tree_connection tc;
         for (i = 0; i < piggy_len; i++)
@@ -312,7 +312,7 @@ bool check_address_in_piggyback_block(uint8_t piggy_len, linkaddr_t node)
                 tc.node.u8[1] = 0x00;
                 if (linkaddr_cmp(&tc.node, &node))
                 {
-                        printf("ERROR: Checking piggy address found: %02x:%02x\n", node.u8[0], node.u8[1]);
+                        printf("ERROR: Checking piggy address found: %02u:%02u\n", node.u8[0], node.u8[1]);
                         return true;
                 }
         }
@@ -354,7 +354,7 @@ void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
                                 }
                                 else
                                 {
-                                        /* printf("[PIGGY] drop invalid tc node=%02x:%02x parent=%02x:%02x\n",
+                                        /* printf("[PIGGY] drop invalid tc node=%02u:%02u parent=%02u:%02u\n",
                                            tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]); */
                                 }
                         }
@@ -379,7 +379,7 @@ void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
                         tc.parent.u8[1] = 0x00;
                         hdr.piggy_len = hdr.piggy_len + 1;
 
-                        printf("Adding tree_connection to piggyinfo: key %02x:%02x value: %02x:%02x\n",
+                        printf("Adding tree_connection to piggyinfo: key %02u:%02u value: %02u:%02u\n",
                                tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]);
 
                         memcpy(packetbuf_hdrptr(), packetbuf_dataptr(), sizeof(enum packet_type));
@@ -411,7 +411,7 @@ void forward_downward_data(struct my_collect_conn *conn, const linkaddr_t *sende
         {
                 if (hdr.path_len == 1)
                 {
-                        LOG(TAG_SRDCP, "path complete at %02x:%02x; deliver",
+                        LOG(TAG_SRDCP, "path complete at %02u:%02u; deliver",
                             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
                         packetbuf_hdrreduce(sizeof(enum packet_type) +
                                             sizeof(downward_data_packet_header) +
@@ -433,7 +433,7 @@ void forward_downward_data(struct my_collect_conn *conn, const linkaddr_t *sende
         }
         else
         {
-                LOG(TAG_SRDCP, "drop (for=%02x:%02x; I'm=%02x:%02x)",
+                LOG(TAG_SRDCP, "drop (for=%02u:%02u; I'm=%02u:%02u)",
                     addr.u8[0], addr.u8[1], linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
         }
 }

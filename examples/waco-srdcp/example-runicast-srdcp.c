@@ -276,7 +276,7 @@ static void pdr_ul_print_csv(void)
   int i;
   if (!csv_ul_header_printed)
   {
-    APP_LOG("CSV,PDR_UL,local=%02x:%02x,time,peer,first,last,recv,gaps,dups,expected,PDR%%,parent,my_metric\n",
+    APP_LOG("CSV,PDR_UL,local=%02u:%02u,time,peer,first,last,recv,gaps,dups,expected,PDR%%,parent,my_metric\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
     csv_ul_header_printed = 1;
   }
@@ -289,7 +289,7 @@ static void pdr_ul_print_csv(void)
         expected = 1;
       uint32_t recv = pdr_ul[i].received;
       uint32_t pdrx = (recv * 10000UL) / expected;
-      APP_LOG("CSV,PDR_UL,local=%02x:%02x,%lu,%02x:%02x,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02x:%02x,%u\n",
+      APP_LOG("CSV,PDR_UL,local=%02u:%02u,%lu,%02u:%02u,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02u:%02u,%u\n",
               linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
               (unsigned long)(clock_time() / CLOCK_SECOND),
               pdr_ul[i].id.u8[0], pdr_ul[i].id.u8[1],
@@ -358,7 +358,7 @@ static void pdr_dl_print_csv(void)
 {
   if (!csv_dl_header_printed)
   {
-    APP_LOG("CSV,PDR_DL,local=%02x:%02x,time,peer,first,last,recv,gaps,dups,expected,PDR%%,parent,my_metric\n",
+    APP_LOG("CSV,PDR_DL,local=%02u:%02u,time,peer,first,last,recv,gaps,dups,expected,PDR%%,parent,my_metric\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
     csv_dl_header_printed = 1;
   }
@@ -368,7 +368,7 @@ static void pdr_dl_print_csv(void)
   if (expected == 0)
     expected = 1;
   uint32_t pdrx = (pdr_dl.received * 10000UL) / expected;
-  APP_LOG("CSV,PDR_DL,local=%02x:%02x,%lu,%02x:%02x,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02x:%02x,%u\n",
+  APP_LOG("CSV,PDR_DL,local=%02u:%02u,%lu,%02u:%02u,%u,%u,%lu,%lu,%lu,%lu,%lu.%02lu,%02u:%02u,%u\n",
           linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
           (unsigned long)(clock_time() / CLOCK_SECOND),
           sink_addr.u8[0], sink_addr.u8[1],
@@ -390,7 +390,7 @@ static void nei_print_csv_all(const char *who)
 
   if (!csv_nei_header_printed)
   {
-    APP_LOG("CSV,NEI,local=%02x:%02x,who,time,rank,neigh,hop,rssi,lqi,last_seen,neigh_last_seq,parent,my_metric\n",
+    APP_LOG("CSV,NEI,local=%02u:%02u,who,time,rank,neigh,hop,rssi,lqi,last_seen,neigh_last_seq,parent,my_metric\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
     csv_nei_header_printed = 1;
   }
@@ -400,7 +400,7 @@ static void nei_print_csv_all(const char *who)
     nei_entry_t *e = ptrs[i];
     unsigned long last_s = (unsigned long)(e->last_seen / CLOCK_SECOND);
     uint16_t hop = e->metric;
-    APP_LOG("CSV,NEI,local=%02x:%02x,%s,%lu,%d,%02x:%02x,%u,%d,%u,%lu,%u,%02x:%02x,%u\n",
+    APP_LOG("CSV,NEI,local=%02u:%02u,%s,%lu,%d,%02u:%02u,%u,%d,%u,%lu,%u,%02u:%02u,%u\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
             who,
             (unsigned long)(clock_time() / CLOCK_SECOND),
@@ -428,10 +428,10 @@ static void nei_print_csv_all(const char *who)
       nei_entry_t *e = ptrs[k];
       unsigned long last_s = (unsigned long)(e->last_seen / CLOCK_SECOND);
       if (e->metric == 0xFFFF)
-        APP_LOG("NEI[%s]-TOP%d: | %02x:%02x | %3u | %4d| %8lus | %4u |  --  |\n",
+        APP_LOG("NEI[%s]-TOP%d: | %02u:%02u | %3u | %4d| %8lus | %4u |  --  |\n",
                 who, topn, e->addr.u8[0], e->addr.u8[1], e->lqi, (int)e->rssi, last_s, e->last_seq);
       else
-        APP_LOG("NEI[%s]-TOP%d: | %02x:%02x | %3u | %4d| %8lus | %4u | %4u |\n",
+        APP_LOG("NEI[%s]-TOP%d: | %02u:%02u | %3u | %4d| %8lus | %4u | %4u |\n",
                 who, topn, e->addr.u8[0], e->addr.u8[1], e->lqi, (int)e->rssi, last_s, e->last_seq, e->metric);
     }
     APP_LOG("NEI[%s]-TOP%d: +------+------+-----+----------+------+------+\n", who, topn);
@@ -453,7 +453,7 @@ static void recv_cb(const linkaddr_t *originator, uint8_t hops)
   /* update neighbor table (include metric=hops for originator as seen by sink) */
   nei_update_from_rx(originator, msg.seqn, (int)hops);
 
-  APP_LOG("APP-UL[SINK]: got seq=%u from %02x:%02x hops=%u my_metric=%u\n",
+  APP_LOG("APP-UL[SINK]: got seq=%u from %02u:%02u hops=%u my_metric=%u\n",
           msg.seqn, originator->u8[0], originator->u8[1], hops, my_collect.metric);
 
   /* Track path length changes to trigger a quick NEI dump (optional) */
@@ -468,13 +468,13 @@ static void recv_cb(const linkaddr_t *originator, uint8_t hops)
   {
     if (last_hops_by_node[originator->u8[0]] != 0xFF)
     {
-      APP_LOG("TOPO[SINK]: %02x:%02x hops %u -> %u\n",
+      APP_LOG("TOPO[SINK]: %02u:%02u hops %u -> %u\n",
               originator->u8[0], originator->u8[1],
               last_hops_by_node[originator->u8[0]], hops);
     }
     else
     {
-      APP_LOG("TOPO[SINK]: %02x:%02x initial hops -> %u\n",
+      APP_LOG("TOPO[SINK]: %02u:%02u initial hops -> %u\n",
               originator->u8[0], originator->u8[1], hops);
     }
     last_hops_by_node[originator->u8[0]] = hops;
@@ -497,7 +497,7 @@ static void sr_recv_cb(struct my_collect_conn *ptr, uint8_t hops)
   const linkaddr_t *sender_ll = packetbuf_addr(PACKETBUF_ADDR_SENDER);
   if (packetbuf_datalen() != sizeof(test_msg_t))
   {
-    APP_LOG("APP-DL[NODE %02x:%02x]: wrong length %d B (expected %u B)\n",
+    APP_LOG("APP-DL[NODE %02u:%02u]: wrong length %d B (expected %u B)\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
             packetbuf_datalen(), (unsigned)sizeof(test_msg_t));
     return;
@@ -507,7 +507,7 @@ static void sr_recv_cb(struct my_collect_conn *ptr, uint8_t hops)
   if (sender_ll)
     nei_update_from_rx(sender_ll, sr_msg.seqn, -1);
 
-  APP_LOG("APP-DL[NODE %02x:%02x]: got SR seq=%u hops=%u my_metric=%u parent=%02x:%02x\n",
+  APP_LOG("APP-DL[NODE %02u:%02u]: got SR seq=%u hops=%u my_metric=%u parent=%02u:%02u\n",
           linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
           sr_msg.seqn, hops, ptr->metric, ptr->parent.u8[0], ptr->parent.u8[1]);
 
@@ -598,18 +598,18 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
   if (linkaddr_cmp(&linkaddr_node_addr, &sink_addr))
   {
     /*==================== SINK ====================*/
-    APP_LOG("APP-ROLE[SINK]: started (local=%02x:%02x)\n",
+    APP_LOG("APP-ROLE[SINK]: started (local=%02u:%02u)\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
 
     my_collect_open(&my_collect, COLLECT_CHANNEL, true, &sink_cb);
-    APP_LOG("CSV,INFO,local=%02x:%02x,%lu,SINK,%02x:%02x,%u\n",
+    APP_LOG("CSV,INFO,local=%02u:%02u,%lu,SINK,%02u:%02u,%u\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
             (unsigned long)(clock_time() / CLOCK_SECOND),
             my_collect.parent.u8[0], my_collect.parent.u8[1],
             my_collect.metric);
 
 #if APP_DOWNWARD_TRAFFIC
-    etimer_set(&periodic, 45 * CLOCK_SECOND); /* warm-up topology */
+    etimer_set(&periodic, 180 * CLOCK_SECOND); /* warm-up topology */
     etimer_set(&nei_tick, NEI_PRINT_PERIOD);
 
     dest.u8[0] = 0x02;
@@ -631,13 +631,13 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         msg.seqn = ++dl_seq_per_dest[dest.u8[0]];
         packetbuf_copyfrom(&msg, sizeof(msg));
 
-        APP_LOG("APP-DL[SINK]: send SR seq=%u -> %02x:%02x\n",
+        APP_LOG("APP-DL[SINK]: send SR seq=%u -> %02u:%02u\n",
                 msg.seqn, dest.u8[0], dest.u8[1]);
 
         ret = sr_send(&my_collect, &dest);
         if (ret == 0)
         {
-          APP_LOG("ERR,SINK,sr_send,seq=%u,dst=%02x:%02x\n", msg.seqn, dest.u8[0], dest.u8[1]);
+          APP_LOG("ERR,SINK,sr_send,seq=%u,dst=%02u:%02u\n", msg.seqn, dest.u8[0], dest.u8[1]);
         }
 
         /* rotate 2..APP_NODES */
@@ -663,11 +663,11 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
   else
   {
     /*==================== NODE ====================*/
-    APP_LOG("APP-ROLE[NODE %02x:%02x]: started\n",
+    APP_LOG("APP-ROLE[NODE %02u:%02u]: started\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
 
     my_collect_open(&my_collect, COLLECT_CHANNEL, false, &node_cb);
-    APP_LOG("CSV,INFO,local=%02x:%02x,%lu,NODE,%02x:%02x,%u\n",
+    APP_LOG("CSV,INFO,local=%02u:%02u,%lu,NODE,%02u:%02u,%u\n",
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
             (unsigned long)(clock_time() / CLOCK_SECOND),
             my_collect.parent.u8[0], my_collect.parent.u8[1],
@@ -695,7 +695,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         }
         else if (!linkaddr_cmp(&last_parent, &my_collect.parent))
         {
-          APP_LOG("ROUTE[NODE %02x:%02x]: parent %02x:%02x -> %02x:%02x metric=%u\n",
+          APP_LOG("ROUTE[NODE %02u:%02u]: parent %02u:%02u -> %02u:%02u metric=%u\n",
                   linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
                   last_parent.u8[0], last_parent.u8[1],
                   my_collect.parent.u8[0], my_collect.parent.u8[1],
@@ -711,7 +711,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         packetbuf_clear();
         packetbuf_copyfrom(&msg, sizeof(msg));
 
-        APP_LOG("APP-UL[NODE %02x:%02x]: send seq=%u metric=%u parent=%02x:%02x\n",
+        APP_LOG("APP-UL[NODE %02u:%02u]: send seq=%u metric=%u parent=%02u:%02u\n",
                 linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
                 msg.seqn, my_collect.metric, my_collect.parent.u8[0], my_collect.parent.u8[1]);
 
