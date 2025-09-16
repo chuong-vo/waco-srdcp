@@ -59,16 +59,18 @@
 #endif
 
 #ifndef MSG_PERIOD
-#define MSG_PERIOD (10 * CLOCK_SECOND) /* uplink period */
+/* Fast-convergence app profile: a bit more frequent UL */
+#define MSG_PERIOD (15 * CLOCK_SECOND) /* uplink period */
 #endif
 #ifndef SR_MSG_PERIOD
-#define SR_MSG_PERIOD (8 * CLOCK_SECOND) /* downlink period at sink */
+/* Fast-convergence app profile: slightly faster DL rotation */
+#define SR_MSG_PERIOD (12 * CLOCK_SECOND) /* downlink period at sink */
 #endif
 #define COLLECT_CHANNEL 0xAA /* SRDCP uses C and C+1 */
 
-#define NEI_MAX 24
+#define NEI_MAX 32
 #define NEI_TOPK 5
-#define NEI_PRINT_PERIOD (30 * CLOCK_SECOND)
+#define NEI_PRINT_PERIOD (60 * CLOCK_SECOND)
 #define PDR_PRINT_PERIOD (60 * CLOCK_SECOND)
 /* Aging theo beacon: +1 mỗi lần thấy beacon (tối đa 10),
  * mỗi BEACON_INTERVAL giảm 1 nếu không thấy; =0 thì xoá. */
@@ -358,6 +360,13 @@ static void pdr_ul_print_csv(void)
   {
     if (pdr_ul[i].used)
     {
+      /* Sanity filters: skip invalid peer or uninitialised stats */
+      if ((pdr_ul[i].id.u8[0] == 0 && pdr_ul[i].id.u8[1] == 0) ||
+          (pdr_ul[i].id.u8[0] == 0xFF && pdr_ul[i].id.u8[1] == 0xFF) ||
+          (pdr_ul[i].first_seq == 0xFFFF) || (pdr_ul[i].last_seq == 0xFFFF))
+      {
+        continue;
+      }
       uint32_t expected = (uint32_t)(pdr_ul[i].last_seq - pdr_ul[i].first_seq + 1);
       if (expected == 0)
         expected = 1;
@@ -447,7 +456,8 @@ static void pdr_dl_print_csv(void)
             linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
     csv_dl_header_printed = 1;
   }
-  if (!pdr_dl.inited)
+  /* Sanity: skip if not inited or invalid seq window */
+  if (!pdr_dl.inited || pdr_dl.first_seq == 0xFFFF || pdr_dl.last_seq == 0xFFFF || pdr_dl.last_seq < pdr_dl.first_seq)
     return;
   uint32_t expected = (uint32_t)(pdr_dl.last_seq - pdr_dl.first_seq + 1);
   if (expected == 0)
@@ -748,7 +758,8 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
 #if APP_DOWNWARD_TRAFFIC
     /* Warm-up before downlink; can override via -DWARMUP_S=NN */
 #ifndef WARMUP_S
-#define WARMUP_S 30
+/* Fast-convergence: shorter warm-up before DL */
+#define WARMUP_S 240
 #endif
     etimer_set(&periodic, WARMUP_S * CLOCK_SECOND); /* warm-up topology */
     etimer_set(&nei_tick, NEI_PRINT_PERIOD);

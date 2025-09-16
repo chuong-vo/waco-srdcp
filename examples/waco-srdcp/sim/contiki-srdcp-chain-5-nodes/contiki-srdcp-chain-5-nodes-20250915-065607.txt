@@ -1,0 +1,123 @@
+=== START Mon Sep 15 06:56:07 UTC 2025 | motes=5 ===
+338541	ID:5	Rime started with address 5.0
+347065	ID:5	MAC 05:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 5.
+358436	ID:5	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+361670	ID:5	Starting 'SRDCP-integrated runicast example'
+367563	ID:5	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+369799	ID:5	APP-ROLE[NODE 05:00]: started
+375469	ID:5	CSV,INFO,local=05:00,0,NODE,00:00,65535
+377461	ID:5	5.0: Contiki> 
+823266	ID:1	Rime started with address 1.0
+831792	ID:1	MAC 01:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 1.
+843168	ID:1	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+846401	ID:1	Starting 'SRDCP-integrated runicast example'
+852362	ID:1	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+855143	ID:1	APP-ROLE[SINK]: started (local=01:00)
+860293	ID:1	CSV,INFO,local=01:00,0,SINK,00:00,0
+862383	ID:1	1.0: Contiki> 
+916132	ID:3	Rime started with address 3.0
+924654	ID:3	MAC 03:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 3.
+936030	ID:3	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+939263	ID:3	Starting 'SRDCP-integrated runicast example'
+945224	ID:3	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+947460	ID:3	APP-ROLE[NODE 03:00]: started
+953109	ID:3	CSV,INFO,local=03:00,0,NODE,00:00,65535
+955101	ID:3	3.0: Contiki> 
+1038869	ID:2	Rime started with address 2.0
+1047394	ID:2	MAC 02:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 2.
+1058769	ID:2	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+1062003	ID:2	Starting 'SRDCP-integrated runicast example'
+1067965	ID:2	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1070201	ID:2	APP-ROLE[NODE 02:00]: started
+1075824	ID:2	CSV,INFO,local=02:00,0,NODE,00:00,65535
+1077816	ID:2	2.0: Contiki> 
+1244595	ID:4	Rime started with address 4.0
+1253121	ID:4	MAC 04:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 4.
+1264495	ID:4	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+1267729	ID:4	Starting 'SRDCP-integrated runicast example'
+1273622	ID:4	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1275858	ID:4	APP-ROLE[NODE 04:00]: started
+1281528	ID:4	CSV,INFO,local=04:00,0,NODE,00:00,65535
+1283520	ID:4	4.0: Contiki> 
+1852255	ID:1	BEACON: send seq=0 metric=0
+9852217	ID:1	BEACON: send seq=1 metric=0
+10392407	ID:5	 1284 P 5.0 0 18645 309761 0 33306 0 33306 18645 309761 0 33306 0 33306 (radio 10.14% / 10.14% tx 0.00% / 0.00% listen 10.14% / 10.14%)
+10878605	ID:1	 1284 P 1.0 0 21448 306962 249 33309 0 33150 21448 306962 249 33309 0 33150 (radio 10.21% / 10.21% tx 0.07% / 0.07% listen 10.14% / 10.14%)
+10970000	ID:3	 1284 P 3.0 0 18646 309760 0 33306 0 33306 18646 309760 0 33306 0 33306 (radio 10.14% / 10.14% tx 0.00% / 0.00% listen 10.14% / 10.14%)
+11092155	ID:2	 1284 P 2.0 0 18646 309755 0 33373 0 33373 18646 309755 0 33373 0 33373 (radio 10.16% / 10.16% tx 0.00% / 0.00% listen 10.16% / 10.16%)
+11298466	ID:4	 1284 P 4.0 0 18645 309761 0 33306 0 33306 18645 309761 0 33306 0 33306 (radio 10.14% / 10.14% tx 0.00% / 0.00% listen 10.14% / 10.14%)
+16581463	ID:5	APP-UL[NODE 05:00]: send seq=0 metric=65535 parent=00:00
+16584335	ID:5	UL: drop (no parent)
+16586509	ID:5	ERR,NODE,my_collect_send,seq=0
+17852256	ID:1	BEACON: send seq=2 metric=0
+17874995	ID:2	BEACON: rx from=01:00 seq=1 tx=2 metric=0 rssi=-51 lqi=37
+17880981	ID:2	PRR: nei=01:00 prr=100 recv=1 exp=1 tx=2
+17887987	ID:2	STAB: new-tree adopt parent=01:00 metric=1 dwell_until=5997
+17893260	ID:2	COLLECT: schedule beacon forward after 36 ticks
+17901244	ID:2	BEACON: rx from=01:00 seq=2 tx=3 metric=0 rssi=-51 lqi=37
+17905450	ID:2	PRR: nei=01:00 prr=100 recv=2 exp=2 tx=3
+17911441	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+17916725	ID:2	COLLECT: schedule beacon forward after 55 ticks
+18135557	ID:4	APP-UL[NODE 04:00]: send seq=0 metric=65535 parent=00:00
+18138463	ID:4	UL: drop (no parent)
+18140636	ID:4	ERR,NODE,my_collect_send,seq=0
+18216758	ID:2	BEACON: send seq=2 metric=1
+18239641	ID:3	BEACON: rx from=02:00 seq=2 tx=1 metric=1 rssi=-51 lqi=37
+18242656	ID:1	BEACON: rx from=02:00 seq=2 tx=1 metric=1 rssi=-51 lqi=37
+18244099	ID:3	PRR: nei=02:00 prr=100 recv=1 exp=1 tx=1
+18248826	ID:1	PRR: nei=02:00 prr=100 recv=1 exp=1 tx=1
+18250635	ID:3	STAB: new-tree adopt parent=02:00 metric=2 dwell_until=6059
+18252562	ID:1	COLLECT: ignore beacon (worse hops: my=0, neigh+1=2)
+18255900	ID:3	COLLECT: schedule beacon forward after 63 ticks
+18455490	ID:3	APP-UL[NODE 03:00]: send seq=0 metric=2 parent=02:00
+18477534	ID:3	BEACON: send seq=2 metric=2
+18497497	ID:2	UC: rx type=0 from=03:00
+18498315	ID:2	UC: data rx
+18498791	ID:4	BEACON: rx from=03:00 seq=2 tx=1 metric=2 rssi=-51 lqi=37
+18500549	ID:2	Checking piggy address: 02:00
+18504024	ID:4	PRR: nei=03:00 prr=100 recv=1 exp=1 tx=1
+18506741	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+18510271	ID:4	STAB: new-tree adopt parent=03:00 metric=3 dwell_until=6050
+18515584	ID:4	COLLECT: schedule beacon forward after 25 ticks
+18527362	ID:1	UC: rx type=0 from=02:00
+18528180	ID:1	UC: data rx
+18530357	ID:1	PIGGY: apply 2 entries at sink
+18533464	ID:1	Dictionary add: key: 02:00 value: 01:00
+18538218	ID:1	Dictionary add: key: 03:00 value: 02:00
+18542564	ID:1	APP-UL[SINK]: got seq=0 from 03:00 hops=2 my_metric=0
+18547455	ID:1	TOPO[SINK]: 03:00 initial hops -> 2
+18555966	ID:1	CSV,NEI,local=01:00,who,time,rank,neigh,hop,rssi,lqi,prr,last_seen,neigh_last_seq,parent,my_metric
+18564630	ID:1	CSV,NEI,local=01:00,SINK,17,1,02:00,1,-51,37,100,17,0,00:00,0
+18572969	ID:1	CSV,NEI,local=01:00,SINK,17,2,03:00,2,-51,37,0,17,0,00:00,0
+18579198	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+18585393	ID:1	NEI[SINK]-TOP2: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+18590755	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+18599911	ID:1	NEI[SINK]-TOP2: | 02:00 |  37 |  -51|       17s |    0 |    1 | 100| 4|
+18608009	ID:1	NEI[SINK]-TOP2: | 03:00 |  37 |  -51|       17s |    0 |    2 |  0| 3|
+18612708	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+18641233	ID:4	BEACON: send seq=2 metric=3
+18662100	ID:5	BEACON: rx from=04:00 seq=2 tx=1 metric=3 rssi=-51 lqi=37
+18666558	ID:5	PRR: nei=04:00 prr=100 recv=1 exp=1 tx=1
+18673009	ID:5	STAB: new-tree adopt parent=04:00 metric=4 dwell_until=6187
+18678282	ID:5	COLLECT: schedule beacon forward after 52 ticks
+18711249	ID:5	BEACON: send seq=2 metric=4
+18733993	ID:4	BEACON: rx from=05:00 seq=2 tx=1 metric=4 rssi=-51 lqi=37
+18739693	ID:4	PRR: nei=05:00 prr=100 recv=1 exp=1 tx=1
+18743451	ID:4	COLLECT: ignore beacon (worse hops: my=3, neigh+1=5)
+20395008	ID:5	 2564 P 5.0 1 39411 616689 134 67005 0 66888 20763 306928 134 33699 0 33582 (radio 10.23% / 10.32% tx 0.02% / 0.04% listen 10.21% / 10.28%)
+20879714	ID:1	 2564 P 1.0 1 45501 610598 364 66996 0 66575 24050 303636 115 33687 0 33425 (radio 10.26% / 10.31% tx 0.05% / 0.03% listen 10.21% / 10.28%)
+20972599	ID:3	 2564 P 3.0 1 40017 616083 232 67477 0 67152 21368 306323 232 34171 0 33846 (radio 10.31% / 10.49% tx 0.03% / 0.07% listen 10.28% / 10.42%)
+21095351	ID:2	 2564 P 2.0 1 40864 615236 220 66940 0 66564 22215 305481 220 33567 0 33191 (radio 10.23% / 10.31% tx 0.03% / 0.06% listen 10.20% / 10.24%)
+21226174	ID:2	APP-UL[NODE 02:00]: send seq=0 metric=1 parent=01:00
+21245027	ID:1	UC: rx type=0 from=02:00
+21245845	ID:1	UC: data rx
+21248022	ID:1	PIGGY: apply 1 entries at sink
+21251130	ID:1	Dictionary add: key: 02:00 value: 01:00
+21256843	ID:1	APP-UL[SINK]: got seq=0 from 02:00 hops=1 my_metric=0
+21259549	ID:1	TOPO[SINK]: 02:00 initial hops -> 1
+21268386	ID:1	CSV,NEI,local=01:00,SINK,20,1,02:00,1,-51,37,100,20,0,00:00,0
+21276646	ID:1	CSV,NEI,local=01:00,SINK,20,2,03:00,2,-51,37,0,17,0,00:00,0
+21282856	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+21289113	ID:1	NEI[SINK]-TOP2: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+21295291	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+21301062	ID:4	 2564 P 4.0 1 40159 615941 114 67305 0 67154 21511 306180 114 33999 0 33848 (radio 1

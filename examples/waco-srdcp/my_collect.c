@@ -56,8 +56,9 @@ const linkaddr_t sink_addr = {{0x01, 0x00}};
 #define PRR_IMPROVE_MIN 60
 #endif
 /* Minimum time to keep chosen parent before tie-break switches (ticks) */
+/* Fast-convergence: allow faster parent changes under PRR tie-breaks */
 #ifndef MIN_PARENT_DWELL
-#define MIN_PARENT_DWELL (60 * CLOCK_SECOND)
+#define MIN_PARENT_DWELL (30 * CLOCK_SECOND)
 #endif
 /* Parent timeout (no beacon from parent for too long -> stale) */
 #ifndef PARENT_TIMEOUT

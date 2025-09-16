@@ -17,12 +17,14 @@
 #endif
 
 #define MAX_NODES 30
-#define MAX_PATH_LENGTH 10
+/* Fast-convergence profile: allow long paths for 30-node chains */
+#define MAX_PATH_LENGTH 32
 
 #ifndef BEACON_INTERVAL
-#define BEACON_INTERVAL CLOCK_SECOND * 8
+/* Fast-convergence: more frequent beacons */
+#define BEACON_INTERVAL (8 * CLOCK_SECOND)
 #endif
-/* Max random forward delay = BEACON_FWD_JITTER_TICKS (default 1 second) */
+/* Max random forward delay = BEACON_FWD_JITTER_TICKS */
 #ifndef BEACON_FWD_JITTER_TICKS
 #define BEACON_FWD_JITTER_TICKS CLOCK_SECOND / 2
 #endif
@@ -31,7 +33,8 @@
 #endif
 // Used for topology reports
 #ifndef TOPOLOGY_REPORT_HOLD_TIME
-#define TOPOLOGY_REPORT_HOLD_TIME (CLOCK_SECOND * 10)
+/* Fast-convergence: shorter hold to still piggyback but update quickly */
+#define TOPOLOGY_REPORT_HOLD_TIME (CLOCK_SECOND * 5)
 #endif
 
 #ifndef RSSI_THRESHOLD

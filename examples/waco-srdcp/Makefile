@@ -1,21 +1,26 @@
 # ---- Project / Contiki ----
 CONTIKI            = ../..
 CONTIKI_WITH_RIME  = 1
-CONTIKI_PROJECT    = example-runicast-srdcp
+# Dự án mặc định; có thêm các biến thể 15/30 nút qua wrapper C files
+CONTIKI_PROJECT    ?= example-runicast-srdcp example-runicast-srdcp-15 example-runicast-srdcp-30
 TARGET ?= sky
 
 # ---- App & sources ----
 all: $(CONTIKI_PROJECT)
+
+# Hỗ trợ build trực tiếp các biến thể:
+#   make example-runicast-srdcp-15.sky TARGET=sky
+#   make example-runicast-srdcp-30.sky TARGET=sky
 
 # Nếu 3 file SRDCP nằm cùng thư mục với Makefile:
 PROJECT_SOURCEFILES += my_collect.c routing_table.c topology_report.c
 
 # (Nếu muốn bật các flag này thì dùng CFLAGS và KHÔNG có dấu cách quanh '=')
 # CFLAGS += -DENABLE_COLLECT_VIEW=1
-CFLAGS += -DLOG_TOPO=1
+CFLAGS += -DLOG_TOPO=0
 CFLAGS += -DLOG_APP=1
 CFLAGS += -DLOG_COLLECT=1
-CFLAGS += -DLOG_WUR=1
+CFLAGS += -DLOG_WUR=0
 
 # ---- Config ----
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"

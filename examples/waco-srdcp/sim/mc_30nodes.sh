@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Monte Carlo headless runs for the 30-node chain scenario
+# Usage: mc_30nodes.sh [NUM_SEEDS] [OUTDIR]
+# - NUM_SEEDS: số lần chạy (mặc định 10)
+# - OUTDIR: thư mục lưu kết quả (mặc định examples/waco-srdcp/sim/out/waco-srdcp-chain-30-nodes-mc)
+
+NUM_SEEDS=${1:-10}
+
+# Chuẩn hoá đường dẫn tuyệt đối để chạy từ bất kỳ thư mục nào
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+
+OUTDIR=${2:-"$ROOT_DIR/examples/waco-srdcp/sim/out/waco-srdcp-chain-30-nodes-mc"}
+
+COOJA_BUILD_XML="$ROOT_DIR/tools/cooja/build.xml"
+SCEN="$ROOT_DIR/examples/waco-srdcp/sim/waco-srdcp-chain-30-nodes/waco-srdcp-chain-30-nodes.csc"
+LOGDIR="$ROOT_DIR/examples/waco-srdcp/sim/waco-srdcp-chain-30-nodes"
+
+echo "[mc30] Chuẩn bị thư mục output: $OUTDIR"
+mkdir -p "$OUTDIR"
+
+if ! command -v ant >/dev/null 2>&1; then
+  echo "[mc30][ERR] Không tìm thấy 'ant' trong PATH" >&2
+  exit 1
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "[mc30][ERR] Không tìm thấy 'python3' trong PATH" >&2
+  exit 1
+fi
+
+echo "[mc30] Build cooja jar (nếu cần)"
+ant -q -f "$COOJA_BUILD_XML" jar >/dev/null
+
+for s in $(seq 1 "$NUM_SEEDS"); do
+  echo "[mc30] Seed $s / $NUM_SEEDS: chạy headless..."
+  ant -q -f "$COOJA_BUILD_XML" run_bigmem -Dargs="-nogui=$SCEN -random-seed=$s" >/dev/null
+
+  # Tìm file log mới nhất, ưu tiên file có timestamp, fallback nếu không có
+  latest_txt=$(ls -t "$LOGDIR"/waco-srdcp-chain-30-nodes-*.txt 2>/dev/null | grep -v '_dc\.txt' | head -1 || true)
+  latest_dc=$(ls -t "$LOGDIR"/waco-srdcp-chain-30-nodes-*_dc.txt 2>/dev/null | head -1 || true)
+  if [[ -z "${latest_txt}" ]]; then
+    # fallback không có suffix
+    latest_txt="$LOGDIR/waco-srdcp-chain-30-nodes.txt"
+    latest_dc="$LOGDIR/waco-srdcp-chain-30-nodes_dc.txt"
+  fi
+
+  if [[ ! -f "$latest_txt" ]]; then
+    echo "[mc30][ERR] Không tìm thấy log TXT sau khi chạy seed=$s" >&2
+    exit 1
+  fi
+
+  dest_txt="$OUTDIR/seed-$s.txt"
+  echo "[mc30] Seed $s: lưu log -> $dest_txt"
+  echo "[mc30]   nguồn TXT: $latest_txt"
+  mv "$latest_txt" "$dest_txt"
+  if [[ -n "${latest_dc}" && -f "$latest_dc" ]]; then
+    echo "[mc30]   nguồn DC:  $latest_dc"
+    mv "$latest_dc" "$OUTDIR/seed-${s}_dc.txt"
+  fi
+
+  echo "[mc30] Seed $s: parse chỉ số -> CSV"
+  python3 "$ROOT_DIR/examples/waco-srdcp/sim/log_parser.py" "$dest_txt" --out-prefix "$OUTDIR/seed-$s" >/dev/null
+  if [[ -f "$OUTDIR/seed-${s}_dc.txt" ]]; then
+    echo "[mc30] Seed $s: tính năng lượng (radio) -> CSV"
+    python3 "$ROOT_DIR/examples/waco-srdcp/sim/energy_parser.py" "$OUTDIR/seed-${s}_dc.txt" --out-prefix "$OUTDIR/seed-$s" >/dev/null
+  fi
+done
+
+# Gọi script tổng hợp riêng biệt (không làm ảnh hưởng tới phần chạy mô phỏng)
+bash "$ROOT_DIR/examples/waco-srdcp/sim/aggregate_results.sh" "$OUTDIR" || true
+
+echo "[mc30] Hoàn tất. Kết quả nằm ở: $OUTDIR"

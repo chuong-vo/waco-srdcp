@@ -1,0 +1,625 @@
+=== START Mon Sep 15 14:59:55 UTC 2025 | motes=5 ===
+476057	ID:1	Rime started with address 0.18.116.1.0.1.1.1
+484793	ID:1	MAC 00:12:74:01:00:01:01:01 Contiki-012eace started. Node id is set to 1.
+487639	ID:1	wurrdc: Initialized
+488460	ID:4	Rime started with address 0.18.116.4.0.4.4.4
+495030	ID:1	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+497194	ID:4	MAC 00:12:74:04:00:04:04:04 Contiki-012eace started. Node id is set to 4.
+500041	ID:4	wurrdc: Initialized
+505472	ID:1	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7401:0001:0101
+507431	ID:4	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+507792	ID:1	Starting 'WaCo + RPL UDP example'
+513372	ID:1	APP-ROLE[SINK]: started (local=00:18)
+516999	ID:1	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+517875	ID:4	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7404:0004:0404
+520195	ID:4	Starting 'WaCo + RPL UDP example'
+520266	ID:1	CSV,INFO,local=00:18,0,SINK,00:00,0
+523548	ID:1	Main radio: OFF (startup cooldown)
+523564	ID:4	APP-ROLE[NODE 00:18]: started
+527176	ID:4	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+531063	ID:4	CSV,INFO,local=00:18,0,NODE,00:00,65535
+534021	ID:4	Main radio: OFF (startup cooldown)
+705740	ID:5	Rime started with address 0.18.116.5.0.5.5.5
+714473	ID:5	MAC 00:12:74:05:00:05:05:05 Contiki-012eace started. Node id is set to 5.
+717320	ID:5	wurrdc: Initialized
+724761	ID:5	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+735203	ID:5	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7405:0005:0505
+737523	ID:5	Starting 'WaCo + RPL UDP example'
+740892	ID:5	APP-ROLE[NODE 00:18]: started
+744504	ID:5	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+748394	ID:5	CSV,INFO,local=00:18,0,NODE,00:00,65535
+751352	ID:5	Main radio: OFF (startup cooldown)
+780996	ID:2	Rime started with address 0.18.116.2.0.2.2.2
+789734	ID:2	MAC 00:12:74:02:00:02:02:02 Contiki-012eace started. Node id is set to 2.
+792580	ID:2	wurrdc: Initialized
+795750	ID:3	Rime started with address 0.18.116.3.0.3.3.3
+800021	ID:2	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+804484	ID:3	MAC 00:12:74:03:00:03:03:03 Contiki-012eace started. Node id is set to 3.
+807330	ID:3	wurrdc: Initialized
+810465	ID:2	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7402:0002:0202
+812785	ID:2	Starting 'WaCo + RPL UDP example'
+814771	ID:3	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+816154	ID:2	APP-ROLE[NODE 00:18]: started
+819766	ID:2	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+823656	ID:2	CSV,INFO,local=00:18,0,NODE,00:00,65535
+825215	ID:3	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7403:0003:0303
+826614	ID:2	Main radio: OFF (startup cooldown)
+827535	ID:3	Starting 'WaCo + RPL UDP example'
+830904	ID:3	APP-ROLE[NODE 00:18]: started
+834516	ID:3	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+838406	ID:3	CSV,INFO,local=00:18,0,NODE,00:00,65535
+841364	ID:3	Main radio: OFF (startup cooldown)
+1727532	ID:5	WuS TX: sending wake-up signal to 00:00
+1730673	ID:4	WuR event: received WuS for 00:00
+1730673	ID:4	Main radio: ON (waiting for data after WuS)
+1731226	ID:5	Main radio: ON (preparing data TX)
+1732513	ID:3	WuR event: received WuS for 00:00
+1732513	ID:3	Main radio: ON (waiting for data after WuS)
+1740892	ID:4	Main radio: OFF (after RX processing)
+1749595	ID:4	Main radio: OFF (WuS data window elapsed)
+1752262	ID:3	Main radio: OFF (WuS data window elapsed)
+1802794	ID:2	WuS TX: sending wake-up signal to 00:00
+1803583	ID:3	WuR event: received WuS for 00:00
+1803583	ID:3	Main radio: ON (waiting for data after WuS)
+1804209	ID:1	WuR event: received WuS for 00:00
+1804209	ID:1	Main radio: ON (waiting for data after WuS)
+1806488	ID:2	Main radio: ON (preparing data TX)
+1807775	ID:4	WuR event: received WuS for 00:00
+1807775	ID:4	Main radio: ON (waiting for data after WuS)
+1816241	ID:1	Main radio: OFF (after RX processing)
+1816245	ID:3	Main radio: OFF (after RX processing)
+1822526	ID:3	Main radio: OFF (WuS data window elapsed)
+1823229	ID:1	Main radio: OFF (WuS data window elapsed)
+1827739	ID:4	Main radio: OFF (WuS data window elapsed)
+4342790	ID:1	WuS TX: sending wake-up signal to 00:00
+4343521	ID:2	WuR event: received WuS for 00:00
+4343521	ID:2	Main radio: ON (waiting for data after WuS)
+4346564	ID:1	Main radio: ON (preparing data TX)
+4348097	ID:3	WuR event: received WuS for 00:00
+4348749	ID:3	Main radio: ON (waiting for data after WuS)
+4363056	ID:2	Main radio: OFF (after RX processing)
+4366598	ID:2	Main radio: OFF (WuS data window elapsed)
+4369380	ID:3	Main radio: OFF (WuS data window elapsed)
+5825273	ID:2	APP-UL[NODE 00:18]: send seq=0 metric=1 parent=00:18
+5832029	ID:2	WuS TX: sending wake-up signal to 00:12
+5835458	ID:1	WuR event: received WuS for 00:12
+5835458	ID:1	Main radio: ON (waiting for data after WuS)
+5835723	ID:2	Main radio: ON (preparing data TX)
+5845584	ID:2	Main radio: OFF (after RX processing)
+5850143	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=0 from 02:00 hops=1 my_metric=0
+5852744	ID:1	Main radio: OFF (after RX processing)
+5855875	ID:1	Main radio: OFF (WuS data window elapsed)
+6483082	ID:2	WuS TX: sending wake-up signal to 00:00
+6483895	ID:1	WuR event: received WuS for 00:00
+6483895	ID:1	Main radio: ON (waiting for data after WuS)
+6486857	ID:2	Main radio: ON (preparing data TX)
+6488390	ID:3	WuR event: received WuS for 00:00
+6488390	ID:4	WuR event: received WuS for 00:00
+6488390	ID:4	Main radio: ON (waiting for data after WuS)
+6489374	ID:3	Main radio: ON (waiting for data after WuS)
+6499291	ID:1	Main radio: OFF (after RX processing)
+6503935	ID:1	Main radio: OFF (WuS data window elapsed)
+6507555	ID:4	Main radio: OFF (WuS data window elapsed)
+6510005	ID:3	Main radio: OFF (WuS data window elapsed)
+9069358	ID:2	WuS TX: sending wake-up signal to 00:12
+9073055	ID:1	WuR event: received WuS for 00:12
+9073133	ID:2	Main radio: ON (preparing data TX)
+9076054	ID:1	Main radio: ON (waiting for data after WuS)
+9082352	ID:2	WuS TX: sending wake-up signal to 00:12
+9086048	ID:2	Main radio: ON (preparing data TX)
+9095423	ID:2	Main radio: OFF (after RX processing)
+9099974	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+9103086	ID:1	Main radio: OFF (WuS data window elapsed)
+10825160	ID:2	APP-UL[NODE 00:18]: send seq=1 metric=1 parent=00:18
+10832011	ID:2	WuS TX: sending wake-up signal to 00:12
+10835458	ID:1	WuR event: received WuS for 00:12
+10835458	ID:1	Main radio: ON (waiting for data after WuS)
+10835706	ID:2	Main radio: ON (preparing data TX)
+10845580	ID:2	Main radio: OFF (after RX processing)
+10850128	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=1 from 02:00 hops=1 my_metric=0
+10852743	ID:1	Main radio: OFF (after RX processing)
+10855855	ID:1	Main radio: OFF (WuS data window elapsed)
+11482703	ID:1	WuS TX: sending wake-up signal to 00:00
+11483271	ID:3	WuR event: received WuS for 00:00
+11483271	ID:3	Main radio: ON (waiting for data after WuS)
+11484147	ID:2	WuR event: received WuS for 00:00
+11484147	ID:2	Main radio: ON (waiting for data after WuS)
+11486478	ID:1	Main radio: ON (preparing data TX)
+11502745	ID:2	Main radio: OFF (after RX processing)
+11503397	ID:3	Main radio: OFF (after RX processing)
+11506077	ID:2	Main radio: OFF (WuS data window elapsed)
+11506936	ID:3	Main radio: OFF (WuS data window elapsed)
+13326781	ID:2	WuS TX: sending wake-up signal to 00:00
+13327645	ID:1	WuR event: received WuS for 00:00
+13327645	ID:1	Main radio: ON (waiting for data after WuS)
+13330555	ID:2	Main radio: ON (preparing data TX)
+13332088	ID:3	WuR event: received WuS for 00:00
+13332088	ID:4	WuR event: received WuS for 00:00
+13332088	ID:4	Main radio: ON (waiting for data after WuS)
+13333124	ID:3	Main radio: ON (waiting for data after WuS)
+13342373	ID:1	Main radio: OFF (after RX processing)
+13346666	ID:1	Main radio: OFF (WuS data window elapsed)
+13351224	ID:4	Main radio: OFF (WuS data window elapsed)
+13353858	ID:3	Main radio: OFF (WuS data window elapsed)
+14101396	ID:2	WuS TX: sending wake-up signal to 00:12
+14105170	ID:2	Main radio: ON (preparing data TX)
+14106708	ID:1	WuR event: received WuS for 00:12
+14107304	ID:1	Main radio: ON (waiting for data after WuS)
+14115540	ID:2	WuS TX: sending wake-up signal to 00:12
+14119234	ID:2	Main radio: ON (preparing data TX)
+14129702	ID:2	Main radio: OFF (after RX processing)
+14133879	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+14136990	ID:1	Main radio: OFF (WuS data window elapsed)
+14420435	ID:3	WuS TX: sending wake-up signal to 00:12
+14421396	ID:1	WuR event: received WuS for 00:12
+14421396	ID:1	Main radio: ON (waiting for data after WuS)
+14424209	ID:3	Main radio: ON (preparing data TX)
+14433870	ID:3	Main radio: OFF (after RX processing)
+14440978	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+14443026	ID:3	WuS TX: sending wake-up signal to 00:00
+14444135	ID:1	Main radio: OFF (WuS data window elapsed)
+14445083	ID:2	WuR event: received WuS for 00:00
+14445083	ID:2	Main radio: ON (waiting for data after WuS)
+14446801	ID:3	Main radio: ON (preparing data TX)
+14446918	ID:1	WuR event: received WuS for 00:00
+14447946	ID:5	WuR event: received WuS for 00:00
+14447946	ID:5	Main radio: ON (waiting for data after WuS)
+14448333	ID:4	WuR event: received WuS for 00:00
+14448333	ID:4	Main radio: ON (waiting for data after WuS)
+14449916	ID:1	Main radio: ON (waiting for data after WuS)
+14463215	ID:5	Main radio: OFF (after RX processing)
+14467081	ID:5	Main radio: OFF (WuS data window elapsed)
+14468334	ID:2	Main radio: OFF (after RX processing)
+14468344	ID:4	Main radio: OFF (WuS data window elapsed)
+14471666	ID:1	Main radio: OFF (WuS data window elapsed)
+14471717	ID:2	Main radio: OFF (WuS data window elapsed)
+15749992	ID:5	APP-UL[NODE 00:18]: send seq=0 metric=2 parent=00:18
+15756756	ID:5	WuS TX: sending wake-up signal to 00:12
+15760451	ID:5	Main radio: ON (preparing data TX)
+15761950	ID:3	WuR event: received WuS for 00:12
+15762923	ID:3	Main radio: ON (waiting for data after WuS)
+15770128	ID:5	WuS TX: sending wake-up signal to 00:12
+15773823	ID:5	Main radio: ON (preparing data TX)
+15783594	ID:5	Main radio: OFF (after RX processing)
+15790183	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+15794032	ID:3	WuS TX: sending wake-up signal to 00:12
+15796395	ID:1	WuR event: received WuS for 00:12
+15796395	ID:1	Main radio: ON (waiting for data after WuS)
+15797726	ID:3	Main radio: ON (preparing data TX)
+15807783	ID:3	Main radio: OFF (after RX processing)
+15810644	ID:3	Main radio: OFF (WuS data window elapsed)
+15812184	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=0 from 05:00 hops=2 my_metric=0
+15814787	ID:1	Main radio: OFF (after RX processing)
+15817899	ID:1	Main radio: OFF (WuS data window elapsed)
+15825232	ID:2	APP-UL[NODE 00:18]: send seq=2 metric=1 parent=00:18
+15831999	ID:2	WuS TX: sending wake-up signal to 00:12
+15835458	ID:1	WuR event: received WuS for 00:12
+15835458	ID:1	Main radio: ON (waiting for data after WuS)
+15835693	ID:2	Main radio: ON (preparing data TX)
+15839952	ID:3	APP-UL[NODE 00:18]: send seq=0 metric=1 parent=00:18
+15845554	ID:2	Main radio: OFF (after RX processing)
+15847127	ID:3	WuS TX: sending wake-up signal to 00:12
+15850324	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=2 from 02:00 hops=1 my_metric=0
+15850823	ID:3	Main radio: ON (preparing data TX)
+15852913	ID:1	Main radio: OFF (after RX processing)
+15856226	ID:1	Main radio: OFF (WuS data window elapsed)
+15860383	ID:3	WuS TX: sending wake-up signal to 00:12
+15864077	ID:3	Main radio: ON (preparing data TX)
+15865496	ID:1	WuR event: received WuS for 00:12
+15865496	ID:1	Main radio: ON (waiting for data after WuS)
+15873615	ID:3	WuS TX: sending wake-up signal to 00:12
+15877390	ID:3	Main radio: ON (preparing data TX)
+15887425	ID:3	Main radio: OFF (after RX processing)
+15892066	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=0 from 03:00 hops=1 my_metric=0
+15894655	ID:1	Main radio: OFF (after RX processing)
+15897787	ID:1	Main radio: OFF (WuS data window elapsed)
+16303734	ID:2	WuS TX: sending wake-up signal to 00:12
+16307430	ID:1	WuR event: received WuS for 00:12
+16307509	ID:2	Main radio: ON (preparing data TX)
+16310429	ID:1	Main radio: ON (waiting for data after WuS)
+16316727	ID:2	WuS TX: sending wake-up signal to 00:12
+16320423	ID:2	Main radio: ON (preparing data TX)
+16329798	ID:2	Main radio: OFF (after RX processing)
+16334449	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+16337562	ID:1	Main radio: OFF (WuS data window elapsed)
+16499075	ID:3	WuS TX: sending wake-up signal to 00:12
+16502835	ID:3	Main radio: ON (preparing data TX)
+16504373	ID:1	WuR event: received WuS for 00:12
+16505741	ID:1	Main radio: ON (waiting for data after WuS)
+16513036	ID:3	WuS TX: sending wake-up signal to 00:12
+16516730	ID:3	Main radio: ON (preparing data TX)
+16525008	ID:5	WuS TX: sending wake-up signal to 00:00
+16527413	ID:3	Main radio: OFF (after RX processing)
+16527548	ID:4	WuR event: received WuS for 00:00
+16527813	ID:4	Main radio: ON (waiting for data after WuS)
+16528783	ID:5	Main radio: ON (preparing data TX)
+16530172	ID:3	WuR event: received WuS for 00:00
+16531698	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+16533170	ID:3	Main radio: ON (waiting for data after WuS)
+16534917	ID:1	Main radio: OFF (WuS data window elapsed)
+16544179	ID:4	Main radio: OFF (after RX processing)
+16554480	ID:4	Main radio: OFF (WuS data window elapsed)
+16556957	ID:3	Main radio: OFF (WuS data window elapsed)
+16752711	ID:5	WuS TX: sending wake-up signal to 00:12
+16756497	ID:5	Main radio: ON (preparing data TX)
+16756709	ID:3	WuR event: received WuS for 00:12
+16756709	ID:3	Main radio: ON (waiting for data after WuS)
+16766904	ID:5	Main radio: OFF (after RX processing)
+16781606	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+16784716	ID:3	Main radio: OFF (WuS data window elapsed)
+17939427	ID:5	WuS TX: sending wake-up signal to 00:12
+17943202	ID:5	Main radio: ON (preparing data TX)
+17944209	ID:3	WuR event: received WuS for 00:12
+17944209	ID:3	Main radio: ON (waiting for data after WuS)
+17952600	ID:5	Main radio: OFF (after RX processing)
+17961359	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+17965198	ID:3	WuS TX: sending wake-up signal to 00:12
+17968270	ID:1	WuR event: received WuS for 00:12
+17968270	ID:1	Main radio: ON (waiting for data after WuS)
+17968899	ID:3	Main radio: ON (preparing data TX)
+17978573	ID:3	Main radio: OFF (after RX processing)
+17981656	ID:3	Main radio: OFF (WuS data window elapsed)
+17983620	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+17987272	ID:1	Main radio: OFF (WuS data window elapsed)
+19402034	ID:4	WuS TX: sending wake-up signal to 00:12
+19405809	ID:4	Main radio: ON (preparing data TX)
+19407153	ID:5	WuR event: received WuS for 00:12
+19407286	ID:5	Main radio: ON (waiting for data after WuS)
+19415029	ID:4	WuS TX: sending wake-up signal to 00:12
+19418733	ID:4	Main radio: ON (preparing data TX)
+19428130	ID:4	Main radio: OFF (after RX processing)
+19437945	ID:5	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+19441783	ID:5	WuS TX: sending wake-up signal to 00:12
+19444208	ID:3	WuR event: received WuS for 00:12
+19444208	ID:3	Main radio: ON (waiting for data after WuS)
+19445478	ID:5	Main radio: ON (preparing data TX)
+19454858	ID:5	Main radio: OFF (after RX processing)
+19457720	ID:5	Main radio: OFF (WuS data window elapsed)
+19463534	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+19467373	ID:3	WuS TX: sending wake-up signal to 00:12
+19468271	ID:1	WuR event: received WuS for 00:12
+19468271	ID:1	Main radio: ON (waiting for data after WuS)
+19471158	ID:3	Main radio: ON (preparing data TX)
+19480745	ID:3	Main radio: OFF (after RX processing)
+19483832	ID:3	Main radio: OFF (WuS data window elapsed)
+19486102	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+19489214	ID:1	Main radio: OFF (WuS data window elapsed)
+20057610	ID:4	WuS TX: sending wake-up signal to 00:00
+20061385	ID:4	Main radio: ON (preparing data TX)
+20061396	ID:3	WuR event: received WuS for 00:00
+20061396	ID:3	Main radio: ON (waiting for data after WuS)
+20062272	ID:2	WuR event: received WuS for 00:00
+20062272	ID:2	Main radio: ON (waiting for data after WuS)
+20062917	ID:5	WuR event: received WuS for 00:00
+20063424	ID:5	Main radio: ON (waiting for data after WuS)
+20084132	ID:5	Main radio: OFF (WuS data window elapsed)
+20087029	ID:2	Main radio: OFF (after RX processing)
+20089323	ID:3	Main radio: OFF (after RX processing)
+20090296	ID:2	Main radio: OFF (WuS data window elapsed)
+20092589	ID:3	Main radio: OFF (WuS data window elapsed)
+20435205	ID:3	WuS TX: sending wake-up signal to 00:00
+20437020	ID:1	WuR event: received WuS for 00:00
+20437020	ID:1	Main radio: ON (waiting for data after WuS)
+20437272	ID:2	WuR event: received WuS for 00:00
+20437272	ID:2	Main radio: ON (waiting for data after WuS)
+20438980	ID:3	Main radio: ON (preparing data TX)
+20440134	ID:5	WuR event: received WuS for 00:00
+20440134	ID:5	Main radio: ON (waiting for data after WuS)
+20440512	ID:4	WuR event: received WuS for 00:00
+20440512	ID:4	Main radio: ON (waiting for data after WuS)
+20451016	ID:1	Main radio: OFF (after RX processing)
+20454462	ID:5	Main radio: OFF (after RX processing)
+20456022	ID:1	Main radio: OFF (WuS data window elapsed)
+20459133	ID:5	Main radio: OFF (WuS data window elapsed)
+20459992	ID:2	Main radio: OFF (after RX processing)
+20460608	ID:4	Main radio: OFF (WuS data window elapsed)
+20463258	ID:2	Main radio: OFF (WuS data window elapsed)
+20532665	ID:4	APP-UL[NODE 00:18]: send seq=0 metric=3 parent=00:18
+20539387	ID:4	WuS TX: sending wake-up signal to 00:12
+20541697	ID:5	WuR event: received WuS for 00:12
+20541697	ID:5	Main radio: ON (waiting for data after WuS)
+20543082	ID:4	Main radio: ON (preparing data TX)
+20552949	ID:4	Main radio: OFF (after RX processing)
+20558165	ID:5	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+20562015	ID:5	WuS TX: sending wake-up signal to 00:12
+20565709	ID:5	Main radio: ON (preparing data TX)
+20567128	ID:3	WuR event: received WuS for 00:12
+20567611	ID:3	Main radio: ON (waiting for data after WuS)
+20574638	ID:5	Main radio: OFF (WuS data window elapsed)
+20578072	ID:5	WuS TX: sending wake-up signal to 00:12
+20581766	ID:5	Main radio: ON (preparing data TX)
+20588208	ID:3	Main radio: OFF (WuS data window elapsed)
+20591626	ID:5	Main radio: OFF (after RX processing)
+20599029	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+20602847	ID:3	WuS TX: sending wake-up signal to 00:12
+20606542	ID:3	Main radio: ON (preparing data TX)
+20607961	ID:1	WuR event: received WuS for 00:12
+20607961	ID:1	Main radio: ON (waiting for data after WuS)
+20616542	ID:3	WuS TX: sending wake-up signal to 00:12
+20620237	ID:3	Main radio: ON (preparing data TX)
+20630221	ID:3	Main radio: OFF (after RX processing)
+20634718	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=0 from 04:00 hops=3 my_metric=0
+20637308	ID:1	Main radio: OFF (after RX processing)
+20640434	ID:1	Main radio: OFF (WuS data window elapsed)
+20749918	ID:5	APP-UL[NODE 00:18]: send seq=1 metric=2 parent=00:18
+20756704	ID:5	WuS TX: sending wake-up signal to 00:12
+20760399	ID:5	Main radio: ON (preparing data TX)
+20761897	ID:3	WuR event: received WuS for 00:12
+20762923	ID:3	Main radio: ON (waiting for data after WuS)
+20770030	ID:5	WuS TX: sending wake-up signal to 00:12
+20773725	ID:5	Main radio: ON (preparing data TX)
+20783498	ID:5	Main radio: OFF (after RX processing)
+20789144	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+20793082	ID:3	WuS TX: sending wake-up signal to 00:12
+20796395	ID:1	WuR event: received WuS for 00:12
+20796395	ID:1	Main radio: ON (waiting for data after WuS)
+20796778	ID:3	Main radio: ON (preparing data TX)
+20806838	ID:3	Main radio: OFF (after RX processing)
+20809698	ID:3	Main radio: OFF (WuS data window elapsed)
+20811183	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=1 from 05:00 hops=2 my_metric=0
+20813773	ID:1	Main radio: OFF (after RX processing)
+20816885	ID:1	Main radio: OFF (WuS data window elapsed)
+20825557	ID:2	APP-UL[NODE 172:101]: send seq=3 metric=1 parent=00:18
+20832270	ID:2	WuS TX: sending wake-up signal to 00:12
+20835458	ID:1	WuR event: received WuS for 00:12
+20835458	ID:1	Main radio: ON (waiting for data after WuS)
+20835966	ID:2	Main radio: ON (preparing data TX)
+20839930	ID:3	APP-UL[NODE 00:18]: send seq=1 metric=1 parent=00:18
+20845732	ID:2	Main radio: OFF (after RX processing)
+20847235	ID:3	WuS TX: sending wake-up signal to 00:12
+20850929	ID:3	Main radio: ON (preparing data TX)
+20851509	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=3 from 02:00 hops=1 my_metric=0
+20854098	ID:1	Main radio: OFF (after RX processing)
+20857431	ID:1	Main radio: OFF (WuS data window elapsed)
+20860494	ID:3	WuS TX: sending wake-up signal to 00:12
+20864189	ID:3	Main radio: ON (preparing data TX)
+20865608	ID:1	WuR event: received WuS for 00:12
+20865608	ID:1	Main radio: ON (waiting for data after WuS)
+20873738	ID:3	WuS TX: sending wake-up signal to 00:12
+20877523	ID:3	Main radio: ON (preparing data TX)
+20887513	ID:3	Main radio: OFF (after RX processing)
+20892178	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=1 from 03:00 hops=1 my_metric=0
+20894767	ID:1	Main radio: OFF (after RX processing)
+20897879	ID:1	Main radio: OFF (WuS data window elapsed)
+21174460	ID:5	WuS TX: sending wake-up signal to 00:12
+21178234	ID:5	Main radio: ON (preparing data TX)
+21178583	ID:3	WuR event: received WuS for 00:12
+21178583	ID:3	Main radio: ON (waiting for data after WuS)
+21188647	ID:5	Main radio: OFF (after RX processing)
+21203819	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+21206929	ID:3	Main radio: OFF (WuS data window elapsed)
+25448649	ID:4	WuS TX: sending wake-up signal to 00:00
+25452022	ID:3	WuR event: received WuS for 00:00
+25452022	ID:3	Main radio: ON (waiting for data after WuS)
+25452424	ID:4	Main radio: ON (preparing data TX)
+25452896	ID:2	WuR event: received WuS for 00:00
+25452896	ID:2	Main radio: ON (waiting for data after WuS)
+25453956	ID:5	WuR event: received WuS for 00:00
+25454049	ID:5	Main radio: ON (waiting for data after WuS)
+25474159	ID:2	Main radio: OFF (after RX processing)
+25474845	ID:5	Main radio: OFF (WuS data window elapsed)
+25475775	ID:3	Main radio: OFF (after RX processing)
+25477446	ID:2	Main radio: OFF (WuS data window elapsed)
+25479131	ID:3	Main radio: OFF (WuS data window elapsed)
+25532624	ID:4	APP-UL[NODE 00:18]: send seq=1 metric=3 parent=00:18
+25539492	ID:4	WuS TX: sending wake-up signal to 00:12
+25541697	ID:5	WuR event: received WuS for 00:12
+25541697	ID:5	Main radio: ON (waiting for data after WuS)
+25543187	ID:4	Main radio: ON (preparing data TX)
+25553044	ID:4	Main radio: OFF (after RX processing)
+25558180	ID:5	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+25562029	ID:5	WuS TX: sending wake-up signal to 00:12
+25565723	ID:5	Main radio: ON (preparing data TX)
+25567144	ID:3	WuR event: received WuS for 00:12
+25568445	ID:3	Main radio: ON (waiting for data after WuS)
+25574763	ID:5	Main radio: OFF (WuS data window elapsed)
+25578196	ID:5	WuS TX: sending wake-up signal to 00:12
+25581890	ID:5	Main radio: ON (preparing data TX)
+25588208	ID:3	Main radio: OFF (WuS data window elapsed)
+25591741	ID:5	Main radio: OFF (after RX processing)
+25599030	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+25602773	ID:3	WuS TX: sending wake-up signal to 00:12
+25606468	ID:3	Main radio: ON (preparing data TX)
+25607887	ID:1	WuR event: received WuS for 00:12
+25607887	ID:1	Main radio: ON (waiting for data after WuS)
+25616014	ID:3	WuS TX: sending wake-up signal to 00:12
+25619789	ID:3	Main radio: ON (preparing data TX)
+25629761	ID:3	Main radio: OFF (after RX processing)
+25634374	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=1 from 04:00 hops=3 my_metric=0
+25636964	ID:1	Main radio: OFF (after RX processing)
+25640095	ID:1	Main radio: OFF (WuS data window elapsed)
+25749898	ID:5	APP-UL[NODE 00:18]: send seq=2 metric=2 parent=00:18
+25756812	ID:5	WuS TX: sending wake-up signal to 00:12
+25760507	ID:5	Main radio: ON (preparing data TX)
+25762006	ID:3	WuR event: received WuS for 00:12
+25762923	ID:3	Main radio: ON (waiting for data after WuS)
+25770532	ID:5	WuS TX: sending wake-up signal to 00:12
+25774226	ID:5	Main radio: ON (preparing data TX)
+25784036	ID:5	Main radio: OFF (after RX processing)
+25789711	ID:3	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+25793561	ID:3	WuS TX: sending wake-up signal to 00:12
+25796395	ID:1	WuR event: received WuS for 00:12
+25796395	ID:1	Main radio: ON (waiting for data after WuS)
+25797255	ID:3	Main radio: ON (preparing data TX)
+25807330	ID:3	Main radio: OFF (after RX processing)
+25810191	ID:3	Main radio: OFF (WuS data window elapsed)
+25811660	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=2 from 05:00 hops=2 my_metric=0
+25814250	ID:1	Main radio: OFF (after RX processing)
+25817451	ID:1	Main radio: OFF (WuS data window elapsed)
+25825538	ID:2	APP-UL[NODE 172:101]: send seq=4 metric=1 parent=00:18
+25832389	ID:2	WuS TX: sending wake-up signal to 00:12
+25835458	ID:1	WuR event: received WuS for 00:12
+25835458	ID:1	Main radio: ON (waiting for data after WuS)
+25836083	ID:2	Main radio: ON (preparing data TX)
+25839911	ID:3	APP-UL[NODE 00:18]: send seq=2 metric=1 parent=00:18
+25845853	ID:2	Main radio: OFF (after RX processing)
+25847354	ID:3	WuS TX: sending wake-up signal to 00:12
+25850679	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=4 from 02:00 hops=1 my_metric=0
+25851048	ID:3	Main radio: ON (preparing data TX)
+25853288	ID:1	Main radio: OFF (after RX processing)
+25856602	ID:1	Main radio: OFF (WuS data window elapsed)
+25861003	ID:3	WuS TX: sending wake-up signal to 00:12
+25864697	ID:3	Main radio: ON (preparing data TX)
+25866116	ID:1	WuR event: received WuS for 00:12
+25866116	ID:1	Main radio: ON (waiting for data after WuS)
+25874337	ID:3	WuS TX: sending wake-up signal to 00:12
+25878032	ID:3	Main radio: ON (preparing data TX)
+25888004	ID:3	Main radio: OFF (after RX processing)
+25892600	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=2 from 03:00 hops=1 my_metric=0
+25895190	ID:1	Main radio: OFF (after RX processing)
+25898325	ID:1	Main radio: OFF (WuS data window elapsed)
+26454568	ID:5	WuS TX: sending wake-up signal to 00:00
+26457236	ID:4	WuR event: received WuS for 00:00
+26457236	ID:4	Main radio: ON (waiting for data after WuS)
+26458343	ID:5	Main radio: ON (preparing data TX)
+26459833	ID:3	WuR event: received WuS for 00:00
+26459833	ID:3	Main radio: ON (waiting for data after WuS)
+26473649	ID:4	Main radio: OFF (after RX processing)
+26477005	ID:4	Main radio: OFF (WuS data window elapsed)
+26481166	ID:3	Main radio: OFF (after RX processing)
+26484444	ID:3	Main radio: OFF (WuS data window elapsed)
+27006139	ID:1	WuS TX: sending wake-up signal to 00:00
+27006708	ID:3	WuR event: received WuS for 00:00
+27006708	ID:3	Main radio: ON (waiting for data after WuS)
+27007583	ID:2	WuR event: received WuS for 00:00
+27007583	ID:2	Main radio: ON (waiting for data after WuS)
+27009914	ID:1	Main radio: ON (preparing data TX)
+27031387	ID:2	Main radio: OFF (after RX processing)
+27032999	ID:3	Main radio: OFF (after RX processing)
+27034700	ID:2	Main radio: OFF (WuS data window elapsed)
+27036312	ID:3	Main radio: OFF (WuS data window elapsed)
+28342411	ID:2	WuS TX: sending wake-up signal to 00:00
+28343271	ID:1	WuR event: received WuS for 00:00
+28343271	ID:1	Main radio: ON (waiting for data after WuS)
+28346185	ID:2	Main radio: ON (preparing data TX)
+28347720	ID:3	WuR event: received WuS for 00:00
+28347720	ID:4	WuR event: received WuS for 00:00
+28347720	ID:4	Main radio: ON (waiting for data after WuS)
+28348749	ID:3	Main radio: ON (waiting for data after WuS)
+28357261	ID:1	Main radio: OFF (after RX processing)
+28362272	ID:1	Main radio: OFF (WuS data window elapsed)
+28366878	ID:4	Main radio: OFF (WuS data window elapsed)
+28369483	ID:3	Main radio: OFF (WuS data window elapsed)
+28574390	ID:4	WuS TX: sending wake-up signal to 00:12
+28578165	ID:4	Main radio: ON (preparing data TX)
+28579703	ID:5	WuR event: received WuS for 00:12
+28579703	ID:5	Main radio: ON (waiting for data after WuS)
+28588351	ID:4	WuS TX: sending wake-up signal to 00:12
+28592047	ID:4	Main radio: ON (preparing data TX)
+28599758	ID:5	Main radio: OFF (WuS data window elapsed)
+28602452	ID:4	Main radio: OFF (after RX processing)
+28617136	ID:5	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+29795177	ID:3	WuS TX: sending wake-up signal to 00:12
+29796395	ID:1	WuR event: received WuS for 00:12
+29796395	ID:1	Main radio: ON (waiting for data after WuS)
+29798951	ID:3	Main radio: ON (preparing data TX)
+29808595	ID:3	Main radio: OFF (after RX processing)
+29812591	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+29815703	ID:1	Main radio: OFF (WuS data window elapsed)
+30532644	ID:4	APP-UL[NODE 00:18]: send seq=2 metric=2 parent=00:18
+30539365	ID:4	WuS TX: sending wake-up signal to 00:12
+30541698	ID:5	WuR event: received WuS for 00:12
+30541698	ID:5	Main radio: ON (waiting for data after WuS)
+30543059	ID:4	Main radio: ON (preparing data TX)
+30552918	ID:4	Main radio: OFF (after RX processing)
+30558055	ID:5	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+30561905	ID:5	WuS TX: sending wake-up signal to 00:12
+30565599	ID:5	Main radio: ON (preparing data TX)
+30574530	ID:5	Main radio: OFF (WuS data window elapsed)
+30577963	ID:5	WuS TX: sending wake-up signal to 00:12
+30581661	ID:5	Main radio: ON (preparing data TX)
+30591228	ID:5	WuS TX: sending wake-up signal to 00:12
+30594923	ID:5	Main radio: ON (preparing data TX)
+30604546	ID:5	WuS TX: sending wake-up signal to 00:12
+30608241	ID:5	Main radio: ON (preparing data TX)
+30617770	ID:5	WuS TX: sending wake-up signal to 00:12
+30621473	ID:5	Main radio: ON (preparing data TX)
+30631104	ID:5	WuS TX: sending wake-up signal to 00:12
+30634798	ID:5	Main radio: ON (preparing data TX)
+30644532	ID:5	WuS TX: sending wake-up signal to 00:12
+30648227	ID:5	Main radio: ON (preparing data TX)
+30658164	ID:5	WuS TX: sending wake-up signal to 00:12
+30661939	ID:5	Main radio: ON (preparing data TX)
+30749898	ID:5	APP-UL[NODE 00:18]: send seq=3 metric=2 parent=00:18
+30756685	ID:5	WuS TX: sending wake-up signal to 00:12
+30760379	ID:5	Main radio: ON (preparing data TX)
+30770030	ID:5	WuS TX: sending wake-up signal to 00:12
+30773725	ID:5	Main radio: ON (preparing data TX)
+30783268	ID:5	WuS TX: sending wake-up signal to 00:12
+30787043	ID:5	Main radio: ON (preparing data TX)
+30796607	ID:5	WuS TX: sending wake-up signal to 00:12
+30800301	ID:5	Main radio: ON (preparing data TX)
+30809846	ID:5	WuS TX: sending wake-up signal to 00:12
+30813541	ID:5	Main radio: ON (preparing data TX)
+30823299	ID:5	WuS TX: sending wake-up signal to 00:12
+30825610	ID:2	APP-UL[NODE 172:101]: send seq=5 metric=1 parent=00:18
+30826994	ID:5	Main radio: ON (preparing data TX)
+30832366	ID:2	WuS TX: sending wake-up signal to 00:12
+30835336	ID:1	WuR event: received WuS for 00:12
+30835336	ID:1	Main radio: ON (waiting for data after WuS)
+30836065	ID:2	Main radio: ON (preparing data TX)
+30836904	ID:5	WuS TX: sending wake-up signal to 00:12
+30839921	ID:3	APP-UL[NODE 00:18]: send seq=3 metric=1 parent=00:18
+30840600	ID:5	Main radio: ON (preparing data TX)
+30845860	ID:2	Main radio: OFF (after RX processing)
+30847642	ID:3	WuS TX: sending wake-up signal to 00:12
+30850234	ID:5	WuS TX: sending wake-up signal to 00:12
+30850566	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=5 from 02:00 hops=1 my_metric=0
+30851350	ID:3	Main radio: ON (preparing data TX)
+30853155	ID:1	Main radio: OFF (after RX processing)
+30853929	ID:5	Main radio: ON (preparing data TX)
+30856468	ID:1	Main radio: OFF (WuS data window elapsed)
+30861343	ID:3	WuS TX: sending wake-up signal to 00:12
+30865038	ID:3	Main radio: ON (preparing data TX)
+30866538	ID:1	WuR event: received WuS for 00:12
+30866538	ID:1	Main radio: ON (waiting for data after WuS)
+30874735	ID:3	WuS TX: sending wake-up signal to 00:12
+30878430	ID:3	Main radio: ON (preparing data TX)
+30885772	ID:1	Main radio: OFF (WuS data window elapsed)
+30888402	ID:3	Main radio: OFF (after RX processing)
+30895798	ID:1	Main radio: OFF (unicast for this node APP-UL[SINK]: got seq=3 from 03:00 hops=1 my_metric=0
+30898388	ID:1	Main radio: OFF (after RX processing)
+31053720	ID:2	WuS TX: sending wake-up signal to 00:12
+31057495	ID:2	Main radio: ON (preparing data TX)
+31057713	ID:1	WuR event: received WuS for 00:12
+31060711	ID:1	Main radio: ON (waiting for data after WuS)
+31066729	ID:2	WuS TX: sending wake-up signal to 00:12
+31070439	ID:2	Main radio: ON (preparing data TX)
+31079832	ID:2	Main radio: OFF (after RX processing)
+31082829	ID:1	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+31085960	ID:1	Main radio: OFF (WuS data window elapsed)
+35458624	ID:3	WuS TX: sending wake-up signal to 00:00
+35460453	ID:5	WuR event: received WuS for 00:00
+35460458	ID:1	WuR event: received WuS for 00:00
+35460458	ID:1	Main radio: ON (waiting for data after WuS)
+35460709	ID:2	WuR event: received WuS for 00:00
+35460709	ID:2	Main radio: ON (waiting for data after WuS)
+35461862	ID:5	Main radio: ON (waiting for data after WuS)
+35462399	ID:3	Main radio: ON (preparing data TX)
+35463931	ID:4	WuR event: received WuS for 00:00
+35463931	ID:4	Main radio: ON (waiting for data after WuS)
+35473526	ID:1	Main radio: OFF (after RX processing)
+35474610	ID:5	Main radio: OFF (after RX processing)
+35474683	ID:2	Main radio: OFF (after RX processing)
+35479479	ID:1	Main radio: OFF (WuS data window elapsed)
+35479707	ID:2	Main radio: OFF (WuS data window elapsed)
+35482570	ID:5	Main radio: OFF (WuS data window elapsed)
+35484066	ID:4	Main radio: OFF (WuS data window elapsed)
+35532605	ID:4	APP-UL[NODE 00:18]: send seq=3 metric=2 parent=00:18
+35539327	ID:4	WuS TX: sending wake-up signal to 00:12
+35541697	ID:5	WuR event: received WuS for 00:12
+35541697	ID:5	Main radio: ON (waiting for data after WuS)
+35543021	ID:4	Main radio: ON (preparing data TX)
+35552907	ID:4	Main radio: OFF (after RX processing)
+35558315	ID:5	Main radio: OFF (unicast for this node Main radio: OFF (after RX processing)
+35562297	ID:5	WuS TX: sending wake-up signal to 00:12
+35565991	ID:5	Main radio: ON (preparing data TX)
+35578442	ID:5	Main radio: OFF (WuS data window elapsed)
+35581875	ID:5	WuS TX: sending wake-up signal to 00:12
+35585569	ID:5	Main radio: ON (preparing data TX)
+35595118	ID:5	WuS TX: sending wake-up signal to 00:12
+35597860	ID:4	WuR event: received WuS for 00:12
+35597860	ID:4	Main radio: ON (waiting for data after WuS)
+35598903	ID:5	Main radio: ON (preparing data TX)
+35609587	ID:5	Main radio: OFF (after RX processing)
+35613302	ID:5	WuS TX: sending wake-up signal to 00:12

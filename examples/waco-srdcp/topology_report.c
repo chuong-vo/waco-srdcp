@@ -21,7 +21,7 @@
         } while (0)
 #endif
 
-#define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
+// #define LOG(tag, fmt, ...) printf(tag ": " fmt "\n", ##__VA_ARGS__)
 
 /* --------------------------------------------------------------------------
  *                             TIMER CALLBACKS
