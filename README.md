@@ -247,6 +247,13 @@ Thumbs.db
 ---
 
 ## 12) Bản quyền & nguồn
-- WaCo: https://github.com/waco-sim/waco  
-- SRDCP: https://github.com/StefanoFioravanzo/SRDCP  
+- WaCo: https://github.com/waco-sim/waco
+- SRDCP: https://github.com/StefanoFioravanzo/SRDCP
 Repo này tuân theo giấy phép của các dự án gốc (xem LICENSE tương ứng nếu kèm theo).
+
+---
+
+## 13) COOJA scenarios & Monte Carlo scripts
+- **Scenarios:** `examples/waco-srdcp/sim/` chứa cả bố cục **grid** và bố cục **random** (5/15/30 nodes) đã cấu hình sẵn cho 50 m radio range. Các file `waco-srdcp-random-*-nodes/waco-srdcp-random-*-nodes.csc` cung cấp toạ độ mẫu (có thể mở trong COOJA để chỉnh tay nếu muốn).
+- **Batch runs:** dùng các script headless `examples/waco-srdcp/sim/mc_random_5nodes.sh`, `mc_random_15nodes.sh`, `mc_random_30nodes.sh` (`[NUM_SEEDS] [OUTDIR]`). Ví dụ `./mc_random_15nodes.sh 20` sẽ chạy 20 seeds, lưu log vào `examples/waco-srdcp/sim/out/waco-srdcp-random-15-nodes-mc/`, parse CSV (PDR UL/DL, neighbour stats) và cộng gộp năng lượng.
+- **Tuỳ biến:** có thể nhân bản script để hỗ trợ số node khác hoặc chèn bước sinh toạ độ ngẫu nhiên mỗi seed (ví dụ qua Python) trước khi gọi `ant -nogui`, miễn đảm bảo các mote vẫn nằm trong bán kính truyền 50 m.
