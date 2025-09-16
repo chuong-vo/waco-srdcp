@@ -162,6 +162,28 @@ platform/minimal-net/contiki-main.c to match your needs.
 Please consult cpu/native/net/README-WPCAP.md as well if you are running
 Microsoft Windows.
 
+waco-srdcp/
+-----------
+
+COOJA scenarios that integrate WaCo + SRDCP for data collection experiments on Sky motes. Build the firmware once:
+
+    cd examples/waco-srdcp
+    make example-runicast-srdcp.sky TARGET=sky
+
+Then launch one of the provided simulations under `examples/waco-srdcp/sim/`:
+
+* `waco-srdcp-grid-5-nodes/`, `waco-srdcp-grid-15-nodes/`, `waco-srdcp-grid-30-nodes/` – deterministic grid layouts.
+* `waco-srdcp-random-5-nodes/`, `waco-srdcp-random-15-nodes/`, `waco-srdcp-random-30-nodes/` – sample random layouts that keep all nodes within the 50 m radio range.
+
+For batch or headless runs, the Monte-Carlo helper scripts in the same folder wrap COOJA (`ant -nogui`) and parse the resulting logs. For example, to evaluate the random layouts with 20 seeds:
+
+    cd examples/waco-srdcp/sim
+    ./mc_random_5nodes.sh 20
+    ./mc_random_15nodes.sh 20
+    ./mc_random_30nodes.sh 20
+
+Each script stores results under `examples/waco-srdcp/sim/out/waco-srdcp-random-*-nodes-mc` by default. They collect CSV summaries (PDR, neighbours, energy) for each seed and aggregate them across all runs.
+
 webbrowser/
 -----------
 
