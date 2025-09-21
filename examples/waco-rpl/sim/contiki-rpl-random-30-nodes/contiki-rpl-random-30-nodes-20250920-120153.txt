@@ -1,0 +1,1113 @@
+=== START Sat Sep 20 12:01:53 UTC 2025 | motes=30 ===
+271373	ID:5	Rime started with address 0.18.116.5.0.5.5.5
+276224	ID:18	Rime started with address 0.18.116.18.0.18.18.18
+280106	ID:5	MAC 00:12:74:05:00:05:05:05 Contiki-b149d98 started. Node id is set to 5.
+283892	ID:23	Rime started with address 0.18.116.23.0.23.23.23
+285370	ID:18	MAC 00:12:74:12:00:12:12:12 Contiki-b149d98 started. Node id is set to 18.
+289320	ID:5	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+291264	ID:7	Rime started with address 0.18.116.7.0.7.7.7
+293038	ID:23	MAC 00:12:74:17:00:17:17:17 Contiki-b149d98 started. Node id is set to 23.
+294656	ID:18	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+299998	ID:7	MAC 00:12:74:07:00:07:07:07 Contiki-b149d98 started. Node id is set to 7.
+302323	ID:23	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+303103	ID:5	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7405:0005:0505
+305178	ID:21	Rime started with address 0.18.116.21.0.21.21.21
+307334	ID:5	Starting 'WaCo + RPL UDP example (fixed)'
+308885	ID:18	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7412:0012:1212
+309211	ID:7	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+312311	ID:5	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+313163	ID:18	Starting 'WaCo + RPL UDP example (fixed)'
+314324	ID:21	MAC 00:12:74:15:00:15:15:15 Contiki-b149d98 started. Node id is set to 21.
+315772	ID:5	APP-ROLE[NODE 05:00]: started
+316553	ID:23	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7417:0017:1717
+318099	ID:18	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+319637	ID:5	CSV,INFO,local=05:00,0,NODE,00:00,65535
+320761	ID:23	Starting 'WaCo + RPL UDP example (fixed)'
+321522	ID:18	APP-ROLE[NODE 18:00]: started
+322999	ID:7	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7407:0007:0707
+323610	ID:21	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+325487	ID:18	CSV,INFO,local=18:00,0,NODE,00:00,65535
+325697	ID:23	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+327261	ID:7	Starting 'WaCo + RPL UDP example (fixed)'
+327490	ID:5	CSV,PDR_DL,local=05:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+329089	ID:23	APP-ROLE[NODE 23:00]: started
+329545	ID:24	Rime started with address 0.18.116.24.0.24.24.24
+332221	ID:7	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+333055	ID:23	CSV,INFO,local=23:00,0,NODE,00:00,65535
+333378	ID:18	CSV,PDR_DL,local=18:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+335673	ID:7	APP-ROLE[NODE 07:00]: started
+337840	ID:21	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7415:0015:1515
+338693	ID:24	MAC 00:12:74:18:00:18:18:18 Contiki-b149d98 started. Node id is set to 24.
+339538	ID:7	CSV,INFO,local=07:00,0,NODE,00:00,65535
+341038	ID:23	CSV,PDR_DL,local=23:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+342119	ID:21	Starting 'WaCo + RPL UDP example (fixed)'
+347055	ID:21	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+347391	ID:7	CSV,PDR_DL,local=07:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+347979	ID:24	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+350478	ID:21	APP-ROLE[NODE 21:00]: started
+354443	ID:21	CSV,INFO,local=21:00,0,NODE,00:00,65535
+357721	ID:26	Rime started with address 0.18.116.26.0.26.26.26
+362213	ID:24	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7418:0018:1818
+362333	ID:21	CSV,PDR_DL,local=21:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+366418	ID:24	Starting 'WaCo + RPL UDP example (fixed)'
+366874	ID:26	MAC 00:12:74:1a:00:1a:1a:1a Contiki-b149d98 started. Node id is set to 26.
+371354	ID:24	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+374746	ID:24	APP-ROLE[NODE 24:00]: started
+376159	ID:26	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+378712	ID:24	CSV,INFO,local=24:00,0,NODE,00:00,65535
+386695	ID:24	CSV,PDR_DL,local=24:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+390397	ID:26	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:741a:001a:1a1a
+394664	ID:26	Starting 'WaCo + RPL UDP example (fixed)'
+399600	ID:26	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+403023	ID:26	APP-ROLE[NODE 26:00]: started
+406988	ID:26	CSV,INFO,local=26:00,0,NODE,00:00,65535
+414879	ID:26	CSV,PDR_DL,local=26:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+427346	ID:13	Rime started with address 0.18.116.13.0.13.13.13
+436137	ID:13	MAC 00:12:74:0d:00:0d:0d:0d Contiki-b149d98 started. Node id is set to 13.
+445349	ID:13	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+459139	ID:13	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:740d:000d:0d0d
+463365	ID:13	Starting 'WaCo + RPL UDP example (fixed)'
+468409	ID:13	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+471801	ID:13	APP-ROLE[NODE 13:00]: started
+474439	ID:1	Rime started with address 0.18.116.1.0.1.1.1
+475767	ID:13	CSV,INFO,local=13:00,0,NODE,00:00,65535
+483175	ID:1	MAC 00:12:74:01:00:01:01:01 Contiki-b149d98 started. Node id is set to 1.
+483634	ID:13	CSV,PDR_DL,local=13:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+491918	ID:9	Rime started with address 0.18.116.9.0.9.9.9
+492388	ID:1	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+500656	ID:9	MAC 00:12:74:09:00:09:09:09 Contiki-b149d98 started. Node id is set to 9.
+506171	ID:1	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7401:0001:0101
+509870	ID:9	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+510433	ID:1	Starting 'WaCo + RPL UDP example (fixed)'
+518436	ID:1	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+521026	ID:1	APP-ROLE[SINK]: started (local=01:00)
+523655	ID:9	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7409:0009:0909
+524977	ID:1	CSV,INFO,local=01:00,0,SINK,00:00,0
+527887	ID:9	Starting 'WaCo + RPL UDP example (fixed)'
+532722	ID:1	CSV,PDR_UL,local=01:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+532862	ID:9	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+536323	ID:9	APP-ROLE[NODE 09:00]: started
+540188	ID:9	CSV,INFO,local=09:00,0,NODE,00:00,65535
+548041	ID:9	CSV,PDR_DL,local=09:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+578225	ID:30	Rime started with address 0.18.116.30.0.30.30.30
+580582	ID:3	Rime started with address 0.18.116.3.0.3.3.3
+587376	ID:30	MAC 00:12:74:1e:00:1e:1e:1e Contiki-b149d98 started. Node id is set to 30.
+589316	ID:3	MAC 00:12:74:03:00:03:03:03 Contiki-b149d98 started. Node id is set to 3.
+596662	ID:30	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+598529	ID:3	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+610898	ID:30	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:741e:001e:1e1e
+612315	ID:3	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7403:0003:0303
+615162	ID:30	Starting 'WaCo + RPL UDP example (fixed)'
+616601	ID:3	Starting 'WaCo + RPL UDP example (fixed)'
+620101	ID:30	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+621562	ID:3	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+623489	ID:30	APP-ROLE[NODE 30:00]: started
+624983	ID:3	APP-ROLE[NODE 03:00]: started
+627455	ID:30	CSV,INFO,local=30:00,0,NODE,00:00,65535
+628848	ID:3	CSV,INFO,local=03:00,0,NODE,00:00,65535
+635375	ID:30	CSV,PDR_DL,local=30:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+636701	ID:3	CSV,PDR_DL,local=03:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+702136	ID:25	Rime started with address 0.18.116.25.0.25.25.25
+711280	ID:25	MAC 00:12:74:19:00:19:19:19 Contiki-b149d98 started. Node id is set to 25.
+720566	ID:25	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+734795	ID:25	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7419:0019:1919
+739073	ID:25	Starting 'WaCo + RPL UDP example (fixed)'
+744009	ID:25	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+747432	ID:25	APP-ROLE[NODE 25:00]: started
+751397	ID:25	CSV,INFO,local=25:00,0,NODE,00:00,65535
+759287	ID:25	CSV,PDR_DL,local=25:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+785509	ID:17	Rime started with address 0.18.116.17.0.17.17.17
+794653	ID:17	MAC 00:12:74:11:00:11:11:11 Contiki-b149d98 started. Node id is set to 17.
+803939	ID:17	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+814968	ID:27	Rime started with address 0.18.116.27.0.27.27.27
+818168	ID:17	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7411:0011:1111
+822453	ID:17	Starting 'WaCo + RPL UDP example (fixed)'
+824118	ID:27	MAC 00:12:74:1b:00:1b:1b:1b Contiki-b149d98 started. Node id is set to 27.
+827389	ID:17	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+830812	ID:17	APP-ROLE[NODE 17:00]: started
+833344	ID:2	Rime started with address 0.18.116.2.0.2.2.2
+833404	ID:27	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+834777	ID:17	CSV,INFO,local=17:00,0,NODE,00:00,65535
+842082	ID:2	MAC 00:12:74:02:00:02:02:02 Contiki-b149d98 started. Node id is set to 2.
+842667	ID:17	CSV,PDR_DL,local=17:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+847642	ID:27	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:741b:001b:1b1b
+851295	ID:2	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+851907	ID:27	Starting 'WaCo + RPL UDP example (fixed)'
+856843	ID:27	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+860266	ID:27	APP-ROLE[NODE 27:00]: started
+864231	ID:27	CSV,INFO,local=27:00,0,NODE,00:00,65535
+865081	ID:2	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7402:0002:0202
+869367	ID:2	Starting 'WaCo + RPL UDP example (fixed)'
+872122	ID:27	CSV,PDR_DL,local=27:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+874328	ID:2	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+877749	ID:2	APP-ROLE[NODE 02:00]: started
+881614	ID:2	CSV,INFO,local=02:00,0,NODE,00:00,65535
+889467	ID:2	CSV,PDR_DL,local=02:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+907023	ID:29	Rime started with address 0.18.116.29.0.29.29.29
+913366	ID:8	Rime started with address 0.18.116.8.0.8.8.8
+916175	ID:29	MAC 00:12:74:1d:00:1d:1d:1d Contiki-b149d98 started. Node id is set to 29.
+922102	ID:8	MAC 00:12:74:08:00:08:08:08 Contiki-b149d98 started. Node id is set to 8.
+925461	ID:29	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+931315	ID:8	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+939694	ID:29	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:741d:001d:1d1d
+943961	ID:29	Starting 'WaCo + RPL UDP example (fixed)'
+945098	ID:8	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7408:0008:0808
+948897	ID:29	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+949337	ID:8	Starting 'WaCo + RPL UDP example (fixed)'
+951270	ID:11	Rime started with address 0.18.116.11.0.11.11.11
+952320	ID:29	APP-ROLE[NODE 29:00]: started
+954310	ID:8	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+956285	ID:29	CSV,INFO,local=29:00,0,NODE,00:00,65535
+957773	ID:8	APP-ROLE[NODE 08:00]: started
+960058	ID:11	MAC 00:12:74:0b:00:0b:0b:0b Contiki-b149d98 started. Node id is set to 11.
+961638	ID:8	CSV,INFO,local=08:00,0,NODE,00:00,65535
+964175	ID:29	CSV,PDR_DL,local=29:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+969270	ID:11	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+969491	ID:8	CSV,PDR_DL,local=08:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+983062	ID:11	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:740b:000b:0b0b
+987288	ID:11	Starting 'WaCo + RPL UDP example (fixed)'
+992330	ID:11	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+995727	ID:11	APP-ROLE[NODE 11:00]: started
+999693	ID:11	CSV,INFO,local=11:00,0,NODE,00:00,65535
+1007558	ID:11	CSV,PDR_DL,local=11:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1026299	ID:28	Rime started with address 0.18.116.28.0.28.28.28
+1035451	ID:28	MAC 00:12:74:1c:00:1c:1c:1c Contiki-b149d98 started. Node id is set to 28.
+1044736	ID:28	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1058972	ID:28	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:741c:001c:1c1c
+1063237	ID:28	Starting 'WaCo + RPL UDP example (fixed)'
+1068173	ID:28	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1071596	ID:28	APP-ROLE[NODE 28:00]: started
+1075561	ID:28	CSV,INFO,local=28:00,0,NODE,00:00,65535
+1082610	ID:4	Rime started with address 0.18.116.4.0.4.4.4
+1083452	ID:28	CSV,PDR_DL,local=28:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1087569	ID:16	Rime started with address 0.18.116.16.0.16.16.16
+1091344	ID:4	MAC 00:12:74:04:00:04:04:04 Contiki-b149d98 started. Node id is set to 4.
+1096711	ID:16	MAC 00:12:74:10:00:10:10:10 Contiki-b149d98 started. Node id is set to 16.
+1097947	ID:22	Rime started with address 0.18.116.22.0.22.22.22
+1100557	ID:4	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1105996	ID:16	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1107093	ID:22	MAC 00:12:74:16:00:16:16:16 Contiki-b149d98 started. Node id is set to 22.
+1114341	ID:4	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7404:0004:0404
+1116378	ID:22	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1118577	ID:4	Starting 'WaCo + RPL UDP example (fixed)'
+1120228	ID:16	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7410:0010:1010
+1123554	ID:4	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1123830	ID:6	Rime started with address 0.18.116.6.0.6.6.6
+1124511	ID:16	Starting 'WaCo + RPL UDP example (fixed)'
+1127015	ID:4	APP-ROLE[NODE 04:00]: started
+1129447	ID:16	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1130613	ID:22	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7416:0016:1616
+1130880	ID:4	CSV,INFO,local=04:00,0,NODE,00:00,65535
+1132562	ID:6	MAC 00:12:74:06:00:06:06:06 Contiki-b149d98 started. Node id is set to 6.
+1132870	ID:16	APP-ROLE[NODE 16:00]: started
+1134892	ID:22	Starting 'WaCo + RPL UDP example (fixed)'
+1136835	ID:16	CSV,INFO,local=16:00,0,NODE,00:00,65535
+1138733	ID:4	CSV,PDR_DL,local=04:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1139828	ID:22	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1141775	ID:6	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1143251	ID:22	APP-ROLE[NODE 22:00]: started
+1144725	ID:16	CSV,PDR_DL,local=16:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1147216	ID:22	CSV,INFO,local=22:00,0,NODE,00:00,65535
+1151990	ID:12	Rime started with address 0.18.116.12.0.12.12.12
+1155107	ID:22	CSV,PDR_DL,local=22:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1155563	ID:6	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7406:0006:0606
+1159855	ID:6	Starting 'WaCo + RPL UDP example (fixed)'
+1160005	ID:14	Rime started with address 0.18.116.14.0.14.14.14
+1160776	ID:12	MAC 00:12:74:0c:00:0c:0c:0c Contiki-b149d98 started. Node id is set to 12.
+1164816	ID:6	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1168237	ID:6	APP-ROLE[NODE 06:00]: started
+1168796	ID:14	MAC 00:12:74:0e:00:0e:0e:0e Contiki-b149d98 started. Node id is set to 14.
+1169988	ID:12	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1172102	ID:6	CSV,INFO,local=06:00,0,NODE,00:00,65535
+1178008	ID:14	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1179955	ID:6	CSV,PDR_DL,local=06:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1180132	ID:19	Rime started with address 0.18.116.19.0.19.19.19
+1183785	ID:12	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:740c:000c:0c0c
+1188011	ID:12	Starting 'WaCo + RPL UDP example (fixed)'
+1189276	ID:19	MAC 00:12:74:13:00:13:13:13 Contiki-b149d98 started. Node id is set to 19.
+1191800	ID:14	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:740e:000e:0e0e
+1192499	ID:20	Rime started with address 0.18.116.20.0.20.20.20
+1193055	ID:12	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1196020	ID:14	Starting 'WaCo + RPL UDP example (fixed)'
+1196408	ID:10	Rime started with address 0.18.116.10.0.10.10.10
+1196447	ID:12	APP-ROLE[NODE 12:00]: started
+1198562	ID:19	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1200413	ID:12	CSV,INFO,local=12:00,0,NODE,00:00,65535
+1201062	ID:14	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1201642	ID:20	MAC 00:12:74:14:00:14:14:14 Contiki-b149d98 started. Node id is set to 20.
+1204459	ID:14	APP-ROLE[NODE 14:00]: started
+1205198	ID:10	MAC 00:12:74:0a:00:0a:0a:0a Contiki-b149d98 started. Node id is set to 10.
+1208280	ID:12	CSV,PDR_DL,local=12:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1208425	ID:14	CSV,INFO,local=14:00,0,NODE,00:00,65535
+1210928	ID:20	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1212791	ID:19	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7413:0013:1313
+1214411	ID:10	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1216290	ID:14	CSV,PDR_DL,local=14:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1217069	ID:19	Starting 'WaCo + RPL UDP example (fixed)'
+1222005	ID:19	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1225157	ID:20	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7414:0014:1414
+1225428	ID:19	APP-ROLE[NODE 19:00]: started
+1228202	ID:10	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:740a:000a:0a0a
+1229372	ID:20	Starting 'WaCo + RPL UDP example (fixed)'
+1229393	ID:19	CSV,INFO,local=19:00,0,NODE,00:00,65535
+1232454	ID:10	Starting 'WaCo + RPL UDP example (fixed)'
+1234307	ID:20	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1237284	ID:19	CSV,PDR_DL,local=19:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1237511	ID:10	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1237701	ID:20	APP-ROLE[NODE 20:00]: started
+1240973	ID:10	APP-ROLE[NODE 10:00]: started
+1241666	ID:20	CSV,INFO,local=20:00,0,NODE,00:00,65535
+1244939	ID:10	CSV,INFO,local=10:00,0,NODE,00:00,65535
+1249648	ID:20	CSV,PDR_DL,local=20:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1252845	ID:10	CSV,PDR_DL,local=10:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+1257983	ID:15	Rime started with address 0.18.116.15.0.15.15.15
+1266772	ID:15	MAC 00:12:74:0f:00:0f:0f:0f Contiki-b149d98 started. Node id is set to 15.
+1275984	ID:15	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+1289774	ID:15	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:740f:000f:0f0f
+1293998	ID:15	Starting 'WaCo + RPL UDP example (fixed)'
+1299042	ID:15	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1302349	ID:15	APP-ROLE[NODE 15:00]: started
+1308193	ID:15	CSV,INFO,local=15:00,0,NODE,00:00,65535
+1314606	ID:15	CSV,PDR_DL,local=15:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+6254586	ID:20	APP-UL[NODE 20:00]: send seq=0 metric=1 parent=01:00
+6289344	ID:1	APP-UL[SINK]: got seq=0 from 20:00 hops=1 my_metric=0
+11254503	ID:20	APP-UL[NODE 20:00]: send seq=1 metric=1 parent=01:00
+11310819	ID:1	APP-UL[SINK]: got seq=1 from 20:00 hops=1 my_metric=0
+16254503	ID:20	APP-UL[NODE 20:00]: send seq=2 metric=1 parent=01:00
+16310767	ID:1	APP-UL[SINK]: got seq=2 from 20:00 hops=1 my_metric=0
+21254587	ID:20	APP-UL[NODE 20:00]: send seq=3 metric=1 parent=01:00
+21290347	ID:1	APP-UL[SINK]: got seq=3 from 20:00 hops=1 my_metric=0
+26254503	ID:20	APP-UL[NODE 20:00]: send seq=4 metric=1 parent=01:00
+26288692	ID:1	APP-UL[SINK]: got seq=4 from 20:00 hops=1 my_metric=0
+30542594	ID:1	CSV,PDR_UL,local=01:00,30,20:00,0,4,5,0,0,5,100.00,00:00,0
+30548292	ID:1	CSV,PRR_UL,local=01:00,30,20:00,100.00
+31254723	ID:20	APP-UL[NODE 20:00]: send seq=5 metric=1 parent=01:00
+31286206	ID:1	APP-UL[SINK]: got seq=5 from 20:00 hops=1 my_metric=0
+36254586	ID:20	APP-UL[NODE 20:00]: send seq=6 metric=1 parent=01:00
+36289363	ID:1	APP-UL[SINK]: got seq=6 from 20:00 hops=1 my_metric=0
+41254503	ID:20	APP-UL[NODE 20:00]: send seq=7 metric=1 parent=01:00
+41310765	ID:1	APP-UL[SINK]: got seq=7 from 20:00 hops=1 my_metric=0
+46254505	ID:20	APP-UL[NODE 20:00]: send seq=8 metric=1 parent=01:00
+46288690	ID:1	APP-UL[SINK]: got seq=8 from 20:00 hops=1 my_metric=0
+51254503	ID:20	APP-UL[NODE 20:00]: send seq=9 metric=1 parent=01:00
+51288690	ID:1	APP-UL[SINK]: got seq=9 from 20:00 hops=1 my_metric=0
+56254654	ID:20	APP-UL[NODE 20:00]: send seq=10 metric=1 parent=01:00
+56310843	ID:1	APP-UL[SINK]: got seq=10 from 20:00 hops=1 my_metric=0
+60543258	ID:1	CSV,PDR_UL,local=01:00,60,20:00,0,10,11,0,0,11,100.00,00:00,0
+60549828	ID:1	CSV,PRR_UL,local=01:00,60,20:00,100.00
+61254860	ID:20	APP-UL[NODE 20:00]: send seq=11 metric=1 parent=01:00
+61286265	ID:1	APP-UL[SINK]: got seq=11 from 20:00 hops=1 my_metric=0
+66260487	ID:20	APP-UL[NODE 20:00]: send seq=12 metric=1 parent=01:00
+66311749	ID:1	APP-UL[SINK]: got seq=12 from 20:00 hops=1 my_metric=0
+71254654	ID:20	APP-UL[NODE 20:00]: send seq=13 metric=1 parent=01:00
+71290475	ID:1	APP-UL[SINK]: got seq=13 from 20:00 hops=1 my_metric=0
+76254723	ID:20	APP-UL[NODE 20:00]: send seq=14 metric=1 parent=01:00
+76290273	ID:1	APP-UL[SINK]: got seq=14 from 20:00 hops=1 my_metric=0
+81254654	ID:20	APP-UL[NODE 20:00]: send seq=15 metric=1 parent=01:00
+81290364	ID:1	APP-UL[SINK]: got seq=15 from 20:00 hops=1 my_metric=0
+86254654	ID:20	APP-UL[NODE 20:00]: send seq=16 metric=1 parent=01:00
+86310843	ID:1	APP-UL[SINK]: got seq=16 from 20:00 hops=1 my_metric=0
+90543254	ID:1	CSV,PDR_UL,local=01:00,90,20:00,0,16,17,0,0,17,100.00,00:00,0
+90549823	ID:1	CSV,PRR_UL,local=01:00,90,20:00,100.00
+91254859	ID:20	APP-UL[NODE 20:00]: send seq=17 metric=1 parent=01:00
+91286357	ID:1	APP-UL[SINK]: got seq=17 from 20:00 hops=1 my_metric=0
+96254724	ID:20	APP-UL[NODE 20:00]: send seq=18 metric=1 parent=01:00
+96290273	ID:1	APP-UL[SINK]: got seq=18 from 20:00 hops=1 my_metric=0
+101254655	ID:20	APP-UL[NODE 20:00]: send seq=19 metric=1 parent=01:00
+101290273	ID:1	APP-UL[SINK]: got seq=19 from 20:00 hops=1 my_metric=0
+106254723	ID:20	APP-UL[NODE 20:00]: send seq=20 metric=1 parent=01:00
+106290273	ID:1	APP-UL[SINK]: got seq=20 from 20:00 hops=1 my_metric=0
+111254655	ID:20	APP-UL[NODE 20:00]: send seq=21 metric=1 parent=01:00
+111310258	ID:1	APP-UL[SINK]: got seq=21 from 20:00 hops=1 my_metric=0
+116254654	ID:20	APP-UL[NODE 20:00]: send seq=22 metric=1 parent=01:00
+116290273	ID:1	APP-UL[SINK]: got seq=22 from 20:00 hops=1 my_metric=0
+120543665	ID:1	CSV,PDR_UL,local=01:00,120,20:00,0,22,23,0,0,23,100.00,00:00,0
+120550572	ID:1	CSV,PRR_UL,local=01:00,120,20:00,100.00
+121254860	ID:20	APP-UL[NODE 20:00]: send seq=23 metric=1 parent=01:00
+121286265	ID:1	APP-UL[SINK]: got seq=23 from 20:00 hops=1 my_metric=0
+126254724	ID:20	APP-UL[NODE 20:00]: send seq=24 metric=1 parent=01:00
+126290273	ID:1	APP-UL[SINK]: got seq=24 from 20:00 hops=1 my_metric=0
+131254723	ID:20	APP-UL[NODE 20:00]: send seq=25 metric=1 parent=01:00
+131290273	ID:1	APP-UL[SINK]: got seq=25 from 20:00 hops=1 my_metric=0
+136254654	ID:20	APP-UL[NODE 20:00]: send seq=26 metric=1 parent=01:00
+136290273	ID:1	APP-UL[SINK]: got seq=26 from 20:00 hops=1 my_metric=0
+141254654	ID:20	APP-UL[NODE 20:00]: send seq=27 metric=1 parent=01:00
+141290475	ID:1	APP-UL[SINK]: got seq=27 from 20:00 hops=1 my_metric=0
+146254654	ID:20	APP-UL[NODE 20:00]: send seq=28 metric=1 parent=01:00
+146290273	ID:1	APP-UL[SINK]: got seq=28 from 20:00 hops=1 my_metric=0
+150543690	ID:1	CSV,PDR_UL,local=01:00,150,20:00,0,28,29,0,0,29,100.00,00:00,0
+150550599	ID:1	CSV,PRR_UL,local=01:00,150,20:00,100.00
+151254860	ID:20	APP-UL[NODE 20:00]: send seq=29 metric=1 parent=01:00
+151286356	ID:1	APP-UL[SINK]: got seq=29 from 20:00 hops=1 my_metric=0
+156254723	ID:20	APP-UL[NODE 20:00]: send seq=30 metric=1 parent=01:00
+156290365	ID:1	APP-UL[SINK]: got seq=30 from 20:00 hops=1 my_metric=0
+161254655	ID:20	APP-UL[NODE 20:00]: send seq=31 metric=1 parent=01:00
+161290271	ID:1	APP-UL[SINK]: got seq=31 from 20:00 hops=1 my_metric=0
+166254655	ID:20	APP-UL[NODE 20:00]: send seq=32 metric=1 parent=01:00
+166290271	ID:1	APP-UL[SINK]: got seq=32 from 20:00 hops=1 my_metric=0
+171254655	ID:20	APP-UL[NODE 20:00]: send seq=33 metric=1 parent=01:00
+171290271	ID:1	APP-UL[SINK]: got seq=33 from 20:00 hops=1 my_metric=0
+176254655	ID:20	APP-UL[NODE 20:00]: send seq=34 metric=1 parent=01:00
+176290271	ID:1	APP-UL[SINK]: got seq=34 from 20:00 hops=1 my_metric=0
+180543644	ID:1	CSV,PDR_UL,local=01:00,180,20:00,0,34,35,0,0,35,100.00,00:00,0
+180550557	ID:1	CSV,PRR_UL,local=01:00,180,20:00,100.00
+181254860	ID:20	APP-UL[NODE 20:00]: send seq=35 metric=1 parent=01:00
+181286265	ID:1	APP-UL[SINK]: got seq=35 from 20:00 hops=1 my_metric=0
+186254655	ID:20	APP-UL[NODE 20:00]: send seq=36 metric=1 parent=01:00
+186290271	ID:1	APP-UL[SINK]: got seq=36 from 20:00 hops=1 my_metric=0
+190535138	ID:1	APP-DL[SINK]: send SR seq=0 -> 20:00
+191254655	ID:20	APP-UL[NODE 20:00]: send seq=37 metric=1 parent=01:00
+191290365	ID:1	APP-UL[SINK]: got seq=37 from 20:00 hops=1 my_metric=0
+196254724	ID:20	APP-UL[NODE 20:00]: send seq=38 metric=1 parent=01:00
+196290271	ID:1	APP-UL[SINK]: got seq=38 from 20:00 hops=1 my_metric=0
+201254655	ID:20	APP-UL[NODE 20:00]: send seq=39 metric=1 parent=01:00
+201290476	ID:1	APP-UL[SINK]: got seq=39 from 20:00 hops=1 my_metric=0
+206254654	ID:20	APP-UL[NODE 20:00]: send seq=40 metric=1 parent=01:00
+206290273	ID:1	APP-UL[SINK]: got seq=40 from 20:00 hops=1 my_metric=0
+210543660	ID:1	CSV,PDR_UL,local=01:00,210,20:00,0,40,41,0,0,41,100.00,00:00,0
+210550570	ID:1	CSV,PRR_UL,local=01:00,210,20:00,100.00
+211254729	ID:20	APP-UL[NODE 20:00]: send seq=41 metric=1 parent=01:00
+211286983	ID:1	APP-UL[SINK]: got seq=41 from 20:00 hops=1 my_metric=0
+216254724	ID:20	APP-UL[NODE 20:00]: send seq=42 metric=1 parent=01:00
+216290364	ID:1	APP-UL[SINK]: got seq=42 from 20:00 hops=1 my_metric=0
+221254655	ID:20	APP-UL[NODE 20:00]: send seq=43 metric=1 parent=01:00
+221290273	ID:1	APP-UL[SINK]: got seq=43 from 20:00 hops=1 my_metric=0
+226254655	ID:20	APP-UL[NODE 20:00]: send seq=44 metric=1 parent=01:00
+226290273	ID:1	APP-UL[SINK]: got seq=44 from 20:00 hops=1 my_metric=0
+231254655	ID:20	APP-UL[NODE 20:00]: send seq=45 metric=1 parent=01:00
+231290273	ID:1	APP-UL[SINK]: got seq=45 from 20:00 hops=1 my_metric=0
+236254654	ID:20	APP-UL[NODE 20:00]: send seq=46 metric=1 parent=01:00
+236290273	ID:1	APP-UL[SINK]: got seq=46 from 20:00 hops=1 my_metric=0
+240543694	ID:1	CSV,PDR_UL,local=01:00,240,20:00,0,46,47,0,0,47,100.00,00:00,0
+240550600	ID:1	CSV,PRR_UL,local=01:00,240,20:00,100.00
+241254860	ID:20	APP-UL[NODE 20:00]: send seq=47 metric=1 parent=01:00
+241286265	ID:1	APP-UL[SINK]: got seq=47 from 20:00 hops=1 my_metric=0
+246254724	ID:20	APP-UL[NODE 20:00]: send seq=48 metric=1 parent=01:00
+246290273	ID:1	APP-UL[SINK]: got seq=48 from 20:00 hops=1 my_metric=0
+251254723	ID:20	APP-UL[NODE 20:00]: send seq=49 metric=1 parent=01:00
+251290475	ID:1	APP-UL[SINK]: got seq=49 from 20:00 hops=1 my_metric=0
+256254655	ID:20	APP-UL[NODE 20:00]: send seq=50 metric=1 parent=01:00
+256290271	ID:1	APP-UL[SINK]: got seq=50 from 20:00 hops=1 my_metric=0
+261254655	ID:20	APP-UL[NODE 20:00]: send seq=51 metric=1 parent=01:00
+261290476	ID:1	APP-UL[SINK]: got seq=51 from 20:00 hops=1 my_metric=0
+266254655	ID:20	APP-UL[NODE 20:00]: send seq=52 metric=1 parent=01:00
+266310495	ID:1	APP-UL[SINK]: got seq=52 from 20:00 hops=1 my_metric=0
+270543666	ID:1	CSV,PDR_UL,local=01:00,270,20:00,0,52,53,0,0,53,100.00,00:00,0
+270550575	ID:1	CSV,PRR_UL,local=01:00,270,20:00,100.00
+271254861	ID:20	APP-UL[NODE 20:00]: send seq=53 metric=1 parent=01:00
+271287120	ID:1	APP-UL[SINK]: got seq=53 from 20:00 hops=1 my_metric=0
+276254723	ID:20	APP-UL[NODE 20:00]: send seq=54 metric=1 parent=01:00
+276290365	ID:1	APP-UL[SINK]: got seq=54 from 20:00 hops=1 my_metric=0
+281254655	ID:20	APP-UL[NODE 20:00]: send seq=55 metric=1 parent=01:00
+281290271	ID:1	APP-UL[SINK]: got seq=55 from 20:00 hops=1 my_metric=0
+286254655	ID:20	APP-UL[NODE 20:00]: send seq=56 metric=1 parent=01:00
+286290271	ID:1	APP-UL[SINK]: got seq=56 from 20:00 hops=1 my_metric=0
+291254655	ID:20	APP-UL[NODE 20:00]: send seq=57 metric=1 parent=01:00
+291290271	ID:1	APP-UL[SINK]: got seq=57 from 20:00 hops=1 my_metric=0
+296254655	ID:20	APP-UL[NODE 20:00]: send seq=58 metric=1 parent=01:00
+296290271	ID:1	APP-UL[SINK]: got seq=58 from 20:00 hops=1 my_metric=0
+300543672	ID:1	CSV,PDR_UL,local=01:00,300,20:00,0,58,59,0,0,59,100.00,00:00,0
+300550584	ID:1	CSV,PRR_UL,local=01:00,300,20:00,100.00
+301254861	ID:20	APP-UL[NODE 20:00]: send seq=59 metric=1 parent=01:00
+301286984	ID:1	APP-UL[SINK]: got seq=59 from 20:00 hops=1 my_metric=0
+306254723	ID:20	APP-UL[NODE 20:00]: send seq=60 metric=1 parent=01:00
+306290271	ID:1	APP-UL[SINK]: got seq=60 from 20:00 hops=1 my_metric=0
+311254655	ID:20	APP-UL[NODE 20:00]: send seq=61 metric=1 parent=01:00
+311290365	ID:1	APP-UL[SINK]: got seq=61 from 20:00 hops=1 my_metric=0
+316254655	ID:20	APP-UL[NODE 20:00]: send seq=62 metric=1 parent=01:00
+316290271	ID:1	APP-UL[SINK]: got seq=62 from 20:00 hops=1 my_metric=0
+321254655	ID:20	APP-UL[NODE 20:00]: send seq=63 metric=1 parent=01:00
+324300308	ID:1	APP-UL[SINK]: got seq=63 from 20:00 hops=1 my_metric=0
+326254655	ID:20	APP-UL[NODE 20:00]: send seq=64 metric=1 parent=01:00
+326290271	ID:1	APP-UL[SINK]: got seq=64 from 20:00 hops=1 my_metric=0
+330543664	ID:1	CSV,PDR_UL,local=01:00,330,20:00,0,64,65,0,0,65,100.00,00:00,0
+330550572	ID:1	CSV,PRR_UL,local=01:00,330,20:00,100.00
+331254861	ID:20	APP-UL[NODE 20:00]: send seq=65 metric=1 parent=01:00
+331287120	ID:1	APP-UL[SINK]: got seq=65 from 20:00 hops=1 my_metric=0
+336254655	ID:20	APP-UL[NODE 20:00]: send seq=66 metric=1 parent=01:00
+336290365	ID:1	APP-UL[SINK]: got seq=66 from 20:00 hops=1 my_metric=0
+341254655	ID:20	APP-UL[NODE 20:00]: send seq=67 metric=1 parent=01:00
+341290271	ID:1	APP-UL[SINK]: got seq=67 from 20:00 hops=1 my_metric=0
+346254724	ID:20	APP-UL[NODE 20:00]: send seq=68 metric=1 parent=01:00
+346290271	ID:1	APP-UL[SINK]: got seq=68 from 20:00 hops=1 my_metric=0
+351254655	ID:20	APP-UL[NODE 20:00]: send seq=69 metric=1 parent=01:00
+351290271	ID:1	APP-UL[SINK]: got seq=69 from 20:00 hops=1 my_metric=0
+356254654	ID:20	APP-UL[NODE 20:00]: send seq=70 metric=1 parent=01:00
+356290275	ID:1	APP-UL[SINK]: got seq=70 from 20:00 hops=1 my_metric=0
+360543645	ID:1	CSV,PDR_UL,local=01:00,360,20:00,0,70,71,0,0,71,100.00,00:00,0
+360550560	ID:1	CSV,PRR_UL,local=01:00,360,20:00,100.00
+361254792	ID:20	APP-UL[NODE 20:00]: send seq=71 metric=1 parent=01:00
+361286985	ID:1	APP-UL[SINK]: got seq=71 from 20:00 hops=1 my_metric=0
+366254724	ID:20	APP-UL[NODE 20:00]: send seq=72 metric=1 parent=01:00
+366291568	ID:1	APP-UL[SINK]: got seq=72 from 20:00 hops=1 my_metric=0
+371254654	ID:20	APP-UL[NODE 20:00]: send seq=73 metric=1 parent=01:00
+371292549	ID:1	APP-UL[SINK]: got seq=73 from 20:00 hops=1 my_metric=0
+376254655	ID:20	APP-UL[NODE 20:00]: send seq=74 metric=1 parent=01:00
+376290275	ID:1	APP-UL[SINK]: got seq=74 from 20:00 hops=1 my_metric=0
+381254654	ID:20	APP-UL[NODE 20:00]: send seq=75 metric=1 parent=01:00
+381290478	ID:1	APP-UL[SINK]: got seq=75 from 20:00 hops=1 my_metric=0
+386254654	ID:20	APP-UL[NODE 20:00]: send seq=76 metric=1 parent=01:00
+386290275	ID:1	APP-UL[SINK]: got seq=76 from 20:00 hops=1 my_metric=0
+390543757	ID:1	CSV,PDR_UL,local=01:00,390,20:00,0,76,77,0,0,77,100.00,00:00,0
+390550677	ID:1	CSV,PRR_UL,local=01:00,390,20:00,100.00
+391254862	ID:20	APP-UL[NODE 20:00]: send seq=77 metric=1 parent=01:00
+391286359	ID:1	APP-UL[SINK]: got seq=77 from 20:00 hops=1 my_metric=0
+396254655	ID:20	APP-UL[NODE 20:00]: send seq=78 metric=1 parent=01:00
+396290366	ID:1	APP-UL[SINK]: got seq=78 from 20:00 hops=1 my_metric=0
+401254657	ID:20	APP-UL[NODE 20:00]: send seq=79 metric=1 parent=01:00
+401290275	ID:1	APP-UL[SINK]: got seq=79 from 20:00 hops=1 my_metric=0
+406254655	ID:20	APP-UL[NODE 20:00]: send seq=80 metric=1 parent=01:00
+406290271	ID:1	APP-UL[SINK]: got seq=80 from 20:00 hops=1 my_metric=0
+411254655	ID:20	APP-UL[NODE 20:00]: send seq=81 metric=1 parent=01:00
+411290271	ID:1	APP-UL[SINK]: got seq=81 from 20:00 hops=1 my_metric=0
+416254654	ID:20	APP-UL[NODE 20:00]: send seq=82 metric=1 parent=01:00
+416290271	ID:1	APP-UL[SINK]: got seq=82 from 20:00 hops=1 my_metric=0
+420543637	ID:1	CSV,PDR_UL,local=01:00,420,20:00,0,82,83,0,0,83,100.00,00:00,0
+420550556	ID:1	CSV,PRR_UL,local=01:00,420,20:00,100.00
+421254792	ID:20	APP-UL[NODE 20:00]: send seq=83 metric=1 parent=01:00
+421286264	ID:1	APP-UL[SINK]: got seq=83 from 20:00 hops=1 my_metric=0
+426254724	ID:20	APP-UL[NODE 20:00]: send seq=84 metric=1 parent=01:00
+426290271	ID:1	APP-UL[SINK]: got seq=84 from 20:00 hops=1 my_metric=0
+431254723	ID:20	APP-UL[NODE 20:00]: send seq=85 metric=1 parent=01:00
+431290271	ID:1	APP-UL[SINK]: got seq=85 from 20:00 hops=1 my_metric=0
+436254655	ID:20	APP-UL[NODE 20:00]: send seq=86 metric=1 parent=01:00
+436310707	ID:1	APP-UL[SINK]: got seq=86 from 20:00 hops=1 my_metric=0
+441254654	ID:20	APP-UL[NODE 20:00]: send seq=87 metric=1 parent=01:00
+441290478	ID:1	APP-UL[SINK]: got seq=87 from 20:00 hops=1 my_metric=0
+446254654	ID:20	APP-UL[NODE 20:00]: send seq=88 metric=1 parent=01:00
+446290365	ID:1	APP-UL[SINK]: got seq=88 from 20:00 hops=1 my_metric=0
+450543662	ID:1	CSV,PDR_UL,local=01:00,450,20:00,0,88,89,0,0,89,100.00,00:00,0
+450550567	ID:1	CSV,PRR_UL,local=01:00,450,20:00,100.00
+451254860	ID:20	APP-UL[NODE 20:00]: send seq=89 metric=1 parent=01:00
+451286264	ID:1	APP-UL[SINK]: got seq=89 from 20:00 hops=1 my_metric=0
+456254724	ID:20	APP-UL[NODE 20:00]: send seq=90 metric=1 parent=01:00
+456290474	ID:1	APP-UL[SINK]: got seq=90 from 20:00 hops=1 my_metric=0
+461254655	ID:20	APP-UL[NODE 20:00]: send seq=91 metric=1 parent=01:00
+461290272	ID:1	APP-UL[SINK]: got seq=91 from 20:00 hops=1 my_metric=0
+466254724	ID:20	APP-UL[NODE 20:00]: send seq=92 metric=1 parent=01:00
+466290272	ID:1	APP-UL[SINK]: got seq=92 from 20:00 hops=1 my_metric=0
+471254655	ID:20	APP-UL[NODE 20:00]: send seq=93 metric=1 parent=01:00
+471290272	ID:1	APP-UL[SINK]: got seq=93 from 20:00 hops=1 my_metric=0
+476254655	ID:20	APP-UL[NODE 20:00]: send seq=94 metric=1 parent=01:00
+476290272	ID:1	APP-UL[SINK]: got seq=94 from 20:00 hops=1 my_metric=0
+480535220	ID:1	APP-DL[SINK]: send SR seq=1 -> 20:00
+480547163	ID:1	CSV,PDR_UL,local=01:00,480,20:00,0,94,95,0,0,95,100.00,00:00,0
+480553887	ID:1	CSV,PRR_UL,local=01:00,480,20:00,100.00
+481254729	ID:20	APP-UL[NODE 20:00]: send seq=95 metric=1 parent=01:00
+481286984	ID:1	APP-UL[SINK]: got seq=95 from 20:00 hops=1 my_metric=0
+486254723	ID:20	APP-UL[NODE 20:00]: send seq=96 metric=1 parent=01:00
+486291492	ID:1	APP-UL[SINK]: got seq=96 from 20:00 hops=1 my_metric=0
+491254655	ID:20	APP-UL[NODE 20:00]: send seq=97 metric=1 parent=01:00
+491290323	ID:1	APP-UL[SINK]: got seq=97 from 20:00 hops=1 my_metric=0
+496254724	ID:20	APP-UL[NODE 20:00]: send seq=98 metric=1 parent=01:00
+496290272	ID:1	APP-UL[SINK]: got seq=98 from 20:00 hops=1 my_metric=0
+501254655	ID:20	APP-UL[NODE 20:00]: send seq=99 metric=1 parent=01:00
+501290272	ID:1	APP-UL[SINK]: got seq=99 from 20:00 hops=1 my_metric=0
+506254805	ID:20	APP-UL[NODE 20:00]: send seq=100 metric=1 parent=01:00
+506290524	ID:1	APP-UL[SINK]: got seq=100 from 20:00 hops=1 my_metric=0
+510544521	ID:1	CSV,PDR_UL,local=01:00,510,20:00,0,100,101,0,0,101,100.00,00:00,0
+510551283	ID:1	CSV,PRR_UL,local=01:00,510,20:00,100.00
+511255032	ID:20	APP-UL[NODE 20:00]: send seq=101 metric=1 parent=01:00
+511377613	ID:1	APP-UL[SINK]: got seq=101 from 20:00 hops=1 my_metric=0
+516274428	ID:20	APP-UL[NODE 20:00]: send seq=102 metric=1 parent=01:00
+516309853	ID:1	APP-UL[SINK]: got seq=102 from 20:00 hops=1 my_metric=0
+521254807	ID:20	APP-UL[NODE 20:00]: send seq=103 metric=1 parent=01:00
+521290423	ID:1	APP-UL[SINK]: got seq=103 from 20:00 hops=1 my_metric=0
+526254926	ID:20	APP-UL[NODE 20:00]: send seq=104 metric=1 parent=01:00
+526290423	ID:1	APP-UL[SINK]: got seq=104 from 20:00 hops=1 my_metric=0
+531254807	ID:20	APP-UL[NODE 20:00]: send seq=105 metric=1 parent=01:00
+531310410	ID:1	APP-UL[SINK]: got seq=105 from 20:00 hops=1 my_metric=0
+536254805	ID:20	APP-UL[NODE 20:00]: send seq=106 metric=1 parent=01:00
+536290423	ID:1	APP-UL[SINK]: got seq=106 from 20:00 hops=1 my_metric=0
+540544521	ID:1	CSV,PDR_UL,local=01:00,540,20:00,0,106,107,0,0,107,100.00,00:00,0
+540551283	ID:1	CSV,PRR_UL,local=01:00,540,20:00,100.00
+541254932	ID:20	APP-UL[NODE 20:00]: send seq=107 metric=1 parent=01:00
+541286417	ID:1	APP-UL[SINK]: got seq=107 from 20:00 hops=1 my_metric=0
+546254927	ID:20	APP-UL[NODE 20:00]: send seq=108 metric=1 parent=01:00
+546291637	ID:1	APP-UL[SINK]: got seq=108 from 20:00 hops=1 my_metric=0
+551254805	ID:20	APP-UL[NODE 20:00]: send seq=109 metric=1 parent=01:00
+551290423	ID:1	APP-UL[SINK]: got seq=109 from 20:00 hops=1 my_metric=0
+556254807	ID:20	APP-UL[NODE 20:00]: send seq=110 metric=1 parent=01:00
+556290424	ID:1	APP-UL[SINK]: got seq=110 from 20:00 hops=1 my_metric=0
+561254806	ID:20	APP-UL[NODE 20:00]: send seq=111 metric=1 parent=01:00
+561290592	ID:1	APP-UL[SINK]: got seq=111 from 20:00 hops=1 my_metric=0
+566254810	ID:20	APP-UL[NODE 20:00]: send seq=112 metric=1 parent=01:00
+566290424	ID:1	APP-UL[SINK]: got seq=112 from 20:00 hops=1 my_metric=0
+570544518	ID:1	CSV,PDR_UL,local=01:00,570,20:00,0,112,113,0,0,113,100.00,00:00,0
+570551287	ID:1	CSV,PRR_UL,local=01:00,570,20:00,100.00
+571254996	ID:20	APP-UL[NODE 20:00]: send seq=113 metric=1 parent=01:00
+571287277	ID:1	APP-UL[SINK]: got seq=113 from 20:00 hops=1 my_metric=0
+576254806	ID:20	APP-UL[NODE 20:00]: send seq=114 metric=1 parent=01:00
+576290521	ID:1	APP-UL[SINK]: got seq=114 from 20:00 hops=1 my_metric=0
+581254928	ID:20	APP-UL[NODE 20:00]: send seq=115 metric=1 parent=01:00
+581290424	ID:1	APP-UL[SINK]: got seq=115 from 20:00 hops=1 my_metric=0
+586254807	ID:20	APP-UL[NODE 20:00]: send seq=116 metric=1 parent=01:00
+586290424	ID:1	APP-UL[SINK]: got seq=116 from 20:00 hops=1 my_metric=0
+591254810	ID:20	APP-UL[NODE 20:00]: send seq=117 metric=1 parent=01:00
+591290424	ID:1	APP-UL[SINK]: got seq=117 from 20:00 hops=1 my_metric=0
+596254806	ID:20	APP-UL[NODE 20:00]: send seq=118 metric=1 parent=01:00
+596290424	ID:1	APP-UL[SINK]: got seq=118 from 20:00 hops=1 my_metric=0
+600544518	ID:1	CSV,PDR_UL,local=01:00,600,20:00,0,118,119,0,0,119,100.00,00:00,0
+600551287	ID:1	CSV,PRR_UL,local=01:00,600,20:00,100.00
+601254995	ID:20	APP-UL[NODE 20:00]: send seq=119 metric=1 parent=01:00
+601287272	ID:1	APP-UL[SINK]: got seq=119 from 20:00 hops=1 my_metric=0
+606254927	ID:20	APP-UL[NODE 20:00]: send seq=120 metric=1 parent=01:00
+606290423	ID:1	APP-UL[SINK]: got seq=120 from 20:00 hops=1 my_metric=0
+611254805	ID:20	APP-UL[NODE 20:00]: send seq=121 metric=1 parent=01:00
+611290524	ID:1	APP-UL[SINK]: got seq=121 from 20:00 hops=1 my_metric=0
+616260555	ID:20	APP-UL[NODE 20:00]: send seq=122 metric=1 parent=01:00
+617330032	ID:1	APP-UL[SINK]: got seq=122 from 20:00 hops=1 my_metric=0
+621254805	ID:20	APP-UL[NODE 20:00]: send seq=123 metric=1 parent=01:00
+621290524	ID:1	APP-UL[SINK]: got seq=123 from 20:00 hops=1 my_metric=0
+626254807	ID:20	APP-UL[NODE 20:00]: send seq=124 metric=1 parent=01:00
+626290423	ID:1	APP-UL[SINK]: got seq=124 from 20:00 hops=1 my_metric=0
+630544524	ID:1	CSV,PDR_UL,local=01:00,630,20:00,0,124,125,0,0,125,100.00,00:00,0
+630551284	ID:1	CSV,PRR_UL,local=01:00,630,20:00,100.00
+631254791	ID:20	APP-UL[NODE 20:00]: send seq=125 metric=1 parent=01:00
+631311186	ID:1	APP-UL[SINK]: got seq=125 from 20:00 hops=1 my_metric=0
+636254927	ID:20	APP-UL[NODE 20:00]: send seq=126 metric=1 parent=01:00
+636290524	ID:1	APP-UL[SINK]: got seq=126 from 20:00 hops=1 my_metric=0
+641254805	ID:20	APP-UL[NODE 20:00]: send seq=127 metric=1 parent=01:00
+641290423	ID:1	APP-UL[SINK]: got seq=127 from 20:00 hops=1 my_metric=0
+646254926	ID:20	APP-UL[NODE 20:00]: send seq=128 metric=1 parent=01:00
+646290423	ID:1	APP-UL[SINK]: got seq=128 from 20:00 hops=1 my_metric=0
+651254807	ID:20	APP-UL[NODE 20:00]: send seq=129 metric=1 parent=01:00
+651290423	ID:1	APP-UL[SINK]: got seq=129 from 20:00 hops=1 my_metric=0
+656254806	ID:20	APP-UL[NODE 20:00]: send seq=130 metric=1 parent=01:00
+656290424	ID:1	APP-UL[SINK]: got seq=130 from 20:00 hops=1 my_metric=0
+660544370	ID:1	CSV,PDR_UL,local=01:00,660,20:00,0,130,131,0,0,131,100.00,00:00,0
+660551223	ID:1	CSV,PRR_UL,local=01:00,660,20:00,100.00
+661255031	ID:20	APP-UL[NODE 20:00]: send seq=131 metric=1 parent=01:00
+661314402	ID:1	APP-UL[SINK]: got seq=131 from 20:00 hops=1 my_metric=0
+666254927	ID:20	APP-UL[NODE 20:00]: send seq=132 metric=1 parent=01:00
+666291576	ID:1	APP-UL[SINK]: got seq=132 from 20:00 hops=1 my_metric=0
+671254806	ID:20	APP-UL[NODE 20:00]: send seq=133 metric=1 parent=01:00
+671290592	ID:1	APP-UL[SINK]: got seq=133 from 20:00 hops=1 my_metric=0
+676254927	ID:20	APP-UL[NODE 20:00]: send seq=134 metric=1 parent=01:00
+676290424	ID:1	APP-UL[SINK]: got seq=134 from 20:00 hops=1 my_metric=0
+681254806	ID:20	APP-UL[NODE 20:00]: send seq=135 metric=1 parent=01:00
+681290592	ID:1	APP-UL[SINK]: got seq=135 from 20:00 hops=1 my_metric=0
+686254806	ID:20	APP-UL[NODE 20:00]: send seq=136 metric=1 parent=01:00
+686290521	ID:1	APP-UL[SINK]: got seq=136 from 20:00 hops=1 my_metric=0
+690544555	ID:1	CSV,PDR_UL,local=01:00,690,20:00,0,136,137,0,0,137,100.00,00:00,0
+690551325	ID:1	CSV,PRR_UL,local=01:00,690,20:00,100.00
+691255031	ID:20	APP-UL[NODE 20:00]: send seq=137 metric=1 parent=01:00
+691455770	ID:1	APP-UL[SINK]: got seq=137 from 20:00 hops=1 my_metric=0
+696254928	ID:20	APP-UL[NODE 20:00]: send seq=138 metric=1 parent=01:00
+696290424	ID:1	APP-UL[SINK]: got seq=138 from 20:00 hops=1 my_metric=0
+701254806	ID:20	APP-UL[NODE 20:00]: send seq=139 metric=1 parent=01:00
+701290424	ID:1	APP-UL[SINK]: got seq=139 from 20:00 hops=1 my_metric=0
+706254807	ID:20	APP-UL[NODE 20:00]: send seq=140 metric=1 parent=01:00
+706290424	ID:1	APP-UL[SINK]: got seq=140 from 20:00 hops=1 my_metric=0
+711260555	ID:20	APP-UL[NODE 20:00]: send seq=141 metric=1 parent=01:00
+711294813	ID:1	APP-UL[SINK]: got seq=141 from 20:00 hops=1 my_metric=0
+716254810	ID:20	APP-UL[NODE 20:00]: send seq=142 metric=1 parent=01:00
+716290424	ID:1	APP-UL[SINK]: got seq=142 from 20:00 hops=1 my_metric=0
+720544555	ID:1	CSV,PDR_UL,local=01:00,720,20:00,0,142,143,0,0,143,100.00,00:00,0
+720551325	ID:1	CSV,PRR_UL,local=01:00,720,20:00,100.00
+721255031	ID:20	APP-UL[NODE 20:00]: send seq=143 metric=1 parent=01:00
+721314402	ID:1	APP-UL[SINK]: got seq=143 from 20:00 hops=1 my_metric=0
+726254928	ID:20	APP-UL[NODE 20:00]: send seq=144 metric=1 parent=01:00
+726290424	ID:1	APP-UL[SINK]: got seq=144 from 20:00 hops=1 my_metric=0
+731254810	ID:20	APP-UL[NODE 20:00]: send seq=145 metric=1 parent=01:00
+731290424	ID:1	APP-UL[SINK]: got seq=145 from 20:00 hops=1 my_metric=0
+736254807	ID:20	APP-UL[NODE 20:00]: send seq=146 metric=1 parent=01:00
+736290424	ID:1	APP-UL[SINK]: got seq=146 from 20:00 hops=1 my_metric=0
+741254807	ID:20	APP-UL[NODE 20:00]: send seq=147 metric=1 parent=01:00
+741290521	ID:1	APP-UL[SINK]: got seq=147 from 20:00 hops=1 my_metric=0
+746254810	ID:20	APP-UL[NODE 20:00]: send seq=148 metric=1 parent=01:00
+746290424	ID:1	APP-UL[SINK]: got seq=148 from 20:00 hops=1 my_metric=0
+750544559	ID:1	CSV,PDR_UL,local=01:00,750,20:00,0,148,149,0,0,149,100.00,00:00,0
+750551388	ID:1	CSV,PRR_UL,local=01:00,750,20:00,100.00
+751254996	ID:20	APP-UL[NODE 20:00]: send seq=149 metric=1 parent=01:00
+752831894	ID:1	APP-UL[SINK]: got seq=149 from 20:00 hops=1 my_metric=0
+756254929	ID:20	APP-UL[NODE 20:00]: send seq=150 metric=1 parent=01:00
+756290522	ID:1	APP-UL[SINK]: got seq=150 from 20:00 hops=1 my_metric=0
+761254807	ID:20	APP-UL[NODE 20:00]: send seq=151 metric=1 parent=01:00
+761290425	ID:1	APP-UL[SINK]: got seq=151 from 20:00 hops=1 my_metric=0
+766254809	ID:20	APP-UL[NODE 20:00]: send seq=152 metric=1 parent=01:00
+766290425	ID:1	APP-UL[SINK]: got seq=152 from 20:00 hops=1 my_metric=0
+770535168	ID:1	APP-DL[SINK]: send SR seq=2 -> 20:00
+771254809	ID:20	APP-UL[NODE 20:00]: send seq=153 metric=1 parent=01:00
+771290425	ID:1	APP-UL[SINK]: got seq=153 from 20:00 hops=1 my_metric=0
+776254809	ID:20	APP-UL[NODE 20:00]: send seq=154 metric=1 parent=01:00
+776290425	ID:1	APP-UL[SINK]: got seq=154 from 20:00 hops=1 my_metric=0
+780544563	ID:1	CSV,PDR_UL,local=01:00,780,20:00,0,154,155,0,0,155,100.00,00:00,0
+780551397	ID:1	CSV,PRR_UL,local=01:00,780,20:00,100.00
+781255032	ID:20	APP-UL[NODE 20:00]: send seq=155 metric=1 parent=01:00
+781314398	ID:1	APP-UL[SINK]: got seq=155 from 20:00 hops=1 my_metric=0
+786254809	ID:20	APP-UL[NODE 20:00]: send seq=156 metric=1 parent=01:00
+786310413	ID:1	APP-UL[SINK]: got seq=156 from 20:00 hops=1 my_metric=0
+791254809	ID:20	APP-UL[NODE 20:00]: send seq=157 metric=1 parent=01:00
+791290591	ID:1	APP-UL[SINK]: got seq=157 from 20:00 hops=1 my_metric=0
+796254809	ID:20	APP-UL[NODE 20:00]: send seq=158 metric=1 parent=01:00
+796310993	ID:1	APP-UL[SINK]: got seq=158 from 20:00 hops=1 my_metric=0
+801254809	ID:20	APP-UL[NODE 20:00]: send seq=159 metric=1 parent=01:00
+801290522	ID:1	APP-UL[SINK]: got seq=159 from 20:00 hops=1 my_metric=0
+806254806	ID:20	APP-UL[NODE 20:00]: send seq=160 metric=1 parent=01:00
+806290422	ID:1	APP-UL[SINK]: got seq=160 from 20:00 hops=1 my_metric=0
+810544546	ID:1	CSV,PDR_UL,local=01:00,810,20:00,0,160,161,0,0,161,100.00,00:00,0
+810551314	ID:1	CSV,PRR_UL,local=01:00,810,20:00,100.00
+811255032	ID:20	APP-UL[NODE 20:00]: send seq=161 metric=1 parent=01:00
+811994835	ID:1	APP-UL[SINK]: got seq=161 from 20:00 hops=1 my_metric=0
+816254806	ID:20	APP-UL[NODE 20:00]: send seq=162 metric=1 parent=01:00
+816290422	ID:1	APP-UL[SINK]: got seq=162 from 20:00 hops=1 my_metric=0
+821254806	ID:20	APP-UL[NODE 20:00]: send seq=163 metric=1 parent=01:00
+821290422	ID:1	APP-UL[SINK]: got seq=163 from 20:00 hops=1 my_metric=0
+826254926	ID:20	APP-UL[NODE 20:00]: send seq=164 metric=1 parent=01:00
+826290422	ID:1	APP-UL[SINK]: got seq=164 from 20:00 hops=1 my_metric=0
+831254806	ID:20	APP-UL[NODE 20:00]: send seq=165 metric=1 parent=01:00
+831310410	ID:1	APP-UL[SINK]: got seq=165 from 20:00 hops=1 my_metric=0
+836254806	ID:20	APP-UL[NODE 20:00]: send seq=166 metric=1 parent=01:00
+836290422	ID:1	APP-UL[SINK]: got seq=166 from 20:00 hops=1 my_metric=0
+840544519	ID:1	CSV,PDR_UL,local=01:00,840,20:00,0,166,167,0,0,167,100.00,00:00,0
+840551287	ID:1	CSV,PRR_UL,local=01:00,840,20:00,100.00
+841254994	ID:20	APP-UL[NODE 20:00]: send seq=167 metric=1 parent=01:00
+841287269	ID:1	APP-UL[SINK]: got seq=167 from 20:00 hops=1 my_metric=0
+846254926	ID:20	APP-UL[NODE 20:00]: send seq=168 metric=1 parent=01:00
+846290422	ID:1	APP-UL[SINK]: got seq=168 from 20:00 hops=1 my_metric=0
+851254806	ID:20	APP-UL[NODE 20:00]: send seq=169 metric=1 parent=01:00
+851290523	ID:1	APP-UL[SINK]: got seq=169 from 20:00 hops=1 my_metric=0
+856254805	ID:20	APP-UL[NODE 20:00]: send seq=170 metric=1 parent=01:00
+856290423	ID:1	APP-UL[SINK]: got seq=170 from 20:00 hops=1 my_metric=0
+861254807	ID:20	APP-UL[NODE 20:00]: send seq=171 metric=1 parent=01:00
+861290591	ID:1	APP-UL[SINK]: got seq=171 from 20:00 hops=1 my_metric=0
+866254807	ID:20	APP-UL[NODE 20:00]: send seq=172 metric=1 parent=01:00
+866290423	ID:1	APP-UL[SINK]: got seq=172 from 20:00 hops=1 my_metric=0
+870544599	ID:1	CSV,PDR_UL,local=01:00,870,20:00,0,172,173,0,0,173,100.00,00:00,0
+870551430	ID:1	CSV,PRR_UL,local=01:00,870,20:00,100.00
+871255032	ID:20	APP-UL[NODE 20:00]: send seq=173 metric=1 parent=01:00
+871924518	ID:1	APP-UL[SINK]: got seq=173 from 20:00 hops=1 my_metric=0
+876254807	ID:20	APP-UL[NODE 20:00]: send seq=174 metric=1 parent=01:00
+876290524	ID:1	APP-UL[SINK]: got seq=174 from 20:00 hops=1 my_metric=0
+881254805	ID:20	APP-UL[NODE 20:00]: send seq=175 metric=1 parent=01:00
+881290423	ID:1	APP-UL[SINK]: got seq=175 from 20:00 hops=1 my_metric=0
+886254806	ID:20	APP-UL[NODE 20:00]: send seq=176 metric=1 parent=01:00
+886290423	ID:1	APP-UL[SINK]: got seq=176 from 20:00 hops=1 my_metric=0
+891254805	ID:20	APP-UL[NODE 20:00]: send seq=177 metric=1 parent=01:00
+891290423	ID:1	APP-UL[SINK]: got seq=177 from 20:00 hops=1 my_metric=0
+896254807	ID:20	APP-UL[NODE 20:00]: send seq=178 metric=1 parent=01:00
+896290423	ID:1	APP-UL[SINK]: got seq=178 from 20:00 hops=1 my_metric=0
+900544553	ID:1	CSV,PDR_UL,local=01:00,900,20:00,0,178,179,0,0,179,100.00,00:00,0
+900551326	ID:1	CSV,PRR_UL,local=01:00,900,20:00,100.00
+901255032	ID:20	APP-UL[NODE 20:00]: send seq=179 metric=1 parent=01:00
+901314402	ID:1	APP-UL[SINK]: got seq=179 from 20:00 hops=1 my_metric=0
+906254927	ID:20	APP-UL[NODE 20:00]: send seq=180 metric=1 parent=01:00
+906290423	ID:1	APP-UL[SINK]: got seq=180 from 20:00 hops=1 my_metric=0
+911254807	ID:20	APP-UL[NODE 20:00]: send seq=181 metric=1 parent=01:00
+911290423	ID:1	APP-UL[SINK]: got seq=181 from 20:00 hops=1 my_metric=0
+916254807	ID:20	APP-UL[NODE 20:00]: send seq=182 metric=1 parent=01:00
+916290423	ID:1	APP-UL[SINK]: got seq=182 from 20:00 hops=1 my_metric=0
+921254805	ID:20	APP-UL[NODE 20:00]: send seq=183 metric=1 parent=01:00
+921290476	ID:1	APP-UL[SINK]: got seq=183 from 20:00 hops=1 my_metric=0
+926254807	ID:20	APP-UL[NODE 20:00]: send seq=184 metric=1 parent=01:00
+926290524	ID:1	APP-UL[SINK]: got seq=184 from 20:00 hops=1 my_metric=0
+930544554	ID:1	CSV,PDR_UL,local=01:00,930,20:00,0,184,185,0,0,185,100.00,00:00,0
+930551384	ID:1	CSV,PRR_UL,local=01:00,930,20:00,100.00
+931254994	ID:20	APP-UL[NODE 20:00]: send seq=185 metric=1 parent=01:00
+931310444	ID:1	APP-UL[SINK]: got seq=185 from 20:00 hops=1 my_metric=0
+936254805	ID:20	APP-UL[NODE 20:00]: send seq=186 metric=1 parent=01:00
+936290524	ID:1	APP-UL[SINK]: got seq=186 from 20:00 hops=1 my_metric=0
+941254805	ID:20	APP-UL[NODE 20:00]: send seq=187 metric=1 parent=01:00
+941290423	ID:1	APP-UL[SINK]: got seq=187 from 20:00 hops=1 my_metric=0
+946254806	ID:20	APP-UL[NODE 20:00]: send seq=188 metric=1 parent=01:00
+946290423	ID:1	APP-UL[SINK]: got seq=188 from 20:00 hops=1 my_metric=0
+951254805	ID:20	APP-UL[NODE 20:00]: send seq=189 metric=1 parent=01:00
+951290423	ID:1	APP-UL[SINK]: got seq=189 from 20:00 hops=1 my_metric=0
+956254810	ID:20	APP-UL[NODE 20:00]: send seq=190 metric=1 parent=01:00
+956290424	ID:1	APP-UL[SINK]: got seq=190 from 20:00 hops=1 my_metric=0
+960544527	ID:1	CSV,PDR_UL,local=01:00,960,20:00,0,190,191,0,0,191,100.00,00:00,0
+960551287	ID:1	CSV,PRR_UL,local=01:00,960,20:00,100.00
+961254932	ID:20	APP-UL[NODE 20:00]: send seq=191 metric=1 parent=01:00
+961287217	ID:1	APP-UL[SINK]: got seq=191 from 20:00 hops=1 my_metric=0
+966254928	ID:20	APP-UL[NODE 20:00]: send seq=192 metric=1 parent=01:00
+966291634	ID:1	APP-UL[SINK]: got seq=192 from 20:00 hops=1 my_metric=0
+971254806	ID:20	APP-UL[NODE 20:00]: send seq=193 metric=1 parent=01:00
+971290424	ID:1	APP-UL[SINK]: got seq=193 from 20:00 hops=1 my_metric=0
+976254810	ID:20	APP-UL[NODE 20:00]: send seq=194 metric=1 parent=01:00
+976290424	ID:1	APP-UL[SINK]: got seq=194 from 20:00 hops=1 my_metric=0
+981254806	ID:20	APP-UL[NODE 20:00]: send seq=195 metric=1 parent=01:00
+981290592	ID:1	APP-UL[SINK]: got seq=195 from 20:00 hops=1 my_metric=0
+986254806	ID:20	APP-UL[NODE 20:00]: send seq=196 metric=1 parent=01:00
+986290521	ID:1	APP-UL[SINK]: got seq=196 from 20:00 hops=1 my_metric=0
+990544557	ID:1	CSV,PDR_UL,local=01:00,990,20:00,0,196,197,0,0,197,100.00,00:00,0
+990551388	ID:1	CSV,PRR_UL,local=01:00,990,20:00,100.00
+991254996	ID:20	APP-UL[NODE 20:00]: send seq=197 metric=1 parent=01:00
+991287369	ID:1	APP-UL[SINK]: got seq=197 from 20:00 hops=1 my_metric=0
+996254807	ID:20	APP-UL[NODE 20:00]: send seq=198 metric=1 parent=01:00
+996290521	ID:1	APP-UL[SINK]: got seq=198 from 20:00 hops=1 my_metric=0
+1001254806	ID:20	APP-UL[NODE 20:00]: send seq=199 metric=1 parent=01:00
+1001290424	ID:1	APP-UL[SINK]: got seq=199 from 20:00 hops=1 my_metric=0
+1006254927	ID:20	APP-UL[NODE 20:00]: send seq=200 metric=1 parent=01:00
+1006290423	ID:1	APP-UL[SINK]: got seq=200 from 20:00 hops=1 my_metric=0
+1011254805	ID:20	APP-UL[NODE 20:00]: send seq=201 metric=1 parent=01:00
+1011310410	ID:1	APP-UL[SINK]: got seq=201 from 20:00 hops=1 my_metric=0
+1016254807	ID:20	APP-UL[NODE 20:00]: send seq=202 metric=1 parent=01:00
+1016290423	ID:1	APP-UL[SINK]: got seq=202 from 20:00 hops=1 my_metric=0
+1020544875	ID:1	CSV,PDR_UL,local=01:00,1020,20:00,0,202,203,0,0,203,100.00,00:00,0
+1020552095	ID:1	CSV,PRR_UL,local=01:00,1020,20:00,100.00
+1021254995	ID:20	APP-UL[NODE 20:00]: send seq=203 metric=1 parent=01:00
+1021287276	ID:1	APP-UL[SINK]: got seq=203 from 20:00 hops=1 my_metric=0
+1026254927	ID:20	APP-UL[NODE 20:00]: send seq=204 metric=1 parent=01:00
+1026290423	ID:1	APP-UL[SINK]: got seq=204 from 20:00 hops=1 my_metric=0
+1031254807	ID:20	APP-UL[NODE 20:00]: send seq=205 metric=1 parent=01:00
+1031290524	ID:1	APP-UL[SINK]: got seq=205 from 20:00 hops=1 my_metric=0
+1036254806	ID:20	APP-UL[NODE 20:00]: send seq=206 metric=1 parent=01:00
+1036310989	ID:1	APP-UL[SINK]: got seq=206 from 20:00 hops=1 my_metric=0
+1041254807	ID:20	APP-UL[NODE 20:00]: send seq=207 metric=1 parent=01:00
+1041290524	ID:1	APP-UL[SINK]: got seq=207 from 20:00 hops=1 my_metric=0
+1046254805	ID:20	APP-UL[NODE 20:00]: send seq=208 metric=1 parent=01:00
+1046290423	ID:1	APP-UL[SINK]: got seq=208 from 20:00 hops=1 my_metric=0
+1050545025	ID:1	CSV,PDR_UL,local=01:00,1050,20:00,0,208,209,0,0,209,100.00,00:00,0
+1050552142	ID:1	CSV,PRR_UL,local=01:00,1050,20:00,100.00
+1051254995	ID:20	APP-UL[NODE 20:00]: send seq=209 metric=1 parent=01:00
+1052853461	ID:1	APP-UL[SINK]: got seq=209 from 20:00 hops=1 my_metric=0
+1056254928	ID:20	APP-UL[NODE 20:00]: send seq=210 metric=1 parent=01:00
+1056290521	ID:1	APP-UL[SINK]: got seq=210 from 20:00 hops=1 my_metric=0
+1060535168	ID:1	APP-DL[SINK]: send SR seq=3 -> 20:00
+1061254928	ID:20	APP-UL[NODE 20:00]: send seq=211 metric=1 parent=01:00
+1061290424	ID:1	APP-UL[SINK]: got seq=211 from 20:00 hops=1 my_metric=0
+1066254807	ID:20	APP-UL[NODE 20:00]: send seq=212 metric=1 parent=01:00
+1066310993	ID:1	APP-UL[SINK]: got seq=212 from 20:00 hops=1 my_metric=0
+1071254927	ID:20	APP-UL[NODE 20:00]: send seq=213 metric=1 parent=01:00
+1071290424	ID:1	APP-UL[SINK]: got seq=213 from 20:00 hops=1 my_metric=0
+1076254806	ID:20	APP-UL[NODE 20:00]: send seq=214 metric=1 parent=01:00
+1076290424	ID:1	APP-UL[SINK]: got seq=214 from 20:00 hops=1 my_metric=0
+1080544950	ID:1	CSV,PDR_UL,local=01:00,1080,20:00,0,214,215,0,0,215,100.00,00:00,0
+1080552103	ID:1	CSV,PRR_UL,local=01:00,1080,20:00,100.00
+1081254996	ID:20	APP-UL[NODE 20:00]: send seq=215 metric=1 parent=01:00
+1081314402	ID:1	APP-UL[SINK]: got seq=215 from 20:00 hops=1 my_metric=0
+1086254928	ID:20	APP-UL[NODE 20:00]: send seq=216 metric=1 parent=01:00
+1086290424	ID:1	APP-UL[SINK]: got seq=216 from 20:00 hops=1 my_metric=0
+1091254810	ID:20	APP-UL[NODE 20:00]: send seq=217 metric=1 parent=01:00
+1091290521	ID:1	APP-UL[SINK]: got seq=217 from 20:00 hops=1 my_metric=0
+1096254807	ID:20	APP-UL[NODE 20:00]: send seq=218 metric=1 parent=01:00
+1096310988	ID:1	APP-UL[SINK]: got seq=218 from 20:00 hops=1 my_metric=0
+1101254927	ID:20	APP-UL[NODE 20:00]: send seq=219 metric=1 parent=01:00
+1101290592	ID:1	APP-UL[SINK]: got seq=219 from 20:00 hops=1 my_metric=0
+1106254806	ID:20	APP-UL[NODE 20:00]: send seq=220 metric=1 parent=01:00
+1106290521	ID:1	APP-UL[SINK]: got seq=220 from 20:00 hops=1 my_metric=0
+1110545034	ID:1	CSV,PDR_UL,local=01:00,1110,20:00,0,220,221,0,0,221,100.00,00:00,0
+1110552141	ID:1	CSV,PRR_UL,local=01:00,1110,20:00,100.00
+1111255032	ID:20	APP-UL[NODE 20:00]: send seq=221 metric=1 parent=01:00
+1111286542	ID:1	APP-UL[SINK]: got seq=221 from 20:00 hops=1 my_metric=0
+1116254932	ID:20	APP-UL[NODE 20:00]: send seq=222 metric=1 parent=01:00
+1116290521	ID:1	APP-UL[SINK]: got seq=222 from 20:00 hops=1 my_metric=0
+1121254928	ID:20	APP-UL[NODE 20:00]: send seq=223 metric=1 parent=01:00
+1121290424	ID:1	APP-UL[SINK]: got seq=223 from 20:00 hops=1 my_metric=0
+1126255340	ID:20	APP-UL[NODE 20:00]: send seq=224 metric=1 parent=01:00
+1126306049	ID:1	APP-UL[SINK]: got seq=224 from 20:00 hops=1 my_metric=0
+1131254810	ID:20	APP-UL[NODE 20:00]: send seq=225 metric=1 parent=01:00
+1131290424	ID:1	APP-UL[SINK]: got seq=225 from 20:00 hops=1 my_metric=0
+1136254807	ID:20	APP-UL[NODE 20:00]: send seq=226 metric=1 parent=01:00
+1136290424	ID:1	APP-UL[SINK]: got seq=226 from 20:00 hops=1 my_metric=0
+1140544843	ID:1	CSV,PDR_UL,local=01:00,1140,20:00,0,226,227,0,0,227,100.00,00:00,0
+1140552070	ID:1	CSV,PRR_UL,local=01:00,1140,20:00,100.00
+1141254996	ID:20	APP-UL[NODE 20:00]: send seq=227 metric=1 parent=01:00
+1141287277	ID:1	APP-UL[SINK]: got seq=227 from 20:00 hops=1 my_metric=0
+1146254928	ID:20	APP-UL[NODE 20:00]: send seq=228 metric=1 parent=01:00
+1146290424	ID:1	APP-UL[SINK]: got seq=228 from 20:00 hops=1 my_metric=0
+1151254928	ID:20	APP-UL[NODE 20:00]: send seq=229 metric=1 parent=01:00
+1151290424	ID:1	APP-UL[SINK]: got seq=229 from 20:00 hops=1 my_metric=0
+1156254810	ID:20	APP-UL[NODE 20:00]: send seq=230 metric=1 parent=01:00
+1156290425	ID:1	APP-UL[SINK]: got seq=230 from 20:00 hops=1 my_metric=0
+1161254928	ID:20	APP-UL[NODE 20:00]: send seq=231 metric=1 parent=01:00
+1161290591	ID:1	APP-UL[SINK]: got seq=231 from 20:00 hops=1 my_metric=0
+1166254807	ID:20	APP-UL[NODE 20:00]: send seq=232 metric=1 parent=01:00
+1166290522	ID:1	APP-UL[SINK]: got seq=232 from 20:00 hops=1 my_metric=0
+1170545037	ID:1	CSV,PDR_UL,local=01:00,1170,20:00,0,232,233,0,0,233,100.00,00:00,0
+1170552142	ID:1	CSV,PRR_UL,local=01:00,1170,20:00,100.00
+1171254997	ID:20	APP-UL[NODE 20:00]: send seq=233 metric=1 parent=01:00
+1171287370	ID:1	APP-UL[SINK]: got seq=233 from 20:00 hops=1 my_metric=0
+1176254927	ID:20	APP-UL[NODE 20:00]: send seq=234 metric=1 parent=01:00
+1176290591	ID:1	APP-UL[SINK]: got seq=234 from 20:00 hops=1 my_metric=0
+1181254929	ID:20	APP-UL[NODE 20:00]: send seq=235 metric=1 parent=01:00
+1181290425	ID:1	APP-UL[SINK]: got seq=235 from 20:00 hops=1 my_metric=0
+1186254810	ID:20	APP-UL[NODE 20:00]: send seq=236 metric=1 parent=01:00
+1186310993	ID:1	APP-UL[SINK]: got seq=236 from 20:00 hops=1 my_metric=0
+1191254809	ID:20	APP-UL[NODE 20:00]: send seq=237 metric=1 parent=01:00
+1191290425	ID:1	APP-UL[SINK]: got seq=237 from 20:00 hops=1 my_metric=0
+1196254807	ID:20	APP-UL[NODE 20:00]: send seq=238 metric=1 parent=01:00
+1196290425	ID:1	APP-UL[SINK]: got seq=238 from 20:00 hops=1 my_metric=0
+1200544953	ID:1	CSV,PDR_UL,local=01:00,1200,20:00,0,238,239,0,0,239,100.00,00:00,0
+1200552103	ID:1	CSV,PRR_UL,local=01:00,1200,20:00,100.00
+1201254996	ID:20	APP-UL[NODE 20:00]: send seq=239 metric=1 parent=01:00
+1201314398	ID:1	APP-UL[SINK]: got seq=239 from 20:00 hops=1 my_metric=0
+1206254927	ID:20	APP-UL[NODE 20:00]: send seq=240 metric=1 parent=01:00
+1206290423	ID:1	APP-UL[SINK]: got seq=240 from 20:00 hops=1 my_metric=0
+1211254805	ID:20	APP-UL[NODE 20:00]: send seq=241 metric=1 parent=01:00
+1211290591	ID:1	APP-UL[SINK]: got seq=241 from 20:00 hops=1 my_metric=0
+1216254806	ID:20	APP-UL[NODE 20:00]: send seq=242 metric=1 parent=01:00
+1216290423	ID:1	APP-UL[SINK]: got seq=242 from 20:00 hops=1 my_metric=0
+1221254805	ID:20	APP-UL[NODE 20:00]: send seq=243 metric=1 parent=01:00
+1221290591	ID:1	APP-UL[SINK]: got seq=243 from 20:00 hops=1 my_metric=0
+1226254805	ID:20	APP-UL[NODE 20:00]: send seq=244 metric=1 parent=01:00
+1226290524	ID:1	APP-UL[SINK]: got seq=244 from 20:00 hops=1 my_metric=0
+1230544866	ID:1	CSV,PDR_UL,local=01:00,1230,20:00,0,244,245,0,0,245,100.00,00:00,0
+1230552089	ID:1	CSV,PRR_UL,local=01:00,1230,20:00,100.00
+1231255032	ID:20	APP-UL[NODE 20:00]: send seq=245 metric=1 parent=01:00
+1231674520	ID:1	APP-UL[SINK]: got seq=245 from 20:00 hops=1 my_metric=0
+1236254927	ID:20	APP-UL[NODE 20:00]: send seq=246 metric=1 parent=01:00
+1236290524	ID:1	APP-UL[SINK]: got seq=246 from 20:00 hops=1 my_metric=0
+1241254806	ID:20	APP-UL[NODE 20:00]: send seq=247 metric=1 parent=01:00
+1241290423	ID:1	APP-UL[SINK]: got seq=247 from 20:00 hops=1 my_metric=0
+1246254806	ID:20	APP-UL[NODE 20:00]: send seq=248 metric=1 parent=01:00
+1246290423	ID:1	APP-UL[SINK]: got seq=248 from 20:00 hops=1 my_metric=0
+1251254805	ID:20	APP-UL[NODE 20:00]: send seq=249 metric=1 parent=01:00
+1251290423	ID:1	APP-UL[SINK]: got seq=249 from 20:00 hops=1 my_metric=0
+1256254806	ID:20	APP-UL[NODE 20:00]: send seq=250 metric=1 parent=01:00
+1256290424	ID:1	APP-UL[SINK]: got seq=250 from 20:00 hops=1 my_metric=0
+1260544869	ID:1	CSV,PDR_UL,local=01:00,1260,20:00,0,250,251,0,0,251,100.00,00:00,0
+1260552093	ID:1	CSV,PRR_UL,local=01:00,1260,20:00,100.00
+1261254933	ID:20	APP-UL[NODE 20:00]: send seq=251 metric=1 parent=01:00
+1261287218	ID:1	APP-UL[SINK]: got seq=251 from 20:00 hops=1 my_metric=0
+1266254928	ID:20	APP-UL[NODE 20:00]: send seq=252 metric=1 parent=01:00
+1266290424	ID:1	APP-UL[SINK]: got seq=252 from 20:00 hops=1 my_metric=0
+1271254810	ID:20	APP-UL[NODE 20:00]: send seq=253 metric=1 parent=01:00
+1271290424	ID:1	APP-UL[SINK]: got seq=253 from 20:00 hops=1 my_metric=0
+1276254807	ID:20	APP-UL[NODE 20:00]: send seq=254 metric=1 parent=01:00
+1276290424	ID:1	APP-UL[SINK]: got seq=254 from 20:00 hops=1 my_metric=0
+1281254806	ID:20	APP-UL[NODE 20:00]: send seq=255 metric=1 parent=01:00
+1281290592	ID:1	APP-UL[SINK]: got seq=255 from 20:00 hops=1 my_metric=0
+1286254806	ID:20	APP-UL[NODE 20:00]: send seq=256 metric=1 parent=01:00
+1286290424	ID:1	APP-UL[SINK]: got seq=256 from 20:00 hops=1 my_metric=0
+1290544863	ID:1	CSV,PDR_UL,local=01:00,1290,20:00,0,256,257,0,0,257,100.00,00:00,0
+1290552081	ID:1	CSV,PRR_UL,local=01:00,1290,20:00,100.00
+1291255032	ID:20	APP-UL[NODE 20:00]: send seq=257 metric=1 parent=01:00
+1292627646	ID:1	APP-UL[SINK]: got seq=257 from 20:00 hops=1 my_metric=0
+1296254928	ID:20	APP-UL[NODE 20:00]: send seq=258 metric=1 parent=01:00
+1296290523	ID:1	APP-UL[SINK]: got seq=258 from 20:00 hops=1 my_metric=0
+1301254810	ID:20	APP-UL[NODE 20:00]: send seq=259 metric=1 parent=01:00
+1301290424	ID:1	APP-UL[SINK]: got seq=259 from 20:00 hops=1 my_metric=0
+1306254927	ID:20	APP-UL[NODE 20:00]: send seq=260 metric=1 parent=01:00
+1306290424	ID:1	APP-UL[SINK]: got seq=260 from 20:00 hops=1 my_metric=0
+1311254810	ID:20	APP-UL[NODE 20:00]: send seq=261 metric=1 parent=01:00
+1311310412	ID:1	APP-UL[SINK]: got seq=261 from 20:00 hops=1 my_metric=0
+1316254806	ID:20	APP-UL[NODE 20:00]: send seq=262 metric=1 parent=01:00
+1316290424	ID:1	APP-UL[SINK]: got seq=262 from 20:00 hops=1 my_metric=0
+1320544865	ID:1	CSV,PDR_UL,local=01:00,1320,20:00,0,262,263,0,0,263,100.00,00:00,0
+1320552084	ID:1	CSV,PRR_UL,local=01:00,1320,20:00,100.00
+1321255031	ID:20	APP-UL[NODE 20:00]: send seq=263 metric=1 parent=01:00
+1321314399	ID:1	APP-UL[SINK]: got seq=263 from 20:00 hops=1 my_metric=0
+1326254806	ID:20	APP-UL[NODE 20:00]: send seq=264 metric=1 parent=01:00
+1326310411	ID:1	APP-UL[SINK]: got seq=264 from 20:00 hops=1 my_metric=0
+1331254806	ID:20	APP-UL[NODE 20:00]: send seq=265 metric=1 parent=01:00
+1331290523	ID:1	APP-UL[SINK]: got seq=265 from 20:00 hops=1 my_metric=0
+1336254927	ID:20	APP-UL[NODE 20:00]: send seq=266 metric=1 parent=01:00
+1336290424	ID:1	APP-UL[SINK]: got seq=266 from 20:00 hops=1 my_metric=0
+1341254806	ID:20	APP-UL[NODE 20:00]: send seq=267 metric=1 parent=01:00
+1341290588	ID:1	APP-UL[SINK]: got seq=267 from 20:00 hops=1 my_metric=0
+1346254806	ID:20	APP-UL[NODE 20:00]: send seq=268 metric=1 parent=01:00
+1346290424	ID:1	APP-UL[SINK]: got seq=268 from 20:00 hops=1 my_metric=0
+1350535190	ID:1	APP-DL[SINK]: send SR seq=4 -> 20:00
+1350549863	ID:1	CSV,PDR_UL,local=01:00,1350,20:00,0,268,269,0,0,269,100.00,00:00,0
+1350556256	ID:1	CSV,PRR_UL,local=01:00,1350,20:00,100.00
+1351255032	ID:20	APP-UL[NODE 20:00]: send seq=269 metric=1 parent=01:00
+1351619835	ID:1	APP-UL[SINK]: got seq=269 from 20:00 hops=1 my_metric=0
+1356254807	ID:20	APP-UL[NODE 20:00]: send seq=270 metric=1 parent=01:00
+1356290524	ID:1	APP-UL[SINK]: got seq=270 from 20:00 hops=1 my_metric=0
+1361254809	ID:20	APP-UL[NODE 20:00]: send seq=271 metric=1 parent=01:00
+1361290425	ID:1	APP-UL[SINK]: got seq=271 from 20:00 hops=1 my_metric=0
+1366254928	ID:20	APP-UL[NODE 20:00]: send seq=272 metric=1 parent=01:00
+1366290425	ID:1	APP-UL[SINK]: got seq=272 from 20:00 hops=1 my_metric=0
+1371254809	ID:20	APP-UL[NODE 20:00]: send seq=273 metric=1 parent=01:00
+1371310413	ID:1	APP-UL[SINK]: got seq=273 from 20:00 hops=1 my_metric=0
+1376254807	ID:20	APP-UL[NODE 20:00]: send seq=274 metric=1 parent=01:00
+1376290425	ID:1	APP-UL[SINK]: got seq=274 from 20:00 hops=1 my_metric=0
+1380544870	ID:1	CSV,PDR_UL,local=01:00,1380,20:00,0,274,275,0,0,275,100.00,00:00,0
+1380552091	ID:1	CSV,PRR_UL,local=01:00,1380,20:00,100.00
+1381254934	ID:20	APP-UL[NODE 20:00]: send seq=275 metric=1 parent=01:00
+1381287218	ID:1	APP-UL[SINK]: got seq=275 from 20:00 hops=1 my_metric=0
+1386254929	ID:20	APP-UL[NODE 20:00]: send seq=276 metric=1 parent=01:00
+1386291634	ID:1	APP-UL[SINK]: got seq=276 from 20:00 hops=1 my_metric=0
+1391254807	ID:20	APP-UL[NODE 20:00]: send seq=277 metric=1 parent=01:00
+1391290591	ID:1	APP-UL[SINK]: got seq=277 from 20:00 hops=1 my_metric=0
+1396254810	ID:20	APP-UL[NODE 20:00]: send seq=278 metric=1 parent=01:00
+1396290425	ID:1	APP-UL[SINK]: got seq=278 from 20:00 hops=1 my_metric=0
+1401254809	ID:20	APP-UL[NODE 20:00]: send seq=279 metric=1 parent=01:00
+1401334542	ID:1	APP-UL[SINK]: got seq=279 from 20:00 hops=1 my_metric=0
+1406254806	ID:20	APP-UL[NODE 20:00]: send seq=280 metric=1 parent=01:00
+1406310989	ID:1	APP-UL[SINK]: got seq=280 from 20:00 hops=1 my_metric=0
+1410544868	ID:1	CSV,PDR_UL,local=01:00,1410,20:00,0,280,281,0,0,281,100.00,00:00,0
+1410552090	ID:1	CSV,PRR_UL,local=01:00,1410,20:00,100.00
+1411254933	ID:20	APP-UL[NODE 20:00]: send seq=281 metric=1 parent=01:00
+1411287308	ID:1	APP-UL[SINK]: got seq=281 from 20:00 hops=1 my_metric=0
+1416254806	ID:20	APP-UL[NODE 20:00]: send seq=282 metric=1 parent=01:00
+1416310504	ID:1	APP-UL[SINK]: got seq=282 from 20:00 hops=1 my_metric=0
+1421254928	ID:20	APP-UL[NODE 20:00]: send seq=283 metric=1 parent=01:00
+1421290424	ID:1	APP-UL[SINK]: got seq=283 from 20:00 hops=1 my_metric=0
+1426254807	ID:20	APP-UL[NODE 20:00]: send seq=284 metric=1 parent=01:00
+1426290424	ID:1	APP-UL[SINK]: got seq=284 from 20:00 hops=1 my_metric=0
+1431254806	ID:20	APP-UL[NODE 20:00]: send seq=285 metric=1 parent=01:00
+1431290424	ID:1	APP-UL[SINK]: got seq=285 from 20:00 hops=1 my_metric=0
+1436254806	ID:20	APP-UL[NODE 20:00]: send seq=286 metric=1 parent=01:00
+1436290424	ID:1	APP-UL[SINK]: got seq=286 from 20:00 hops=1 my_metric=0
+1440544848	ID:1	CSV,PDR_UL,local=01:00,1440,20:00,0,286,287,0,0,287,100.00,00:00,0
+1440552071	ID:1	CSV,PRR_UL,local=01:00,1440,20:00,100.00
+1441254996	ID:20	APP-UL[NODE 20:00]: send seq=287 metric=1 parent=01:00
+1441287271	ID:1	APP-UL[SINK]: got seq=287 from 20:00 hops=1 my_metric=0
+1446254928	ID:20	APP-UL[NODE 20:00]: send seq=288 metric=1 parent=01:00
+1446290424	ID:1	APP-UL[SINK]: got seq=288 from 20:00 hops=1 my_metric=0
+1451254806	ID:20	APP-UL[NODE 20:00]: send seq=289 metric=1 parent=01:00
+1451290523	ID:1	APP-UL[SINK]: got seq=289 from 20:00 hops=1 my_metric=0
+1456254928	ID:20	APP-UL[NODE 20:00]: send seq=290 metric=1 parent=01:00
+1456290425	ID:1	APP-UL[SINK]: got seq=290 from 20:00 hops=1 my_metric=0
+1461254807	ID:20	APP-UL[NODE 20:00]: send seq=291 metric=1 parent=01:00
+1461290524	ID:1	APP-UL[SINK]: got seq=291 from 20:00 hops=1 my_metric=0
+1466254807	ID:20	APP-UL[NODE 20:00]: send seq=292 metric=1 parent=01:00
+1466310788	ID:1	APP-UL[SINK]: got seq=292 from 20:00 hops=1 my_metric=0
+1470545036	ID:1	CSV,PDR_UL,local=01:00,1470,20:00,0,292,293,0,0,293,100.00,00:00,0
+1470552141	ID:1	CSV,PRR_UL,local=01:00,1470,20:00,100.00
+1471254934	ID:20	APP-UL[NODE 20:00]: send seq=293 metric=1 parent=01:00
+1471287310	ID:1	APP-UL[SINK]: got seq=293 from 20:00 hops=1 my_metric=0
+1476254929	ID:20	APP-UL[NODE 20:00]: send seq=294 metric=1 parent=01:00
+1476290425	ID:1	APP-UL[SINK]: got seq=294 from 20:00 hops=1 my_metric=0
+1481254929	ID:20	APP-UL[NODE 20:00]: send seq=295 metric=1 parent=01:00
+1481290425	ID:1	APP-UL[SINK]: got seq=295 from 20:00 hops=1 my_metric=0
+1486254810	ID:20	APP-UL[NODE 20:00]: send seq=296 metric=1 parent=01:00
+1486290425	ID:1	APP-UL[SINK]: got seq=296 from 20:00 hops=1 my_metric=0
+1491254809	ID:20	APP-UL[NODE 20:00]: send seq=297 metric=1 parent=01:00
+1491290425	ID:1	APP-UL[SINK]: got seq=297 from 20:00 hops=1 my_metric=0
+1496254807	ID:20	APP-UL[NODE 20:00]: send seq=298 metric=1 parent=01:00
+1496290425	ID:1	APP-UL[SINK]: got seq=298 from 20:00 hops=1 my_metric=0
+1500544874	ID:1	CSV,PDR_UL,local=01:00,1500,20:00,0,298,299,0,0,299,100.00,00:00,0
+1500552097	ID:1	CSV,PRR_UL,local=01:00,1500,20:00,100.00
+1501255031	ID:20	APP-UL[NODE 20:00]: send seq=299 metric=1 parent=01:00
+1501314402	ID:1	APP-UL[SINK]: got seq=299 from 20:00 hops=1 my_metric=0
+1506254810	ID:20	APP-UL[NODE 20:00]: send seq=300 metric=1 parent=01:00
+1506290426	ID:1	APP-UL[SINK]: got seq=300 from 20:00 hops=1 my_metric=0
+1511254810	ID:20	APP-UL[NODE 20:00]: send seq=301 metric=1 parent=01:00
+1511290521	ID:1	APP-UL[SINK]: got seq=301 from 20:00 hops=1 my_metric=0
+1516254809	ID:20	APP-UL[NODE 20:00]: send seq=302 metric=1 parent=01:00
+1516310994	ID:1	APP-UL[SINK]: got seq=302 from 20:00 hops=1 my_metric=0
+1521254810	ID:20	APP-UL[NODE 20:00]: send seq=303 metric=1 parent=01:00
+1521290592	ID:1	APP-UL[SINK]: got seq=303 from 20:00 hops=1 my_metric=0
+1526254810	ID:20	APP-UL[NODE 20:00]: send seq=304 metric=1 parent=01:00
+1526290426	ID:1	APP-UL[SINK]: got seq=304 from 20:00 hops=1 my_metric=0
+1530544878	ID:1	CSV,PDR_UL,local=01:00,1530,20:00,0,304,305,0,0,305,100.00,00:00,0
+1530552101	ID:1	CSV,PRR_UL,local=01:00,1530,20:00,100.00
+1531255031	ID:20	APP-UL[NODE 20:00]: send seq=305 metric=1 parent=01:00
+1531440143	ID:1	APP-UL[SINK]: got seq=305 from 20:00 hops=1 my_metric=0
+1536254810	ID:20	APP-UL[NODE 20:00]: send seq=306 metric=1 parent=01:00
+1536310505	ID:1	APP-UL[SINK]: got seq=306 from 20:00 hops=1 my_metric=0
+1541254810	ID:20	APP-UL[NODE 20:00]: send seq=307 metric=1 parent=01:00
+1541290426	ID:1	APP-UL[SINK]: got seq=307 from 20:00 hops=1 my_metric=0
+1546254809	ID:20	APP-UL[NODE 20:00]: send seq=308 metric=1 parent=01:00
+1546310994	ID:1	APP-UL[SINK]: got seq=308 from 20:00 hops=1 my_metric=0
+1551254810	ID:20	APP-UL[NODE 20:00]: send seq=309 metric=1 parent=01:00
+1551290426	ID:1	APP-UL[SINK]: got seq=309 from 20:00 hops=1 my_metric=0
+1556254809	ID:20	APP-UL[NODE 20:00]: send seq=310 metric=1 parent=01:00
+1556310993	ID:1	APP-UL[SINK]: got seq=310 from 20:00 hops=1 my_metric=0
+1560544882	ID:1	CSV,PDR_UL,local=01:00,1560,20:00,0,310,311,0,0,311,100.00,00:00,0
+1560552104	ID:1	CSV,PRR_UL,local=01:00,1560,20:00,100.00
+1561255031	ID:20	APP-UL[NODE 20:00]: send seq=311 metric=1 parent=01:00
+1561314398	ID:1	APP-UL[SINK]: got seq=311 from 20:00 hops=1 my_metric=0
+1566254931	ID:20	APP-UL[NODE 20:00]: send seq=312 metric=1 parent=01:00
+1566290427	ID:1	APP-UL[SINK]: got seq=312 from 20:00 hops=1 my_metric=0
+1571254929	ID:20	APP-UL[NODE 20:00]: send seq=313 metric=1 parent=01:00
+1571290591	ID:1	APP-UL[SINK]: got seq=313 from 20:00 hops=1 my_metric=0
+1576254810	ID:20	APP-UL[NODE 20:00]: send seq=314 metric=1 parent=01:00
+1576310993	ID:1	APP-UL[SINK]: got seq=314 from 20:00 hops=1 my_metric=0
+1581254809	ID:20	APP-UL[NODE 20:00]: send seq=315 metric=1 parent=01:00
+1581290591	ID:1	APP-UL[SINK]: got seq=315 from 20:00 hops=1 my_metric=0
+1586254809	ID:20	APP-UL[NODE 20:00]: send seq=316 metric=1 parent=01:00
+1586290522	ID:1	APP-UL[SINK]: got seq=316 from 20:00 hops=1 my_metric=0
+1590544930	ID:1	CSV,PDR_UL,local=01:00,1590,20:00,0,316,317,0,0,317,100.00,00:00,0
+1590552102	ID:1	CSV,PRR_UL,local=01:00,1590,20:00,100.00
+1591255032	ID:20	APP-UL[NODE 20:00]: send seq=317 metric=1 parent=01:00
+1592853462	ID:1	APP-UL[SINK]: got seq=317 from 20:00 hops=1 my_metric=0
+1596254812	ID:20	APP-UL[NODE 20:00]: send seq=318 metric=1 parent=01:00
+1596287313	ID:1	APP-UL[SINK]: got seq=318 from 20:00 hops=1 my_metric=0
+1601254809	ID:20	APP-UL[NODE 20:00]: send seq=319 metric=1 parent=01:00
+1601290427	ID:1	APP-UL[SINK]: got seq=319 from 20:00 hops=1 my_metric=0
+1606254926	ID:20	APP-UL[NODE 20:00]: send seq=320 metric=1 parent=01:00
+1606290423	ID:1	APP-UL[SINK]: got seq=320 from 20:00 hops=1 my_metric=0
+1611254807	ID:20	APP-UL[NODE 20:00]: send seq=321 metric=1 parent=01:00
+1611310410	ID:1	APP-UL[SINK]: got seq=321 from 20:00 hops=1 my_metric=0
+1616254805	ID:20	APP-UL[NODE 20:00]: send seq=322 metric=1 parent=01:00
+1616290423	ID:1	APP-UL[SINK]: got seq=322 from 20:00 hops=1 my_metric=0
+1620544952	ID:1	CSV,PDR_UL,local=01:00,1620,20:00,0,322,323,0,0,323,100.00,00:00,0
+1620552103	ID:1	CSV,PRR_UL,local=01:00,1620,20:00,100.00
+1621254995	ID:20	APP-UL[NODE 20:00]: send seq=323 metric=1 parent=01:00
+1621314398	ID:1	APP-UL[SINK]: got seq=323 from 20:00 hops=1 my_metric=0
+1626254927	ID:20	APP-UL[NODE 20:00]: send seq=324 metric=1 parent=01:00
+1626290423	ID:1	APP-UL[SINK]: got seq=324 from 20:00 hops=1 my_metric=0
+1631254805	ID:20	APP-UL[NODE 20:00]: send seq=325 metric=1 parent=01:00
+1631292550	ID:1	APP-UL[SINK]: got seq=325 from 20:00 hops=1 my_metric=0
+1636254926	ID:20	APP-UL[NODE 20:00]: send seq=326 metric=1 parent=01:00
+1636290423	ID:1	APP-UL[SINK]: got seq=326 from 20:00 hops=1 my_metric=0
+1640535071	ID:1	APP-DL[SINK]: send SR seq=5 -> 20:00
+1641254805	ID:20	APP-UL[NODE 20:00]: send seq=327 metric=1 parent=01:00
+1641290592	ID:1	APP-UL[SINK]: got seq=327 from 20:00 hops=1 my_metric=0
+1646254805	ID:20	APP-UL[NODE 20:00]: send seq=328 metric=1 parent=01:00
+1646290423	ID:1	APP-UL[SINK]: got seq=328 from 20:00 hops=1 my_metric=0
+1650544868	ID:1	CSV,PDR_UL,local=01:00,1650,20:00,0,328,329,0,0,329,100.00,00:00,0
+1650552087	ID:1	CSV,PRR_UL,local=01:00,1650,20:00,100.00
+1651254995	ID:20	APP-UL[NODE 20:00]: send seq=329 metric=1 parent=01:00
+1652853592	ID:1	APP-UL[SINK]: got seq=329 from 20:00 hops=1 my_metric=0
+1656254927	ID:20	APP-UL[NODE 20:00]: send seq=330 metric=1 parent=01:00
+1656290523	ID:1	APP-UL[SINK]: got seq=330 from 20:00 hops=1 my_metric=0
+1661254810	ID:20	APP-UL[NODE 20:00]: send seq=331 metric=1 parent=01:00
+1661290424	ID:1	APP-UL[SINK]: got seq=331 from 20:00 hops=1 my_metric=0
+1666254807	ID:20	APP-UL[NODE 20:00]: send seq=332 metric=1 parent=01:00
+1666290424	ID:1	APP-UL[SINK]: got seq=332 from 20:00 hops=1 my_metric=0
+1671254810	ID:20	APP-UL[NODE 20:00]: send seq=333 metric=1 parent=01:00
+1671290424	ID:1	APP-UL[SINK]: got seq=333 from 20:00 hops=1 my_metric=0
+1676254806	ID:20	APP-UL[NODE 20:00]: send seq=334 metric=1 parent=01:00
+1676290424	ID:1	APP-UL[SINK]: got seq=334 from 20:00 hops=1 my_metric=0
+1680544844	ID:1	CSV,PDR_UL,local=01:00,1680,20:00,0,334,335,0,0,335,100.00,00:00,0
+1680552069	ID:1	CSV,PRR_UL,local=01:00,1680,20:00,100.00
+1681254996	ID:20	APP-UL[NODE 20:00]: send seq=335 metric=1 parent=01:00
+1681287271	ID:1	APP-UL[SINK]: got seq=335 from 20:00 hops=1 my_metric=0
+1686254928	ID:20	APP-UL[NODE 20:00]: send seq=336 metric=1 parent=01:00
+1686290424	ID:1	APP-UL[SINK]: got seq=336 from 20:00 hops=1 my_metric=0
+1691254806	ID:20	APP-UL[NODE 20:00]: send seq=337 metric=1 parent=01:00
+1691290521	ID:1	APP-UL[SINK]: got seq=337 from 20:00 hops=1 my_metric=0
+1696254927	ID:20	APP-UL[NODE 20:00]: send seq=338 metric=1 parent=01:00
+1696290424	ID:1	APP-UL[SINK]: got seq=338 from 20:00 hops=1 my_metric=0
+1701254810	ID:20	APP-UL[NODE 20:00]: send seq=339 metric=1 parent=01:00
+1701290592	ID:1	APP-UL[SINK]: got seq=339 from 20:00 hops=1 my_metric=0
+1706254926	ID:20	APP-UL[NODE 20:00]: send seq=340 metric=1 parent=01:00
+1706290424	ID:1	APP-UL[SINK]: got seq=340 from 20:00 hops=1 my_metric=0
+1710544868	ID:1	CSV,PDR_UL,local=01:00,1710,20:00,0,340,341,0,0,341,100.00,00:00,0
+1710552090	ID:1	CSV,PRR_UL,local=01:00,1710,20:00,100.00
+1711254996	ID:20	APP-UL[NODE 20:00]: send seq=341 metric=1 parent=01:00
+1711287277	ID:1	APP-UL[SINK]: got seq=341 from 20:00 hops=1 my_metric=0
+1716254927	ID:20	APP-UL[NODE 20:00]: send seq=342 metric=1 parent=01:00
+1716290592	ID:1	APP-UL[SINK]: got seq=342 from 20:00 hops=1 my_metric=0
+1721254926	ID:20	APP-UL[NODE 20:00]: send seq=343 metric=1 parent=01:00
+1721290424	ID:1	APP-UL[SINK]: got seq=343 from 20:00 hops=1 my_metric=0
+1726254807	ID:20	APP-UL[NODE 20:00]: send seq=344 metric=1 parent=01:00
+1726310988	ID:1	APP-UL[SINK]: got seq=344 from 20:00 hops=1 my_metric=0
+1731254810	ID:20	APP-UL[NODE 20:00]: send seq=345 metric=1 parent=01:00
+1731290424	ID:1	APP-UL[SINK]: got seq=345 from 20:00 hops=1 my_metric=0
+1736254810	ID:20	APP-UL[NODE 20:00]: send seq=346 metric=1 parent=01:00
+1736290424	ID:1	APP-UL[SINK]: got seq=346 from 20:00 hops=1 my_metric=0
+1740544869	ID:1	CSV,PDR_UL,local=01:00,1740,20:00,0,346,347,0,0,347,100.00,00:00,0
+1740552091	ID:1	CSV,PRR_UL,local=01:00,1740,20:00,100.00
+1741254933	ID:20	APP-UL[NODE 20:00]: send seq=347 metric=1 parent=01:00
+1741287218	ID:1	APP-UL[SINK]: got seq=347 from 20:00 hops=1 my_metric=0
+1746254928	ID:20	APP-UL[NODE 20:00]: send seq=348 metric=1 parent=01:00
+1746290424	ID:1	APP-UL[SINK]: got seq=348 from 20:00 hops=1 my_metric=0
+1751254926	ID:20	APP-UL[NODE 20:00]: send seq=349 metric=1 parent=01:00
+1751290424	ID:1	APP-UL[SINK]: got seq=349 from 20:00 hops=1 my_metric=0
+1756254810	ID:20	APP-UL[NODE 20:00]: send seq=350 metric=1 parent=01:00
+1756310993	ID:1	APP-UL[SINK]: got seq=350 from 20:00 hops=1 my_metric=0
+1761254807	ID:20	APP-UL[NODE 20:00]: send seq=351 metric=1 parent=01:00
+1761290591	ID:1	APP-UL[SINK]: got seq=351 from 20:00 hops=1 my_metric=0
+1766254927	ID:20	APP-UL[NODE 20:00]: send seq=352 metric=1 parent=01:00
+1766290522	ID:1	APP-UL[SINK]: got seq=352 from 20:00 hops=1 my_metric=0
+1770544998	ID:1	CSV,PDR_UL,local=01:00,1770,20:00,0,352,353,0,0,353,100.00,00:00,0
+1770552103	ID:1	CSV,PRR_UL,local=01:00,1770,20:00,100.00
+1771254997	ID:20	APP-UL[NODE 20:00]: send seq=353 metric=1 parent=01:00
+1771486941	ID:1	APP-UL[SINK]: got seq=353 from 20:00 hops=1 my_metric=0
+1776254807	ID:20	APP-UL[NODE 20:00]: send seq=354 metric=1 parent=01:00
+1776290522	ID:1	APP-UL[SINK]: got seq=354 from 20:00 hops=1 my_metric=0
+1781254809	ID:20	APP-UL[NODE 20:00]: send seq=355 metric=1 parent=01:00
+1781290425	ID:1	APP-UL[SINK]: got seq=355 from 20:00 hops=1 my_metric=0
+1786254810	ID:20	APP-UL[NODE 20:00]: send seq=356 metric=1 parent=01:00
+1786310993	ID:1	APP-UL[SINK]: got seq=356 from 20:00 hops=1 my_metric=0
+1791254807	ID:20	APP-UL[NODE 20:00]: send seq=357 metric=1 parent=01:00
+1791290425	ID:1	APP-UL[SINK]: got seq=357 from 20:00 hops=1 my_metric=0
+1796254807	ID:20	APP-UL[NODE 20:00]: send seq=358 metric=1 parent=01:00
+1796290425	ID:1	APP-UL[SINK]: got seq=358 from 20:00 hops=1 my_metric=0

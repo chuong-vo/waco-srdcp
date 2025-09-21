@@ -1,0 +1,494 @@
+=== START Wed Sep 17 09:41:51 UTC 2025 | motes=5 ===
+338541	ID:5	Rime started with address 5.0
+347065	ID:5	MAC 05:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 5.
+358436	ID:5	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+361670	ID:5	Starting 'SRDCP-integrated runicast example'
+367563	ID:5	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+369799	ID:5	APP-ROLE[NODE 05:00]: started
+375469	ID:5	CSV,INFO,local=05:00,0,NODE,00:00,65535
+377461	ID:5	5.0: Contiki> 
+823266	ID:1	Rime started with address 1.0
+831792	ID:1	MAC 01:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 1.
+843168	ID:1	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+846401	ID:1	Starting 'SRDCP-integrated runicast example'
+852362	ID:1	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+855143	ID:1	APP-ROLE[SINK]: started (local=01:00)
+860293	ID:1	CSV,INFO,local=01:00,0,SINK,00:00,0
+862383	ID:1	1.0: Contiki> 
+916132	ID:3	Rime started with address 3.0
+924654	ID:3	MAC 03:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 3.
+936030	ID:3	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+939263	ID:3	Starting 'SRDCP-integrated runicast example'
+945224	ID:3	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+947460	ID:3	APP-ROLE[NODE 03:00]: started
+953109	ID:3	CSV,INFO,local=03:00,0,NODE,00:00,65535
+955101	ID:3	3.0: Contiki> 
+1038869	ID:2	Rime started with address 2.0
+1047394	ID:2	MAC 02:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 2.
+1058769	ID:2	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+1062003	ID:2	Starting 'SRDCP-integrated runicast example'
+1067965	ID:2	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1070201	ID:2	APP-ROLE[NODE 02:00]: started
+1075824	ID:2	CSV,INFO,local=02:00,0,NODE,00:00,65535
+1077816	ID:2	2.0: Contiki> 
+1244595	ID:4	Rime started with address 4.0
+1253121	ID:4	MAC 04:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 4.
+1264495	ID:4	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
+1267729	ID:4	Starting 'SRDCP-integrated runicast example'
+1273622	ID:4	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+1275858	ID:4	APP-ROLE[NODE 04:00]: started
+1281528	ID:4	CSV,INFO,local=04:00,0,NODE,00:00,65535
+1283520	ID:4	4.0: Contiki> 
+1852255	ID:1	BEACON: send seq=0 metric=0
+9852217	ID:1	BEACON: send seq=1 metric=0
+10392407	ID:5	 1284 P 5.0 0 18645 309761 0 33306 0 33306 18645 309761 0 33306 0 33306 (radio 10.14% / 10.14% tx 0.00% / 0.00% listen 10.14% / 10.14%)
+10878605	ID:1	 1284 P 1.0 0 21448 306962 249 33309 0 33150 21448 306962 249 33309 0 33150 (radio 10.21% / 10.21% tx 0.07% / 0.07% listen 10.14% / 10.14%)
+10970000	ID:3	 1284 P 3.0 0 18646 309760 0 33306 0 33306 18646 309760 0 33306 0 33306 (radio 10.14% / 10.14% tx 0.00% / 0.00% listen 10.14% / 10.14%)
+11092155	ID:2	 1284 P 2.0 0 18646 309755 0 33373 0 33373 18646 309755 0 33373 0 33373 (radio 10.16% / 10.16% tx 0.00% / 0.00% listen 10.16% / 10.16%)
+11298466	ID:4	 1284 P 4.0 0 18645 309761 0 33306 0 33306 18645 309761 0 33306 0 33306 (radio 10.14% / 10.14% tx 0.00% / 0.00% listen 10.14% / 10.14%)
+16581463	ID:5	APP-UL[NODE 05:00]: send seq=0 metric=65535 parent=00:00
+16584335	ID:5	UL: drop (no parent)
+16586509	ID:5	ERR,NODE,my_collect_send,seq=0
+17852256	ID:1	BEACON: send seq=2 metric=0
+17874995	ID:2	BEACON: rx from=01:00 seq=1 tx=2 metric=0 rssi=-51 lqi=37
+17880981	ID:2	PRR: nei=01:00 prr=100 recv=1 exp=1 tx=2
+17887987	ID:2	STAB: new-tree adopt parent=01:00 metric=1 dwell_until=5997
+17893260	ID:2	COLLECT: schedule beacon forward after 36 ticks
+17901244	ID:2	BEACON: rx from=01:00 seq=2 tx=3 metric=0 rssi=-51 lqi=37
+17905450	ID:2	PRR: nei=01:00 prr=100 recv=2 exp=2 tx=3
+17911441	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+17916725	ID:2	COLLECT: schedule beacon forward after 55 ticks
+18135557	ID:4	APP-UL[NODE 04:00]: send seq=0 metric=65535 parent=00:00
+18138463	ID:4	UL: drop (no parent)
+18140636	ID:4	ERR,NODE,my_collect_send,seq=0
+18216758	ID:2	BEACON: send seq=2 metric=1
+18239641	ID:3	BEACON: rx from=02:00 seq=2 tx=1 metric=1 rssi=-51 lqi=37
+18242656	ID:1	BEACON: rx from=02:00 seq=2 tx=1 metric=1 rssi=-51 lqi=37
+18244099	ID:3	PRR: nei=02:00 prr=100 recv=1 exp=1 tx=1
+18248826	ID:1	PRR: nei=02:00 prr=100 recv=1 exp=1 tx=1
+18250635	ID:3	STAB: new-tree adopt parent=02:00 metric=2 dwell_until=6059
+18252562	ID:1	COLLECT: ignore beacon (worse hops: my=0, neigh+1=2)
+18255900	ID:3	COLLECT: schedule beacon forward after 63 ticks
+18455490	ID:3	APP-UL[NODE 03:00]: send seq=0 metric=2 parent=02:00
+18477534	ID:3	BEACON: send seq=2 metric=2
+18497497	ID:2	UC: rx type=0 from=03:00
+18498315	ID:2	UC: data rx
+18498791	ID:4	BEACON: rx from=03:00 seq=2 tx=1 metric=2 rssi=-51 lqi=37
+18500549	ID:2	Checking piggy address: 02:00
+18504024	ID:4	PRR: nei=03:00 prr=100 recv=1 exp=1 tx=1
+18506741	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+18510271	ID:4	STAB: new-tree adopt parent=03:00 metric=3 dwell_until=6050
+18515584	ID:4	COLLECT: schedule beacon forward after 25 ticks
+18527362	ID:1	UC: rx type=0 from=02:00
+18528180	ID:1	UC: data rx
+18530357	ID:1	PIGGY: apply 2 entries at sink
+18533464	ID:1	Dictionary add: key: 02:00 value: 01:00
+18538218	ID:1	Dictionary add: key: 03:00 value: 02:00
+18542564	ID:1	APP-UL[SINK]: got seq=0 from 03:00 hops=2 my_metric=0
+18547455	ID:1	TOPO[SINK]: 03:00 initial hops -> 2
+18555966	ID:1	CSV,NEI,local=01:00,who,time,rank,neigh,hop,rssi,lqi,prr,last_seen,neigh_last_seq,parent,my_metric
+18564630	ID:1	CSV,NEI,local=01:00,SINK,17,1,02:00,1,-51,37,100,17,0,00:00,0
+18572969	ID:1	CSV,NEI,local=01:00,SINK,17,2,03:00,2,-51,37,0,17,0,00:00,0
+18579198	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+18585393	ID:1	NEI[SINK]-TOP2: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+18590755	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+18599911	ID:1	NEI[SINK]-TOP2: | 02:00 |  37 |  -51|       17s |    0 |    1 | 100| 4|
+18608009	ID:1	NEI[SINK]-TOP2: | 03:00 |  37 |  -51|       17s |    0 |    2 |  0| 3|
+18612708	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+18641233	ID:4	BEACON: send seq=2 metric=3
+18662100	ID:5	BEACON: rx from=04:00 seq=2 tx=1 metric=3 rssi=-51 lqi=37
+18666558	ID:5	PRR: nei=04:00 prr=100 recv=1 exp=1 tx=1
+18673009	ID:5	STAB: new-tree adopt parent=04:00 metric=4 dwell_until=6187
+18678282	ID:5	COLLECT: schedule beacon forward after 52 ticks
+18711249	ID:5	BEACON: send seq=2 metric=4
+18733993	ID:4	BEACON: rx from=05:00 seq=2 tx=1 metric=4 rssi=-51 lqi=37
+18739693	ID:4	PRR: nei=05:00 prr=100 recv=1 exp=1 tx=1
+18743451	ID:4	COLLECT: ignore beacon (worse hops: my=3, neigh+1=5)
+20395008	ID:5	 2564 P 5.0 1 39411 616689 134 67005 0 66888 20763 306928 134 33699 0 33582 (radio 10.23% / 10.32% tx 0.02% / 0.04% listen 10.21% / 10.28%)
+20879714	ID:1	 2564 P 1.0 1 45501 610598 364 66996 0 66575 24050 303636 115 33687 0 33425 (radio 10.26% / 10.31% tx 0.05% / 0.03% listen 10.21% / 10.28%)
+20972599	ID:3	 2564 P 3.0 1 40017 616083 232 67477 0 67152 21368 306323 232 34171 0 33846 (radio 10.31% / 10.49% tx 0.03% / 0.07% listen 10.28% / 10.42%)
+21095351	ID:2	 2564 P 2.0 1 40864 615236 220 66940 0 66564 22215 305481 220 33567 0 33191 (radio 10.23% / 10.31% tx 0.03% / 0.06% listen 10.20% / 10.24%)
+21226174	ID:2	APP-UL[NODE 02:00]: send seq=0 metric=1 parent=01:00
+21245027	ID:1	UC: rx type=0 from=02:00
+21245845	ID:1	UC: data rx
+21248022	ID:1	PIGGY: apply 1 entries at sink
+21251130	ID:1	Dictionary add: key: 02:00 value: 01:00
+21256843	ID:1	APP-UL[SINK]: got seq=0 from 02:00 hops=1 my_metric=0
+21259549	ID:1	TOPO[SINK]: 02:00 initial hops -> 1
+21268386	ID:1	CSV,NEI,local=01:00,SINK,20,1,02:00,1,-51,37,100,20,0,00:00,0
+21276646	ID:1	CSV,NEI,local=01:00,SINK,20,2,03:00,2,-51,37,0,17,0,00:00,0
+21282856	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+21289113	ID:1	NEI[SINK]-TOP2: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+21295291	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+21301062	ID:4	 2564 P 4.0 1 40159 615941 114 67305 0 67154 21511 306180 114 33999 0 33848 (radio 10.27% / 10.41% tx 0.01% / 0.03% listen 10.25% / 10.37%)
+21303624	ID:1	NEI[SINK]-TOP2: | 02:00 |  37 |  -51|       20s |    0 |    1 | 100| 4|
+21311612	ID:1	NEI[SINK]-TOP2: | 03:00 |  37 |  -51|       17s |    0 |    2 |  0| 3|
+21316975	ID:1	NEI[SINK]-TOP2: +------+------+-----+----------+------+------+-+--+
+23264179	ID:2	UC: rx type=2 from=03:00
+23265268	ID:2	UC: topology rx
+23282338	ID:1	UC: rx type=2 from=02:00
+23283428	ID:1	UC: topology rx
+23288898	ID:1	Sink: received topology report. Updating parent of node 02:00
+23293762	ID:1	Dictionary add: key: 02:00 value: 01:00
+23296935	ID:1		DictEntry 0: node 02:00 - parent 01:00
+23300110	ID:1		DictEntry 1: node 03:00 - parent 02:00
+23307166	ID:1	UC: rx type=2 from=02:00
+23308255	ID:1	UC: topology rx
+23312688	ID:1	Sink: received topology report. Updating parent of node 03:00
+23315796	ID:1	Dictionary add: key: 03:00 value: 02:00
+23320541	ID:1		DictEntry 0: node 02:00 - parent 01:00
+23323717	ID:1		DictEntry 1: node 03:00 - parent 02:00
+23548483	ID:3	UC: rx type=2 from=04:00
+23549573	ID:3	UC: topology rx
+23569074	ID:2	UC: rx type=2 from=03:00
+23570164	ID:2	UC: topology rx
+23587856	ID:1	UC: rx type=2 from=02:00
+23588946	ID:1	UC: topology rx
+23594809	ID:1	Sink: received topology report. Updating parent of node 04:00
+23599508	ID:1	Dictionary add: key: 04:00 value: 03:00
+23602742	ID:1		DictEntry 0: node 02:00 - parent 01:00
+23607501	ID:1		DictEntry 1: node 03:00 - parent 02:00
+23610692	ID:1		DictEntry 2: node 04:00 - parent 03:00
+23690816	ID:4	UC: rx type=2 from=05:00
+23691905	ID:4	UC: topology rx
+23713173	ID:3	UC: rx type=2 from=04:00
+23714263	ID:3	UC: topology rx
+23732038	ID:2	UC: rx type=2 from=03:00
+23733128	ID:2	UC: topology rx
+23775383	ID:1	UC: rx type=2 from=02:00
+23776473	ID:1	UC: topology rx
+23782325	ID:1	Sink: received topology report. Updating parent of node 05:00
+23787057	ID:1	Dictionary add: key: 05:00 value: 04:00
+23790282	ID:1		DictEntry 0: node 02:00 - parent 01:00
+23795013	ID:1		DictEntry 1: node 03:00 - parent 02:00
+23798191	ID:1		DictEntry 2: node 04:00 - parent 03:00
+23802885	ID:1		DictEntry 3: node 05:00 - parent 04:00
+25852256	ID:1	BEACON: send seq=3 metric=0
+25875172	ID:2	BEACON: rx from=01:00 seq=3 tx=4 metric=0 rssi=-51 lqi=37
+25880943	ID:2	PRR: nei=01:00 prr=100 recv=3 exp=3 tx=4
+25886914	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+25890496	ID:2	COLLECT: schedule beacon forward after 5 ticks
+26239677	ID:2	BEACON: send seq=3 metric=1
+26263987	ID:1	BEACON: rx from=02:00 seq=3 tx=2 metric=1 rssi=-51 lqi=37
+26268119	ID:1	PRR: nei=02:00 prr=100 recv=2 exp=2 tx=2
+26273291	ID:1	COLLECT: ignore beacon (worse hops: my=0, neigh+1=2)
+30395048	ID:5	 3844 P 5.0 2 58973 924790 236 100791 0 100430 19559 308101 102 33786 0 33542 (radio 10.26% / 10.34% tx 0.02% / 0.03% listen 10.24% / 10.31%)
+30401233	ID:5	ROUTE[NODE 05:00]: parent 00:00 -> 04:00 metric=4
+30879552	ID:1	 3844 P 1.0 2 72304 911463 479 100999 0 99997 26800 300865 115 34003 0 33422 (radio 10.31% / 10.41% tx 0.04% / 0.03% listen 10.26% / 10.37%)
+30972678	ID:3	 3844 P 3.0 2 60798 922965 434 102447 0 101291 20778 306882 202 34970 0 34139 (radio 10.45% / 10.73% tx 0.04% / 0.06% listen 10.41% / 10.67%)
+30978863	ID:3	ROUTE[NODE 03:00]: parent 00:00 -> 02:00 metric=2
+31096490	ID:2	 3844 P 2.0 2 66292 917471 1179 101892 0 99324 25425 302235 959 34952 0 32760 (radio 10.47% / 10.95% tx 0.11% / 0.29% listen 10.35% / 10.66%)
+31101820	ID:2	ROUTE[NODE 02:00]: parent 00:00 -> 01:00 metric=1
+31302012	ID:4	 3844 P 4.0 2 61076 922687 521 101531 0 100334 20914 306746 407 34226 0 33180 (radio 10.37% / 10.56% tx 0.05% / 0.12% listen 10.32% / 10.44%)
+31307407	ID:4	ROUTE[NODE 04:00]: parent 00:00 -> 03:00 metric=3
+32666217	ID:4	APP-UL[NODE 04:00]: send seq=1 metric=3 parent=03:00
+32691440	ID:3	UC: rx type=0 from=04:00
+32692258	ID:3	UC: data rx
+32694493	ID:3	Checking piggy address: 03:00
+32700799	ID:3	Adding tree_connection to piggyinfo: key 03:00 value: 02:00
+32720523	ID:2	UC: rx type=0 from=03:00
+32721357	ID:2	UC: data rx
+32723592	ID:2	Checking piggy address: 02:00
+32729978	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+32753862	ID:1	UC: rx type=0 from=02:00
+32754680	ID:1	UC: data rx
+32756855	ID:1	PIGGY: apply 3 entries at sink
+32759964	ID:1	Dictionary add: key: 02:00 value: 01:00
+32764726	ID:1	Dictionary add: key: 03:00 value: 02:00
+32767885	ID:1	Dictionary add: key: 04:00 value: 03:00
+32773825	ID:1	APP-UL[SINK]: got seq=1 from 04:00 hops=3 my_metric=0
+32776532	ID:1	TOPO[SINK]: 04:00 initial hops -> 3
+32785995	ID:1	CSV,NEI,local=01:00,SINK,31,1,02:00,1,-51,37,100,25,0,00:00,0
+32795242	ID:1	CSV,NEI,local=01:00,SINK,31,2,03:00,2,-51,37,0,17,0,00:00,0
+32803612	ID:1	CSV,NEI,local=01:00,SINK,31,3,04:00,3,-51,37,0,31,1,00:00,0
+32808312	ID:1	NEI[SINK]-TOP3: +------+------+-----+----------+------+------+-+--+
+32814703	ID:1	NEI[SINK]-TOP3: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+32820908	ID:1	NEI[SINK]-TOP3: +------+------+-----+----------+------+------+-+--+
+32829250	ID:1	NEI[SINK]-TOP3: | 02:00 |  37 |  -51|       25s |    0 |    1 | 100| 5|
+32837168	ID:1	NEI[SINK]-TOP3: | 03:00 |  37 |  -51|       17s |    0 |    2 |  0| 3|
+32845121	ID:1	NEI[SINK]-TOP3: | 04:00 |  37 |  -51|       31s |    1 |    3 |  0| 3|
+32851242	ID:1	NEI[SINK]-TOP3: +------+------+-----+----------+------+------+-+--+
+33852256	ID:1	BEACON: send seq=4 metric=0
+33875172	ID:2	BEACON: rx from=01:00 seq=4 tx=5 metric=0 rssi=-51 lqi=37
+33880943	ID:2	PRR: nei=01:00 prr=100 recv=4 exp=4 tx=5
+33886914	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+33890646	ID:2	COLLECT: schedule beacon forward after 19 ticks
+33894790	ID:2	BEACON: send seq=4 metric=1
+33919401	ID:3	BEACON: rx from=02:00 seq=4 tx=3 metric=1 rssi=-51 lqi=37
+33920308	ID:1	BEACON: rx from=02:00 seq=4 tx=3 metric=1 rssi=-51 lqi=37
+33923351	ID:3	PRR: nei=02:00 prr=66 recv=2 exp=3 tx=3
+33924410	ID:1	PRR: nei=02:00 prr=100 recv=3 exp=3 tx=3
+33929255	ID:1	COLLECT: ignore beacon (worse hops: my=0, neigh+1=2)
+33929348	ID:3	STAB: new-tree keep parent=02:00 my_metric=2 sender_hops=2
+33934606	ID:3	COLLECT: schedule beacon forward after 61 ticks
+33968942	ID:3	BEACON: send seq=4 metric=2
+33988857	ID:2	BEACON: rx from=03:00 seq=4 tx=2 metric=2 rssi=-51 lqi=37
+33989797	ID:4	BEACON: rx from=03:00 seq=4 tx=2 metric=2 rssi=-51 lqi=37
+33993899	ID:4	PRR: nei=03:00 prr=100 recv=2 exp=2 tx=2
+33994834	ID:2	PRR: nei=03:00 prr=100 recv=1 exp=1 tx=2
+33998698	ID:2	COLLECT: ignore beacon (worse hops: my=1, neigh+1=3)
+33999913	ID:4	STAB: new-tree keep parent=03:00 my_metric=3 sender_hops=3
+34005175	ID:4	COLLECT: schedule beacon forward after 14 ticks
+34054777	ID:4	BEACON: send seq=4 metric=3
+34076836	ID:3	BEACON: rx from=04:00 seq=4 tx=2 metric=3 rssi=-51 lqi=37
+34082538	ID:3	PRR: nei=04:00 prr=100 recv=1 exp=1 tx=2
+34086336	ID:3	COLLECT: ignore beacon (worse hops: my=2, neigh+1=4)
+35205846	ID:5	APP-UL[NODE 05:00]: send seq=1 metric=4 parent=04:00
+35228062	ID:4	UC: rx type=0 from=05:00
+35228880	ID:4	UC: data rx
+35232744	ID:4	Checking piggy address: 04:00
+35237413	ID:4	Adding tree_connection to piggyinfo: key 04:00 value: 03:00
+36392656	ID:3	APP-UL[NODE 03:00]: send seq=1 metric=2 parent=02:00
+38413590	ID:2	APP-UL[NODE 02:00]: send seq=1 metric=1 parent=01:00
+38429992	ID:3	UC: rx type=0 from=04:00
+38430810	ID:3	UC: data rx
+38432779	ID:1	UC: rx type=0 from=02:00
+38433597	ID:1	UC: data rx
+38434668	ID:3	Checking piggy address: 03:00
+38435795	ID:1	PIGGY: apply 1 entries at sink
+38438903	ID:1	Dictionary add: key: 02:00 value: 01:00
+38439541	ID:3	Adding tree_connection to piggyinfo: key 03:00 value: 02:00
+38444654	ID:1	APP-UL[SINK]: got seq=1 from 02:00 hops=1 my_metric=0
+40395928	ID:5	 5124 P 5.0 3 78760 1232690 360 134755 0 134153 19784 307900 124 33964 0 33723 (radio 10.30% / 10.40% tx 0.02% / 0.03% listen 10.27% / 10.36%)
+40881765	ID:1	 5124 P 1.0 3 97180 1214279 594 134980 0 133747 24873 302816 115 33981 0 33750 (radio 10.33% / 10.40% tx 0.04% / 0.03% listen 10.29% / 10.36%)
+40974630	ID:3	 5124 P 3.0 3 87543 1223912 773 136887 0 135053 26742 300947 339 34440 0 33762 (radio 10.49% / 10.61% tx 0.05% / 0.10% listen 10.43% / 10.50%)
+41097123	ID:2	 5124 P 2.0 3 89229 1222221 1571 201260 0 198049 22934 304750 392 99368 0 98725 (radio 15.46% / 30.44% tx 0.11% / 0.11% listen 15.34% / 30.32%)
+41303447	ID:4	 5124 P 4.0 3 83983 1227472 1058 135606 0 133408 22904 304785 537 34075 0 33074 (radio 10.42% / 10.56% tx 0.08% / 0.16% listen 10.34% / 10.39%)
+41852256	ID:1	BEACON: send seq=5 metric=0
+41871990	ID:2	UC: rx type=0 from=03:00
+41872808	ID:2	UC: data rx
+41875043	ID:2	Checking piggy address: 02:00
+41881308	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+41893889	ID:2	BEACON: rx from=01:00 seq=5 tx=6 metric=0 rssi=-51 lqi=37
+41897991	ID:2	PRR: nei=01:00 prr=100 recv=5 exp=5 tx=6
+41903915	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+41909115	ID:2	COLLECT: schedule beacon forward after 30 ticks
+41923694	ID:1	UC: rx type=0 from=02:00
+41924512	ID:1	UC: data rx
+41928238	ID:1	PIGGY: apply 4 entries at sink
+41931347	ID:1	Dictionary add: key: 02:00 value: 01:00
+41936109	ID:1	Dictionary add: key: 03:00 value: 02:00
+41939268	ID:1	Dictionary add: key: 04:00 value: 03:00
+41944091	ID:1	Dictionary add: key: 05:00 value: 04:00
+41948524	ID:1	APP-UL[SINK]: got seq=1 from 05:00 hops=4 my_metric=0
+41952856	ID:1	TOPO[SINK]: 05:00 initial hops -> 4
+41961780	ID:1	CSV,NEI,local=01:00,SINK,41,1,02:00,1,-51,37,100,37,1,00:00,0
+41970148	ID:1	CSV,NEI,local=01:00,SINK,41,2,03:00,2,-51,37,0,17,0,00:00,0
+41978523	ID:1	CSV,NEI,local=01:00,SINK,41,3,04:00,3,-51,37,0,31,1,00:00,0
+41982309	ID:2	BEACON: send seq=5 metric=1
+41986860	ID:1	CSV,NEI,local=01:00,SINK,41,4,05:00,4,-51,37,0,41,1,00:00,0
+41993006	ID:1	NEI[SINK]-TOP4: +------+------+-----+----------+------+------+-+--+
+41998499	ID:1	NEI[SINK]-TOP4: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+42004224	ID:1	NEI[SINK]-TOP4: +------+------+-----+----------+------+------+-+--+
+42005999	ID:3	BEACON: rx from=02:00 seq=5 tx=4 metric=1 rssi=-51 lqi=37
+42009951	ID:3	PRR: nei=02:00 prr=75 recv=3 exp=4 tx=4
+42010946	ID:1	NEI[SINK]-TOP4: | 02:00 |  37 |  -51|       37s |    1 |    1 | 100| 6|
+42015786	ID:3	STAB: new-tree keep parent=02:00 my_metric=2 sender_hops=2
+42018467	ID:1	NEI[SINK]-TOP4: | 03:00 |  37 |  -51|       17s |    0 |    2 |  0| 1|
+42020895	ID:3	COLLECT: schedule beacon forward after 4 ticks
+42026322	ID:1	NEI[SINK]-TOP4: | 04:00 |  37 |  -51|       31s |    1 |    3 |  0| 2|
+42034147	ID:1	NEI[SINK]-TOP4: | 05:00 |  37 |  -51|       41s |    1 |    4 |  0| 3|
+42040186	ID:1	NEI[SINK]-TOP4: +------+------+-----+----------+------+------+-+--+
+42048472	ID:1	BEACON: rx from=02:00 seq=5 tx=4 metric=1 rssi=-51 lqi=37
+42054247	ID:1	PRR: nei=02:00 prr=100 recv=4 exp=4 tx=4
+42057983	ID:1	COLLECT: ignore beacon (worse hops: my=0, neigh+1=2)
+42078318	ID:3	BEACON: send seq=5 metric=2
+42098232	ID:2	BEACON: rx from=03:00 seq=5 tx=3 metric=2 rssi=-51 lqi=37
+42099172	ID:4	BEACON: rx from=03:00 seq=5 tx=3 metric=2 rssi=-51 lqi=37
+42103041	ID:2	PRR: nei=03:00 prr=100 recv=2 exp=2 tx=3
+42103274	ID:4	PRR: nei=03:00 prr=100 recv=3 exp=3 tx=3
+42107546	ID:2	COLLECT: ignore beacon (worse hops: my=1, neigh+1=3)
+42109288	ID:4	STAB: new-tree keep parent=03:00 my_metric=3 sender_hops=3
+42114577	ID:4	COLLECT: schedule beacon forward after 61 ticks
+42250534	ID:4	BEACON: send seq=5 metric=3
+42270254	ID:3	BEACON: rx from=04:00 seq=5 tx=3 metric=3 rssi=-51 lqi=37
+42276960	ID:3	PRR: nei=04:00 prr=100 recv=2 exp=2 tx=3
+42280717	ID:3	COLLECT: ignore beacon (worse hops: my=2, neigh+1=4)
+46619342	ID:4	APP-UL[NODE 04:00]: send seq=2 metric=3 parent=03:00
+46643876	ID:3	UC: rx type=0 from=04:00
+46644694	ID:3	UC: data rx
+46646928	ID:3	Checking piggy address: 03:00
+46652353	ID:3	Adding tree_connection to piggyinfo: key 03:00 value: 02:00
+46672996	ID:2	UC: rx type=0 from=03:00
+46673814	ID:2	UC: data rx
+46676117	ID:2	Checking piggy address: 02:00
+46682466	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+46700741	ID:1	UC: rx type=0 from=02:00
+46701559	ID:1	UC: data rx
+46703735	ID:1	PIGGY: apply 3 entries at sink
+46707224	ID:1	Dictionary add: key: 02:00 value: 01:00
+46711177	ID:1	Dictionary add: key: 03:00 value: 02:00
+46714336	ID:1	Dictionary add: key: 04:00 value: 03:00
+46720065	ID:1	APP-UL[SINK]: got seq=2 from 04:00 hops=3 my_metric=0
+47968740	ID:2	APP-UL[NODE 02:00]: send seq=2 metric=1 parent=01:00
+47987214	ID:1	UC: rx type=0 from=02:00
+47988031	ID:1	UC: data rx
+47990208	ID:1	PIGGY: apply 1 entries at sink
+47993316	ID:1	Dictionary add: key: 02:00 value: 01:00
+47999022	ID:1	APP-UL[SINK]: got seq=2 from 02:00 hops=1 my_metric=0
+48860449	ID:1	NEI-AGING: drop 03:00 (stale)
+49533971	ID:5	APP-UL[NODE 05:00]: send seq=2 metric=4 parent=04:00
+49556181	ID:4	UC: rx type=0 from=05:00
+49556999	ID:4	UC: data rx
+49560750	ID:4	Checking piggy address: 04:00
+49565420	ID:4	Adding tree_connection to piggyinfo: key 04:00 value: 03:00
+49852217	ID:1	BEACON: send seq=6 metric=0
+50394677	ID:5	 6404 P 5.0 4 98529 1540590 483 168611 0 167769 19766 307900 123 33856 0 33616 (radio 10.31% / 10.37% tx 0.02% / 0.03% listen 10.28% / 10.33%)
+50881760	ID:1	 6404 P 1.0 4 124281 1514846 820 169229 0 167710 27098 300567 226 34249 0 33963 (radio 10.37% / 10.52% tx 0.05% / 0.06% listen 10.32% / 10.45%)
+50973517	ID:3	 6404 P 3.0 4 109475 1529644 991 170940 0 168601 21929 305732 218 34053 0 33548 (radio 10.48% / 10.45% tx 0.06% / 0.06% listen 10.42% / 10.39%)
+51096974	ID:2	 6404 P 2.0 4 112716 1526403 1868 300653 0 296761 23484 304182 297 99393 0 98712 (radio 18.45% / 30.42% tx 0.11% / 0.09% listen 18.34% / 30.33%)
+51303451	ID:4	 6404 P 4.0 4 106501 1532624 1570 169654 0 166450 22515 305152 512 34048 0 33042 (radio 10.44% / 10.54% tx 0.09% / 0.15% listen 10.35% / 10.39%)
+53064568	ID:3	APP-UL[NODE 03:00]: send seq=2 metric=2 parent=02:00
+56375500	ID:5	NEI-AGING: drop 04:00 (stale)
+57281731	ID:4	NEI-AGING: drop 05:00 (stale)
+57852256	ID:1	BEACON: send seq=7 metric=0
+57874447	ID:2	BEACON: rx from=01:00 seq=6 tx=7 metric=0 rssi=-51 lqi=37
+57880036	ID:2	PRR: nei=01:00 prr=100 recv=6 exp=6 tx=7
+57885868	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+57889450	ID:2	COLLECT: schedule beacon forward after 0 ticks
+57897263	ID:2	BEACON: rx from=01:00 seq=7 tx=8 metric=0 rssi=-51 lqi=37
+57902956	ID:2	PRR: nei=01:00 prr=100 recv=7 exp=7 tx=8
+57908855	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+57912700	ID:2	COLLECT: schedule beacon forward after 63 ticks
+58130302	ID:2	BEACON: send seq=7 metric=1
+58154612	ID:1	BEACON: rx from=02:00 seq=7 tx=5 metric=1 rssi=-51 lqi=37
+58158745	ID:1	PRR: nei=02:00 prr=100 recv=5 exp=5 tx=5
+58163935	ID:1	COLLECT: ignore beacon (worse hops: my=0, neigh+1=2)
+60394680	ID:5	 7684 P 5.0 5 117106 1849703 483 201891 0 201049 18574 309113 0 33280 0 33280 (radio 10.28% / 10.15% tx 0.02% / 0.00% listen 10.26% / 10.15%)
+60882116	ID:1	 7684 P 1.0 5 145417 1821402 935 202591 0 200886 21133 306556 115 33362 0 33176 (radio 10.34% / 10.21% tx 0.04% / 0.03% listen 10.30% / 10.18%)
+60891988	ID:1	CSV,NEI,local=01:00,SINK,60,1,02:00,1,-51,37,100,57,2,00:00,0
+60900326	ID:1	CSV,NEI,local=01:00,SINK,60,2,04:00,3,-51,37,0,45,2,00:00,0
+60908616	ID:1	CSV,NEI,local=01:00,SINK,60,3,05:00,4,-51,37,0,41,1,00:00,0
+60914733	ID:1	NEI[SINK]-TOP3: +------+------+-----+----------+------+------+-+--+
+60920911	ID:1	NEI[SINK]-TOP3: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+60926287	ID:1	NEI[SINK]-TOP3: +------+------+-----+----------+------+------+-+--+
+60934547	ID:1	NEI[SINK]-TOP3: | 02:00 |  37 |  -51|       57s |    2 |    1 | 100| 7|
+60943446	ID:1	NEI[SINK]-TOP3: | 04:00 |  37 |  -51|       45s |    2 |    3 |  0| 1|
+60951483	ID:1	NEI[SINK]-TOP3: | 05:00 |  37 |  -51|       41s |    1 |    4 |  0| 2|
+60956183	ID:1	NEI[SINK]-TOP3: +------+------+-----+----------+------+------+-+--+
+60972342	ID:3	 7684 P 3.0 5 131425 1835384 991 204220 0 201881 21947 305740 0 33280 0 33280 (radio 10.43% / 10.15% tx 0.05% / 0.00% listen 10.38% / 10.15%)
+61097804	ID:2	 7684 P 2.0 5 133483 1833331 2007 333953 0 329937 20764 306928 139 33300 0 33176 (radio 17.08% / 10.20% tx 0.10% / 0.04% listen 16.97% / 10.16%)
+61302972	ID:4	 7684 P 4.0 5 125162 1841652 1570 202934 0 199730 18658 309028 0 33280 0 33280 (radio 10.39% / 10.15% tx 0.07% / 0.00% listen 10.31% / 10.15%)
+63377561	ID:5	APP-UL[NODE 05:00]: send seq=3 metric=4 parent=04:00
+63388114	ID:5	CSV,NEI,local=05:00,who,time,rank,neigh,hop,rssi,lqi,prr,last_seen,neigh_last_seq,parent,my_metric
+63395795	ID:5	CSV,PDR_DL,local=05:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+64860511	ID:1	NEI-AGING: drop 04:00 (stale)
+65852275	ID:1	BEACON: send seq=8 metric=0
+65869289	ID:4	APP-UL[NODE 04:00]: send seq=3 metric=3 parent=03:00
+65880153	ID:4	CSV,NEI,local=04:00,who,time,rank,neigh,hop,rssi,lqi,prr,last_seen,neigh_last_seq,parent,my_metric
+65889016	ID:4	CSV,NEI,local=04:00,NODE,64,1,03:00,2,-51,37,100,40,0,03:00,3
+65893716	ID:4	NEI[NODE]-TOP1: +------+------+-----+----------+------+------+-+--+
+65900057	ID:4	NEI[NODE]-TOP1: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+65906180	ID:4	NEI[NODE]-TOP1: +------+------+-----+----------+------+------+-+--+
+65914523	ID:4	NEI[NODE]-TOP1: | 03:00 |  37 |  -51|       40s |    0 |    2 | 100| 4|
+65920666	ID:4	NEI[NODE]-TOP1: +------+------+-----+----------+------+------+-+--+
+65928441	ID:4	CSV,PDR_DL,local=04:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+65944518	ID:3	UC: rx type=0 from=04:00
+65945336	ID:3	UC: data rx
+65947571	ID:3	Checking piggy address: 03:00
+65953773	ID:3	Adding tree_connection to piggyinfo: key 03:00 value: 02:00
+65972008	ID:3	UC: rx type=0 from=04:00
+65972826	ID:3	UC: data rx
+65975059	ID:3	Checking piggy address: 03:00
+65980494	ID:3	Adding tree_connection to piggyinfo: key 03:00 value: 02:00
+66032324	ID:2	BEACON: rx from=01:00 seq=8 tx=9 metric=0 rssi=-51 lqi=37
+66039281	ID:2	PRR: nei=01:00 prr=100 recv=8 exp=8 tx=9
+66043708	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+66048136	ID:2	COLLECT: schedule beacon forward after 58 ticks
+66056307	ID:2	UC: rx type=0 from=03:00
+66057126	ID:2	UC: data rx
+66059361	ID:2	Checking piggy address: 02:00
+66064646	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+66073256	ID:2	UC: rx type=0 from=03:00
+66074074	ID:2	UC: data rx
+66076309	ID:2	Checking piggy address: 02:00
+66082645	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+66106975	ID:1	UC: rx type=0 from=02:00
+66107792	ID:1	UC: data rx
+66109968	ID:1	PIGGY: apply 4 entries at sink
+66113569	ID:1	Dictionary add: key: 02:00 value: 01:00
+66117659	ID:1	Dictionary add: key: 03:00 value: 02:00
+66120818	ID:1	Dictionary add: key: 04:00 value: 03:00
+66124087	ID:1	Dictionary add: key: 05:00 value: 04:00
+66128306	ID:1	APP-UL[SINK]: got seq=2 from 05:00 hops=4 my_metric=0
+66139747	ID:1	CSV,PDR_UL,local=01:00,65,03:00,0,0,1,0,0,1,100.00,00:00,0
+66149613	ID:1	CSV,PDR_UL,local=01:00,65,02:00,0,2,3,0,0,3,100.00,00:00,0
+66159479	ID:1	CSV,PDR_UL,local=01:00,65,04:00,1,2,2,0,0,2,100.00,00:00,0
+66170706	ID:1	CSV,PDR_UL,local=01:00,65,05:00,1,2,2,0,0,2,100.00,00:00,0
+66174675	ID:1	UC: rx type=0 from=02:00
+66175493	ID:1	UC: data rx
+66179278	ID:1	PIGGY: apply 3 entries at sink
+66182387	ID:1	Dictionary add: key: 02:00 value: 01:00
+66187133	ID:1	Dictionary add: key: 03:00 value: 02:00
+66190291	ID:1	Dictionary add: key: 04:00 value: 03:00
+66196192	ID:1	APP-UL[SINK]: got seq=3 from 04:00 hops=3 my_metric=0
+66216623	ID:2	BEACON: send seq=8 metric=1
+66240036	ID:1	BEACON: rx from=02:00 seq=8 tx=6 metric=1 rssi=-51 lqi=37
+66244139	ID:1	PRR: nei=02:00 prr=100 recv=6 exp=6 tx=6
+66249408	ID:1	COLLECT: ignore beacon (worse hops: my=0, neigh+1=2)
+66533379	ID:3	APP-UL[NODE 03:00]: send seq=3 metric=2 parent=02:00
+66544266	ID:3	CSV,NEI,local=03:00,who,time,rank,neigh,hop,rssi,lqi,prr,last_seen,neigh_last_seq,parent,my_metric
+66552864	ID:3	CSV,NEI,local=03:00,NODE,65,1,02:00,1,-51,37,75,41,0,02:00,2
+66561603	ID:3	CSV,NEI,local=03:00,NODE,65,2,04:00,3,-51,37,100,41,0,02:00,2
+66567742	ID:3	NEI[NODE]-TOP2: +------+------+-----+----------+------+------+-+--+
+66572509	ID:3	NEI[NODE]-TOP2: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+66578734	ID:3	NEI[NODE]-TOP2: +------+------+-----+----------+------+------+-+--+
+66586920	ID:3	NEI[NODE]-TOP2: | 02:00 |  37 |  -51|       41s |    0 |    1 | 75| 4|
+66595255	ID:3	NEI[NODE]-TOP2: | 04:00 |  37 |  -51|       41s |    0 |    3 | 100| 3|
+66601406	ID:3	NEI[NODE]-TOP2: +------+------+-----+----------+------+------+-+--+
+66609168	ID:3	CSV,PDR_DL,local=03:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+66625917	ID:2	UC: rx type=0 from=03:00
+66626735	ID:2	UC: data rx
+66628968	ID:2	Checking piggy address: 02:00
+66634408	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+66652245	ID:1	UC: rx type=0 from=02:00
+66653063	ID:1	UC: data rx
+66655238	ID:1	PIGGY: apply 2 entries at sink
+66658346	ID:1	Dictionary add: key: 02:00 value: 01:00
+66663078	ID:1	Dictionary add: key: 03:00 value: 02:00
+66667470	ID:1	APP-UL[SINK]: got seq=3 from 03:00 hops=2 my_metric=0
+68343620	ID:2	APP-UL[NODE 02:00]: send seq=3 metric=1 parent=01:00
+68354507	ID:2	CSV,NEI,local=02:00,who,time,rank,neigh,hop,rssi,lqi,prr,last_seen,neigh_last_seq,parent,my_metric
+68363266	ID:2	CSV,NEI,local=02:00,NODE,67,1,01:00,0,-51,37,100,65,0,01:00,1
+68371984	ID:2	CSV,NEI,local=02:00,NODE,67,2,03:00,2,-51,37,100,41,0,01:00,1
+68378149	ID:2	NEI[NODE]-TOP2: +------+------+-----+----------+------+------+-+--+
+68382918	ID:2	NEI[NODE]-TOP2: |  ID  | LQI | RSSI| last_seen| seq  | hop  |PRR|CR|
+68389164	ID:2	NEI[NODE]-TOP2: +------+------+-----+----------+------+------+-+--+
+68397500	ID:2	NEI[NODE]-TOP2: | 01:00 |  37 |  -51|       65s |    0 |    0 | 100|10|
+68405923	ID:2	NEI[NODE]-TOP2: | 03:00 |  37 |  -51|       41s |    0 |    2 | 100| 4|
+68412138	ID:2	NEI[NODE]-TOP2: +------+------+-----+----------+------+------+-+--+
+68419886	ID:2	CSV,PDR_DL,local=02:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+68440594	ID:1	UC: rx type=0 from=02:00
+68441412	ID:1	UC: data rx
+68443596	ID:1	PIGGY: apply 1 entries at sink
+68446704	ID:1	Dictionary add: key: 02:00 value: 01:00
+68452453	ID:1	APP-UL[SINK]: got seq=3 from 02:00 hops=1 my_metric=0
+70396112	ID:5	 8964 P 5.0 6 139684 2154802 483 235313 0 234471 22575 305099 0 33422 0 33422 (radio 10.27% / 10.19% tx 0.02% / 0.00% listen 10.25% / 10.19%)
+70882126	ID:1	 8964 P 1.0 6 173275 2121214 1046 236845 0 234790 27855 299812 111 34254 0 33904 (radio 10.36% / 10.48% tx 0.04% / 0.03% listen 10.32% / 10.45%)
+70975076	ID:3	 8964 P 3.0 6 155907 2138579 1440 238619 0 235274 24479 303195 449 34399 0 33393 (radio 10.46% / 10.63% tx 0.06% / 0.13% listen 10.39% / 10.49%)
+71097717	ID:2	 8964 P 2.0 6 159455 2135031 2582 368735 0 363247 25969 301700 575 34782 0 33310 (radio 16.18% / 10.79% tx 0.11% / 0.17% listen 16.07% / 10.61%)
+71303545	ID:4	 8964 P 4.0 6 147068 2147418 1906 236949 0 233183 21903 305766 336 34015 0 33453 (radio 10.40% / 10.48% tx 0.08% / 0.10% listen 10.32% / 10.38%)
+73852256	ID:1	BEACON: send seq=9 metric=0
+73875321	ID:2	BEACON: rx from=01:00 seq=9 tx=10 metric=0 rssi=-51 lqi=37
+73881223	ID:2	PRR: nei=01:00 prr=100 recv=9 exp=9 tx=10
+73887079	ID:2	STAB: new-tree keep parent=01:00 my_metric=1 sender_hops=1
+73890811	ID:2	COLLECT: schedule beacon forward after 12 ticks
+74364677	ID:2	BEACON: send seq=9 metric=1
+74388985	ID:1	BEACON: rx from=02:00 seq=9 tx=7 metric=1 rssi=-51 lqi=37
+74393117	ID:1	PRR: nei=02:00 prr=100 recv=7 exp=7 tx=7
+74398291	ID:1	COLLECT: ignore beacon (worse hops: my=0, neigh+1=2)
+76728376	ID:3	APP-UL[NODE 03:00]: send seq=4 metric=2 parent=02:00
+76751052	ID:2	UC: rx type=0 from=03:00
+76751870	ID:2	UC: data rx
+76754104	ID:2	Checking piggy address: 02:00
+76760318	ID:2	Adding tree_connection to piggyinfo: key 02:00 value: 01:00
+76777337	ID:1	UC: rx type=0 from=02:00
+76778155	ID:1	UC: data rx
+76780357	ID:1	PIGGY: apply 2 entries at sink
+76783465	ID:1	Dictionary add: key: 02:00 value: 01:00
+76788231	ID:1	Dictionary add: key: 03:00 value: 02:00
+76792419	ID:1	APP-UL[SINK]: got seq=4 from 03:00 hops=2 my_metric=0
+80397030	ID:5	 10244 P 5.0 7 158901 2463279 483 268593 0 267751 19214 308477 0 33280 0 33280 (radio 10.26% / 10.15% tx 0.01% / 0.00% listen 10.24% / 10.15%)
+80882758	ID:1	 10244 P 1.0 7 195090 2427089 1161 270302 0 267927 21812 305875 115 33457 0 33137 (radio 10.35% / 10.24% tx 0.04% / 0.03% listen 10.30% / 10.21%)
+80885979	ID:1	NEI-AGING: drop 05:00 (stale)
+80975477	ID:3	 10244 P 3.0 7 175425 2446750 1564 272

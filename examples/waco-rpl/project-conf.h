@@ -17,7 +17,9 @@
 #define NETSTACK_CONF_FRAMER framer_802154
 #define NETSTACK_CONF_LLSEC nullsec_driver
 /* RPL + IPv6 on Sky is memory tight. Use nullrdc to reduce footprint. */
-#define NETSTACK_CONF_RDC wurrdc_driver
+// #define NETSTACK_CONF_RDC wurrdc_driver
+#define NETSTACK_CONF_RDC contikimac_driver
+
 #undef NULLRDC_CONF_802154_AUTOACK
 #define NULLRDC_CONF_802154_AUTOACK 1
 

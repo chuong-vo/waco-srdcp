@@ -340,6 +340,14 @@ packet_input(void)
     else
     {
       int duplicate = 0;
+      int payload_len = packetbuf_datalen();
+      int deliver_frame = 1;
+
+      if(payload_len <= 0)
+      {
+        PRINTF("wurrdc: drop frame, payload_len=%d\n", payload_len);
+        deliver_frame = 0;
+      }
 
 #if (WURRDC_802154_AUTOACK || WURRDC_802154_AUTOACK_HW) && RDC_WITH_DUPLICATE_DETECTION
       /* Check for duplicate packet. */
@@ -378,7 +386,7 @@ packet_input(void)
         off();
       }
 
-      if (!duplicate)
+      if (!duplicate && deliver_frame)
       {
         NETSTACK_MAC.input();
       }

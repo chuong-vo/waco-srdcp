@@ -25,9 +25,9 @@
       org.contikios.cooja.mspmote.SkyMoteType
       <identifier>sky1</identifier>
       <description>Sky Mote Type #sky1</description>
-      <source EXPORT="discard">[CONTIKI_DIR]/examples/waco-rpl/example-waco-rpl.c</source>
-      <commands EXPORT="discard">make example-waco-rpl.sky TARGET=sky</commands>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/waco-rpl/example-waco-rpl.sky</firmware>
+      <source EXPORT="discard">[CONTIKI_DIR]/examples/waco-rpl/example-waco-rpl-15.c</source>
+      <commands EXPORT="discard">make example-waco-rpl-15.sky TARGET=sky</commands>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/waco-rpl/example-waco-rpl-15.sky</firmware>
       <moteinterface>org.contikios.cooja.interfaces.Position</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>org.contikios.cooja.interfaces.IPAddress</moteinterface>

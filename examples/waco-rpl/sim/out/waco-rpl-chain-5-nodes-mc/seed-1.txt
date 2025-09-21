@@ -1,6 +1,6 @@
-=== START Mon Sep 15 18:03:31 UTC 2025 | motes=5 ===
+=== START Thu Sep 18 08:22:19 UTC 2025 | motes=5 ===
 334454	ID:5	Rime started with address 0.18.116.5.0.5.5.5
-343187	ID:5	MAC 00:12:74:05:00:05:05:05 Contiki-012eace started. Node id is set to 5.
+343187	ID:5	MAC 00:12:74:05:00:05:05:05 Contiki-b149d98 started. Node id is set to 5.
 346034	ID:5	wurrdc: Initialized
 353475	ID:5	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
 363917	ID:5	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7405:0005:0505
@@ -10,7 +10,7 @@
 377533	ID:5	CSV,INFO,local=05:00,0,NODE,00:00,65535
 383856	ID:5	CSV,PDR_DL,local=05:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
 819178	ID:1	Rime started with address 0.18.116.1.0.1.1.1
-827914	ID:1	MAC 00:12:74:01:00:01:01:01 Contiki-012eace started. Node id is set to 1.
+827914	ID:1	MAC 00:12:74:01:00:01:01:01 Contiki-b149d98 started. Node id is set to 1.
 830760	ID:1	wurrdc: Initialized
 838151	ID:1	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
 848593	ID:1	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7401:0001:0101
@@ -20,7 +20,7 @@
 863794	ID:1	CSV,INFO,local=01:00,0,SINK,00:00,0
 870115	ID:1	CSV,PDR_UL,local=01:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
 912045	ID:3	Rime started with address 0.18.116.3.0.3.3.3
-920779	ID:3	MAC 00:12:74:03:00:03:03:03 Contiki-012eace started. Node id is set to 3.
+920779	ID:3	MAC 00:12:74:03:00:03:03:03 Contiki-b149d98 started. Node id is set to 3.
 923625	ID:3	wurrdc: Initialized
 931066	ID:3	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
 941510	ID:3	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7403:0003:0303
@@ -30,7 +30,7 @@
 955126	ID:3	CSV,INFO,local=03:00,0,NODE,00:00,65535
 961449	ID:3	CSV,PDR_DL,local=03:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
 1034782	ID:2	Rime started with address 0.18.116.2.0.2.2.2
-1043520	ID:2	MAC 00:12:74:02:00:02:02:02 Contiki-012eace started. Node id is set to 2.
+1043520	ID:2	MAC 00:12:74:02:00:02:02:02 Contiki-b149d98 started. Node id is set to 2.
 1046366	ID:2	wurrdc: Initialized
 1053807	ID:2	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
 1064251	ID:2	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7402:0002:0202
@@ -40,7 +40,7 @@
 1077867	ID:2	CSV,INFO,local=02:00,0,NODE,00:00,65535
 1084190	ID:2	CSV,PDR_DL,local=02:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
 1240507	ID:4	Rime started with address 0.18.116.4.0.4.4.4
-1249241	ID:4	MAC 00:12:74:04:00:04:04:04 Contiki-012eace started. Node id is set to 4.
+1249241	ID:4	MAC 00:12:74:04:00:04:04:04 Contiki-b149d98 started. Node id is set to 4.
 1252088	ID:4	wurrdc: Initialized
 1259478	ID:4	nullsec CSMA wurrdc, channel check rate 128 Hz, radio channel 26, CCA threshold -45
 1269922	ID:4	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7404:0004:0404

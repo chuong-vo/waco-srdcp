@@ -1,6 +1,6 @@
-=== START Mon Sep 15 07:49:35 UTC 2025 | motes=5 ===
+=== START Wed Sep 17 23:37:59 UTC 2025 | motes=5 ===
 289840	ID:4	Rime started with address 4.0
-298366	ID:4	MAC 04:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 4.
+298366	ID:4	MAC 04:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 4.
 309740	ID:4	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
 312974	ID:4	Starting 'SRDCP-integrated runicast example'
 318867	ID:4	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
@@ -8,7 +8,7 @@
 326773	ID:4	CSV,INFO,local=04:00,0,NODE,00:00,65535
 328765	ID:4	4.0: Contiki> 
 968054	ID:5	Rime started with address 5.0
-976578	ID:5	MAC 05:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 5.
+976578	ID:5	MAC 05:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 5.
 987949	ID:5	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
 991183	ID:5	Starting 'SRDCP-integrated runicast example'
 997076	ID:5	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
@@ -16,7 +16,7 @@
 1004982	ID:5	CSV,INFO,local=05:00,0,NODE,00:00,65535
 1006974	ID:5	5.0: Contiki> 
 1197588	ID:3	Rime started with address 3.0
-1206110	ID:3	MAC 03:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 3.
+1206110	ID:3	MAC 03:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 3.
 1217486	ID:3	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
 1220719	ID:3	Starting 'SRDCP-integrated runicast example'
 1226680	ID:3	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
@@ -24,11 +24,11 @@
 1234565	ID:3	CSV,INFO,local=03:00,0,NODE,00:00,65535
 1236557	ID:3	3.0: Contiki> 
 1246143	ID:1	Rime started with address 1.0
-1254669	ID:1	MAC 01:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 1.
+1254669	ID:1	MAC 01:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 1.
 1265733	ID:2	Rime started with address 2.0
 1266045	ID:1	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26
 1269278	ID:1	Starting 'SRDCP-integrated runicast example'
-1274258	ID:2	MAC 02:00:00:00:00:00:00:00 Contiki-012eace started. Node id is set to 2.
+1274258	ID:2	MAC 02:00:00:00:00:00:00:00 Contiki-b149d98 started. Node id is set to 2.
 1275239	ID:1	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
 1278020	ID:1	APP-ROLE[SINK]: started (local=01:00)
 1283170	ID:1	CSV,INFO,local=01:00,0,SINK,00:00,0
