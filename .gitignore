@@ -1,9 +1,3 @@
-
----
-
-### `.gitignore` (drop in repo root)
-
-```gitignore
 # Build artifacts
 *.o
 *.d
@@ -13,8 +7,6 @@
 *.elf
 *.bin
 *.hex
-
-# Contiki / Cooja
 *.sky
 *.z1
 obj_*/
@@ -24,16 +16,33 @@ build*/
 *.cooja
 *.csc.backup
 
-# Logs & temp
-COOJA.log
-log.log
-log*.log
-*.csv
+# Simulation and measurement outputs
+*.time
+*_summary.csv
+*_network_avg.csv
+*_per_node_avg.csv
+*_per_node_energy_avg.csv
+*.pcap
+
+# Generated logs
+*.log
 *.tmp
 
-# IDE / OS
+# Virtual environments
+.venv/
+
+# IDE / OS clutter
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 *~
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Simulation log text
+examples/**/sim/**/*.txt
+# Simulation run directories
+examples/**/sim/**/out/
