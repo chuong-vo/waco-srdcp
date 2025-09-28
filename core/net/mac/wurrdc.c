@@ -36,6 +36,12 @@
 #define WUR_LOG(...)
 #endif
 
+#ifdef WURRDC_CONF_DATA_WINDOW
+#define WURRDC_DATA_WINDOW WURRDC_CONF_DATA_WINDOW
+#else
+#define WURRDC_DATA_WINDOW 3
+#endif
+
 static inline void addr_print(const linkaddr_t *a)
 {
   WUR_LOG("%02x:%02x", a->u8[0], a->u8[1]);
@@ -451,7 +457,7 @@ PROCESS_THREAD(wur_process, ev, data)
 
       WUR_LOG("Main radio: ON (waiting for data after WuS)\n");
       on();                  /* turn on the radio on the receiver side */
-      etimer_set(&timer, 3); /* timeout for the reception of data packet (keep original) */
+      etimer_set(&timer, WURRDC_DATA_WINDOW); /* reception window after WuS */
       PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
       WUR_LOG("Main radio: OFF (WuS data window elapsed)\n");
       off(); /* turn off radio after reception */

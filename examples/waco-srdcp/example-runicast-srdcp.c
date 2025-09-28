@@ -34,7 +34,7 @@
 
 /* ===== Application logging toggle (does not change behavior) ===== */
 #ifndef LOG_APP
-#define LOG_APP 0 /* 1: enable all app logs (including CSV); 0: silence */
+#define LOG_APP 1 /* 1: enable all app logs (including CSV); 0: silence */
 #endif
 #if LOG_APP
 #define APP_LOG(...) printf(__VA_ARGS__)
@@ -60,11 +60,16 @@
 
 #ifndef MSG_PERIOD
 /* Fast-convergence app profile: a bit more frequent UL */
-#define MSG_PERIOD (15 * CLOCK_SECOND) /* uplink period */
+// #define MSG_PERIOD (15 * CLOCK_SECOND) /* uplink period */
+#define MSG_PERIOD (60 * CLOCK_SECOND)
+#endif
+#ifndef UL_JITTER_MAX
+#define UL_JITTER_MAX (2 * CLOCK_SECOND) /* ±2 s để tránh đồng pha */
 #endif
 #ifndef SR_MSG_PERIOD
 /* Fast-convergence app profile: slightly faster DL rotation */
-#define SR_MSG_PERIOD (12 * CLOCK_SECOND) /* downlink period at sink */
+// #define SR_MSG_PERIOD (12 * CLOCK_SECOND) /* downlink period at sink */
+#define SR_MSG_PERIOD (60 * CLOCK_SECOND)
 #endif
 #define COLLECT_CHANNEL 0xAA /* SRDCP uses C and C+1 */
 
@@ -833,7 +838,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
             my_collect.metric);
 
 #if APP_UPWARD_TRAFFIC
-    etimer_set(&periodic, MSG_PERIOD);
+    etimer_set(&periodic, MSG_PERIOD + (random_rand() % UL_JITTER_MAX));
     etimer_set(&nei_tick, NEI_PRINT_PERIOD);
     etimer_set(&nei_aging, BEACON_INTERVAL);
 
@@ -845,7 +850,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
 
       if (etimer_expired(&periodic))
       {
-        etimer_reset(&periodic);
+        etimer_set(&periodic, MSG_PERIOD + (random_rand() % UL_JITTER_MAX));
 
         /* route change watch before send */
         if (!have_last_parent)
@@ -864,7 +869,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         }
 
         /* jitter */
-        etimer_set(&rnd, (uint16_t)(random_rand() % (MSG_PERIOD / 2)));
+        etimer_set(&rnd, (uint16_t)(random_rand() % UL_JITTER_MAX));
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&rnd));
 
         /* uplink send */

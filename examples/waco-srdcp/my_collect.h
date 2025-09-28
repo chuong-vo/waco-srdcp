@@ -22,7 +22,7 @@
 
 #ifndef BEACON_INTERVAL
 /* Fast-convergence: more frequent beacons */
-#define BEACON_INTERVAL (8 * CLOCK_SECOND)
+#define BEACON_INTERVAL (16 * CLOCK_SECOND)
 #endif
 /* Max random forward delay = BEACON_FWD_JITTER_TICKS */
 #ifndef BEACON_FWD_JITTER_TICKS

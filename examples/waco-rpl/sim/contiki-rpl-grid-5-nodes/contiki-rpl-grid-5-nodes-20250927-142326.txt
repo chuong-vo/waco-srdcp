@@ -1,0 +1,46 @@
+=== START Sat Sep 27 14:23:26 UTC 2025 | motes=5 ===
+475911	ID:1	Rime started with address 0.18.116.1.0.1.1.1
+484647	ID:1	MAC 00:12:74:01:00:01:01:01 Contiki-2a2ad0c started. Node id is set to 1.
+488314	ID:4	Rime started with address 0.18.116.4.0.4.4.4
+494762	ID:1	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+497048	ID:4	MAC 00:12:74:04:00:04:04:04 Contiki-2a2ad0c started. Node id is set to 4.
+507166	ID:4	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+508601	ID:1	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7401:0001:0101
+512914	ID:1	Starting 'WaCo + RPL UDP example (fixed)'
+520862	ID:1	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+521002	ID:4	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7404:0004:0404
+523477	ID:1	APP-ROLE[SINK]: started (local=01:00)
+525248	ID:4	Starting 'WaCo + RPL UDP example (fixed)'
+528224	ID:1	CSV,INFO,local=01:00,0,SINK,00:00,0
+530777	ID:4	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+533537	ID:4	APP-ROLE[NODE 04:00]: started
+535874	ID:1	CSV,PDR_UL,local=01:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+537412	ID:4	CSV,INFO,local=04:00,0,NODE,00:00,65535
+545232	ID:4	CSV,PDR_DL,local=04:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+705594	ID:5	Rime started with address 0.18.116.5.0.5.5.5
+714327	ID:5	MAC 00:12:74:05:00:05:05:05 Contiki-2a2ad0c started. Node id is set to 5.
+724443	ID:5	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+738283	ID:5	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7405:0005:0505
+742560	ID:5	Starting 'WaCo + RPL UDP example (fixed)'
+748108	ID:5	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+750879	ID:5	APP-ROLE[NODE 05:00]: started
+754754	ID:5	CSV,INFO,local=05:00,0,NODE,00:00,65535
+762574	ID:5	CSV,PDR_DL,local=05:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+780850	ID:2	Rime started with address 0.18.116.2.0.2.2.2
+789588	ID:2	MAC 00:12:74:02:00:02:02:02 Contiki-2a2ad0c started. Node id is set to 2.
+795604	ID:3	Rime started with address 0.18.116.3.0.3.3.3
+799705	ID:2	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+804338	ID:3	MAC 00:12:74:03:00:03:03:03 Contiki-2a2ad0c started. Node id is set to 3.
+813541	ID:2	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7402:0002:0202
+814455	ID:3	nullsec CSMA ContikiMAC, channel check rate 128 Hz, radio channel 26, CCA threshold -45
+817784	ID:2	Starting 'WaCo + RPL UDP example (fixed)'
+823313	ID:2	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+826073	ID:2	APP-ROLE[NODE 02:00]: started
+828291	ID:3	Tentative link-local IPv6 address fe80:0000:0000:0000:0212:7403:0003:0303
+829948	ID:2	CSV,INFO,local=02:00,0,NODE,00:00,65535
+832534	ID:3	Starting 'WaCo + RPL UDP example (fixed)'
+837768	ID:2	CSV,PDR_DL,local=02:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric
+838063	ID:3	CSV,INFO_HDR,fields=local,time,role,parent,my_metric
+840823	ID:3	APP-ROLE[NODE 03:00]: started
+844698	ID:3	CSV,INFO,local=03:00,0,NODE,00:00,65535
+852518	ID:3	CSV,PDR_DL,local=03:00,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric

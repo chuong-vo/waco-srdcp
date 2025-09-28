@@ -28,16 +28,25 @@
 #define APP_NODES 5
 #endif
 
-#ifndef MSG_PERIOD
-#define MSG_PERIOD (15 * CLOCK_SECOND)
+/* Chu kỳ uplink/downlink mặc định, có thể override từ project-conf.h */
+#ifndef UL_PERIOD
+#define UL_PERIOD (30 * CLOCK_SECOND)
 #endif
 
-#ifndef SR_MSG_PERIOD
-#define SR_MSG_PERIOD (12 * CLOCK_SECOND)
+#ifndef DL_PERIOD
+#define DL_PERIOD (60 * CLOCK_SECOND)
 #endif
+
+// #ifndef MSG_PERIOD
+// #define MSG_PERIOD (15 * CLOCK_SECOND)
+// #endif
+
+// #ifndef SR_MSG_PERIOD
+// #define SR_MSG_PERIOD (12 * CLOCK_SECOND)
+// #endif
 
 #ifndef PDR_PRINT_PERIOD
-#define PDR_PRINT_PERIOD (30 * CLOCK_SECOND) /* shorter to guarantee CSV during short sims */
+#define PDR_PRINT_PERIOD (60 * CLOCK_SECOND) /* shorter to guarantee CSV during short sims */
 #endif
 
 #define UL_PORT 8765
@@ -450,10 +459,10 @@ PROCESS_THREAD(waco_rpl_process, ev, data)
     pdr_dl_print_csv(rpl_hops_approx(), pl, &sink_ll);
   }
 
-  etimer_set(&ul_timer, CLOCK_SECOND * 5);
+  etimer_set(&ul_timer, UL_PERIOD);
   if (node_id == 1)
   {
-    etimer_set(&dl_timer, CLOCK_SECOND * 10);
+    etimer_set(&dl_timer, DL_PERIOD);
   }
   etimer_set(&stats_timer, PDR_PRINT_PERIOD);
 

@@ -1,0 +1,30 @@
+AVG ON 103244 us 12.79 %
+AVG TX 29312 us 3.63 %
+AVG RX 9882 us 1.22 %
+AVG INT 13690 us 1.70 %
+Sky_1 MONITORED 170440 us
+Sky_1 ON 56183 us 32.96 %
+Sky_1 TX 19543 us 11.47 %
+Sky_1 RX 3257 us 1.91 %
+Sky_1 INT 6381 us 3.74 %
+Sky_2 MONITORED 170440 us
+Sky_2 ON 0 us 0.00 %
+Sky_2 TX 0 us 0.00 %
+Sky_2 RX 0 us 0.00 %
+Sky_2 INT 0 us 0.00 %
+Sky_3 MONITORED 170440 us
+Sky_3 ON 0 us 0.00 %
+Sky_3 TX 0 us 0.00 %
+Sky_3 RX 0 us 0.00 %
+Sky_3 INT 0 us 0.00 %
+Sky_4 MONITORED 170440 us
+Sky_4 ON 47061 us 27.61 %
+Sky_4 TX 9769 us 5.73 %
+Sky_4 RX 6625 us 3.89 %
+Sky_4 INT 7309 us 4.29 %
+Sky_5 MONITORED 125384 us
+Sky_5 ON 0 us 0.00 %
+Sky_5 TX 0 us 0.00 %
+Sky_5 RX 0 us 0.00 %
+Sky_5 INT 0 us 0.00 %
+
