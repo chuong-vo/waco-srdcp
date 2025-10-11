@@ -1,259 +1,195 @@
-# WaCo × SRDCP – Runicast Example for Contiki/COOJA
+# WaCo × SRDCP Simulation Toolkit (Contiki OS)
 
-> **EN TL;DR:** Minimal integration of **SRDCP** (Source-Routing Data Collection Protocol) with **WaCo** (Wake-up Radio COOJA extension) on Contiki (TARGET=sky) focused on internship report experiments: UL/DL PDR, neighbor table, route changes, and energy (powertrace). Sink is **Node ID = 1** (addr 1.0).
-
-## Mục tiêu
-- Tích hợp **SRDCP** vào **WaCo** chạy trên Contiki (TARGET=sky).
-- Thực nghiệm 2 chiều: **UL** (nodes → sink) và **DL** (sink → node chọn) dùng **source routing**.
-- Thu **metrics phục vụ báo cáo**: PDR UL/DL, bảng láng giềng (hop/metric/RSSI/LQI), thay đổi tuyến/parent/metric/retries, **powertrace** (năng lượng).
-- Hook **beacon SRDCP** để thống kê metric ở phía node.
-
----
-
-## 1) Tính năng chính
-- **UL (many-to-one)**: node gửi dữ liệu lên sink (1.0). Sink tính PDR-UL theo từng nguồn.
-- **DL (one-to-one source-route)**: sink xây tuyến bằng `routing_table.c` và gửi xuống node đích; node đích tính PDR-DL theo seq.
-- **Energy**: `powertrace_start()` bật mặc định (chu kỳ 10s).
-- **Log CSV qua `printf`** (để Log Listener lưu file):
-  - `UL`: PDR tại sink, theo source.
-  - `DL`: PDR tại node đích, theo dest/seq.
-  - Bảng láng giềng: **hops ↑, RSSI ↓, last_seen ↓**.
-  - Thay đổi tuyến/parent/metric/retries.
-  - Hook beacon SRDCP: `metric`, `RSSI`, `LQI`.
-- **Wake-up Radio**: có thể bật log WUR (mặc định tắt để tránh nhiễu powertrace).
+This repository extends the classic [Contiki OS](https://github.com/contiki-os/contiki) with teaching-ready
+examples that combine the **Wake-up Radio COOJA extension (WaCo)** and the
+**Source-Routing Data Collection Protocol (SRDCP)** for MSP430-based Sky motes. It ships
+side-by-side variants that run on WaCo's wake-up radio RDC as well as ContikiMAC and RPL
+baselines so that students can compare behaviour, generate repeatable COOJA experiments,
+and post-process the results with Python tooling.
 
 ---
 
-## 2) Cấu trúc thư mục & các file đã chỉnh
-```
-examples/waco-srdcp/
-  example-runicast-srdcp.c    # App UL/DL + log CSV + powertrace
-  my_collect.c / my_collect.h # API collect + hook quan sát beacon
-  topology_report.c           # In bảng láng giềng/topology
-  routing_table.c             # Xây tuyến nguồn (source route) cho DL
-  project-conf.h              # Chọn wurrdc_driver, channel, log toggles
+## What you will find in this tree
 
-core/net/mac/
-  wurrdc.c                    # LOG_WUR macro (không dùng wur_trace.h)
-```
-
-> **Sink mặc định:** **Node ID = 1** trong COOJA → địa chỉ **1.0**.  
-> App có thể dùng `sink_addr` (khai báo trong `my_collect.h`).
+| Path | Purpose |
+|------|---------|
+| `examples/simulation/waco-srdcp/` | SRDCP data collection app running on the WaCo RDC (`wurrdc_driver`). Includes 5/15/30-node wrappers, SRDCP glue (`my_collect.*`, `routing_table.*`, `topology_report.*`), and ready-to-run COOJA scenarios under `sim/`. |
+| `examples/simulation/contikimac-srdcp/` | Same SRDCP application bound to the stock `contikimac_driver` so you can contrast WaCo vs. ContikiMAC duty-cycling. |
+| `examples/simulation/waco-rpl/`, `contikimac-rpl/`, `tsch-rpl/` | Companion RPL-focused examples useful when demonstrating non-SRDCP stacks. |
+| `examples/simulation/scripts/` | Automation helpers: `run_scenario.sh` orchestrates headless Monte Carlo runs, `log_parser.py`/`energy_parser.py` convert COOJA logs into CSV files, and `aggregate_results.sh`/`agg_per_node.py` summarise results over many seeds. |
+| `core/net/mac/wurrdc.c` | WaCo wake-up radio RDC driver used by the WaCo examples. Optional debug logging lives here. |
+| `README-BUILDING.md`, `README-EXAMPLES.md`, `doc/` | Extra Contiki background material kept from upstream for reference. |
 
 ---
 
-## 3) Yêu cầu môi trường
-- Ubuntu 20.04+ (đã test với 24.04).
-- Java + Ant để chạy **COOJA** (`tools/cooja`).
-- MSP430 toolchain (build cho TARGET=sky).
-- Contiki có tích hợp WaCo; source SRDCP nằm cùng repo hoặc kèm trong ví dụ.
+## Behaviour at a glance
+
+* **Uplink SRDCP collection:** Sensor motes periodically send payloads to the sink. The sink prints
+  `CSV,PDR_UL,...` rows capturing per-source PDR, sequence ranges, and the parent path.
+* **Downlink source routing:** The sink rotates through the configurable `APP_NODES` set, builds SRDCP
+  headers with `routing_table.c`, and nodes report `CSV,PDR_DL,...` statistics when packets arrive.
+* **Neighbour & topology tracking:** `topology_report.c` maintains a per-node cache and emits
+  `CSV,NEI,...` records plus `CSV,INFO...` heartbeats for easy reconstruction of routing trees.
+* **Energy accounting:** Powertrace is enabled by default in the SRDCP apps; COOJA test scripts save
+  `*_dc.txt` duty-cycle logs that are converted into radio-on/off CSV summaries by `energy_parser.py`.
+* **WaCo diagnostics:** Setting `LOG_WUR=1` enables friendly `wurrdc:` traces to inspect wake-up
+  interactions between the main radio and the WuR companion.
 
 ---
 
-## 4) Build & Chạy
+## Student quickstart
+
+### 1. Prerequisites (tested on Ubuntu 20.04+/Debian)
+
 ```bash
-# 1) Về thư mục ví dụ
-cd examples/waco-srdcp
-
-# 2) Build cho sky
-make clean && make example-runicast-srdcp.sky TARGET=sky
-
-# 3) Mở COOJA
-cd ../../tools/cooja && ant run
+sudo apt update
+sudo apt install build-essential git python3 python3-pip ant openjdk-11-jdk \
+                 gcc-msp430 msp430mcu mspdebug
+python3 -m pip install --user pandas numpy matplotlib
 ```
 
-Trong COOJA:
-1. Tạo **New Simulation** (radio channel khớp `project-conf.h`, ví dụ 26).
-2. **Add motes** → **Sky Mote** → nạp firmware `examples/waco-srdcp/example-runicast-srdcp.sky`.
-3. Đặt mote đầu tiên **Node ID = 1** (sink 1.0).
-4. Thêm các mote thường: 2.0, 3.0, …
-5. Mở **Mote Output / Log Listener** và **Radio Messages** để theo dõi & lưu log CSV.
+The SRDCP examples target MSP430X MCUs. Follow the Contiki wiki guide to install the MSP430X toolchain
+if your distribution does not bundle it or if you prefer TI's compiler layout:
+<https://github.com/contiki-os/contiki/wiki/MSP430X>.
+The guide covers downloading the TI MSP430 GCC bundle, unpacking it, and adding its `bin/`
+directory to your `PATH` before invoking `make`.
 
----
+> **Note:** This repository is built on Contiki OS (classic), not Contiki-NG. Use Java 11 with
+> COOJA (`ant run`) for the smoothest experience.
 
-## 5) Tuỳ chọn cấu hình (quan trọng)
-- **Bật/Tắt log WuR** (mặc định **tắt** để không nhiễu powertrace):
-  - Trong `project-conf.h` thêm:
-    ```c
-    #define LOG_WUR 1
-    ```
-  - Hoặc tại dòng lệnh:
-    ```bash
-    make example-runicast-srdcp.sky TARGET=sky CFLAGS='-DLOG_WUR=1'
-    ```
-- **Kỳ gửi & số node DL**: trong `example-runicast-srdcp.c`
-  - `MSG_PERIOD` (chu kỳ gửi UL)
-  - `APP_NODES` (số node quay vòng DL hoặc danh sách đích)
-- **Độ dài đường đi tối đa**: `MAX_PATH_LENGTH` trong `routing_table.c`.
-- **Chu kỳ in bảng láng giềng / PDR**: `NEI_PRINT_PERIOD`, `PDR_PRINT_PERIOD` (nếu bạn có define).
-- **Kênh radio, TX power, …**: chỉnh trong `project-conf.h` cho thống nhất mô phỏng.
+### 2. Clone the repository
 
----
-
-## 6) Hook beacon SRDCP (ở phía app)
-Hàm app có thể định nghĩa (hoặc dùng **stub yếu** nếu muốn build ví dụ khác mà không cần hook):
-```c
-void srdcp_app_beacon_observed(const linkaddr_t *sender,
-                               uint16_t metric, int16_t rssi, uint8_t lqi);
-```
-- Mục đích: cập nhật bảng láng giềng bằng hop/metric khi **nghe beacon** từ hàng xóm.
-
----
-
-## 7) Ghi log & thu thập số liệu
-- **Powertrace**: đã bật trong app (chu kỳ mặc định 10s).  
-  Lưu log qua **Log Listener → Save to file** để phân tích năng lượng.
-- **Tag log** (gợi ý lọc):
-  - `SRDCP`, `UC` (runicast), `COLLECT` (UL), `TOPO` (neighbor/topology), `UL` (tổng hợp UL), `BEACON` (quan sát beacon), `SRDCP/PIGGY` (nếu có gói piggyback).
-- **Đầu ra tối thiểu cho báo cáo**:
-  - Bảng PDR-UL theo từng source tại sink.
-  - Bảng PDR-DL theo từng dest tại node đích (tính theo seq).
-  - Bảng láng giềng có **hop(metric)/RSSI/LQI/last_seen**.
-  - Log thay đổi tuyến/parent/metric/retries.
-  - Bảng powertrace tổng hợp theo thời gian.
-
----
-
-## 8) Quy trình thí nghiệm mẫu (gợi ý)
-1. **Baseline**: LOG_WUR=0, N=5 nodes, `MSG_PERIOD = 30 s`, kênh 26, TX power mặc định.
-2. **Bật WUR log**: LOG_WUR=1 → so sánh độ nhiễu log lên powertrace, điều chỉnh kỳ in nếu cần.
-3. **Tăng mật độ**: N=10–15 nodes, giữ `MSG_PERIOD`, đo PDR/energy.
-4. **Nhiễu kênh**: đổi kênh hoặc chèn interferer (tuỳ setup) để đo PDR/parent switch.
-5. **Tối ưu**: thay đổi `MAX_PATH_LENGTH`, `NEI_PRINT_PERIOD`, `PDR_PRINT_PERIOD` để cân bằng log/độ mượt.
-
----
-
-## 9) Sơ đồ (PlantUML)
-
-### 9.1 Kiến trúc mức cao
-```plantuml
-@startuml
-skinparam componentStyle rectangle
-skinparam shadowing false
-skinparam monochrome true
-
-package "Contiki Node" {
-  [App: example-runicast-srdcp.c] as APP
-  [Collect API\nmy_collect.c/.h] as COL
-  [Topology Report\ntopology_report.c] as TOPO
-  [Source Route Builder\nrouting_table.c] as RT
-  [SRDCP Core] as SR
-  [RDC: wurrdc.c] as WURRDC
-  [Radio Driver] as RADIO
-
-  APP -down-> COL
-  APP -down-> TOPO
-  APP -down-> RT
-  COL -down-> SR
-  SR -down-> WURRDC
-  WURRDC -down-> RADIO
-}
-
-node "Sink (1.0)" as SINK
-node "Node i (2.0..N)" as NODES
-
-APP -right-> SINK : DL (source route)
-NODES -left-> APP : UL (many-to-one)
-
-note right of COL
- Hook beacon:
- srdcp_app_beacon_observed()
- updates neighbor table
-end note
-
-note bottom of WURRDC
- LOG_WUR macro
- (printf-based logging)
-end note
-@enduml
+```bash
+git clone <repository-url>
+cd waco-srdcp
 ```
 
-### 9.2 Trình tự UL/DL + Wake-up
-```plantuml
-@startuml
-skinparam sequenceMessageAlign center
-skinparam monochrome true
+### 3. Build firmware images
 
-participant "Node (WuR + Main Radio)" as N
-participant "Sink (1.0)" as S
+WaCo + SRDCP (default topologies are 5, 15, and 30 motes):
 
-== Upward (UL) ==
-N -> S : Data (runicast via SRDCP parent chain)
-S -> S : Update UL PDR / powertrace
-
-== Beacon ==
-S --> N : SRDCP Beacon (metric, RSSI, LQI)
-N -> N : Update neighbor table (hop metric)
-
-== Downward (DL) ==
-S -> S : Build source route (routing_table.c)
-S -> N : DL packet (SR header)
-N -> N : Update DL PDR / log
-
-== Wake-up Radio ==
-S --> N : WuS (pattern match)
-N -> N : Wake main radio\nthen receive data
-@enduml
+```bash
+cd examples/simulation/waco-srdcp
+make example-waco-srdcp.sky TARGET=sky
+make example-waco-srdcp-15.sky TARGET=sky
+make example-waco-srdcp-30.sky TARGET=sky
 ```
 
----
+ContikiMAC + SRDCP for comparison:
 
-## 10) Lỗi thường gặp & khắc phục
-- **Không thấy log WUR** → bật `LOG_WUR` (mục 5).
-- **Cảnh báo `implicit declaration of memcpy`** → thêm `#include <string.h>`.
-- **Thiếu kiểu `uint16_t/uint8_t`** → thêm `#include <stdint.h>`.
-- **`undefined reference to srdcp_app_beacon_observed`** → đảm bảo app định nghĩa hoặc thêm **stub yếu** trong `my_collect.c`.
-- **PDR/Powertrace nhiễu do log quá nhiều** → tắt `LOG_WUR` hoặc tăng chu kỳ in `NEI_PRINT_PERIOD`/`PDR_PRINT_PERIOD`.
-
----
-
-## 11) Vệ sinh repo (.gitignore gợi ý)
-```gitignore
-# Build artifacts
-*.o
-*.d
-*.a
-*.out
-*.map
-*.elf
-*.bin
-*.hex
-
-# Contiki / COOJA
-*.sky
-*.z1
-obj_*/
-build*/
-*.class
-*.jar
-*.cooja
-*.csc.backup
-
-# Logs & temp
-COOJA.log
-log.log
-log*.log
-*.csv
-*.tmp
-
-# IDE / OS
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*~
+```bash
+cd ../contikimac-srdcp
+make example-contikimac-srdcp.sky TARGET=sky
 ```
 
+Other stacks (optional):
+
+```bash
+cd ../waco-rpl && make example-waco-rpl.sky TARGET=sky
+cd ../contikimac-rpl && make example-contikimac-rpl.sky TARGET=sky
+cd ../tsch-rpl && make example-tsch-rpl.sky TARGET=sky
+```
+
+You can override compile-time knobs on the command line, for example:
+
+```bash
+make example-waco-srdcp.sky TARGET=sky CFLAGS+=' -DLOG_APP=1 -DLOG_TOPO=1 -DLOG_WUR=1'
+```
+
+### 4. Run COOJA simulations
+
+**Interactive GUI**
+
+1. Launch COOJA:
+   ```bash
+   cd tools/cooja
+   ant run
+   ```
+2. `File → Open simulation` and select a `.csc` file under `examples/simulation/<flavour>/sim/`.
+   Scenarios ship with `grid`, `chain`, and `random` layouts for 5/15/30-node networks.
+3. When prompted, browse to the `.sky` firmware built earlier.
+4. Start the simulation, open the **Log Listener**, and export the console to `scenario.txt`.
+   If powertrace is enabled the test scripts also generate `scenario_dc.txt` radio duty-cycle logs.
+
+**Headless Monte Carlo batches**
+
+```bash
+cd examples/simulation/scripts
+./run_scenario.sh                  # Lists available scenarios
+./run_scenario.sh waco-srdcp-grid-15-nodes 20 ~/waco-data/grid15
+```
+
+The script rebuilds COOJA if required, runs `ant -nogui` with different random seeds, captures both
+application and duty-cycle logs, converts the `CSV,*` lines into structured CSV files, and collates
+them under `sim/out/<scenario>-mc/` (or a path you provide). Use `aggregate_results.sh <outdir>` to
+produce summaries such as `network_avgs.csv`, `per_node_avg.csv`, `energy_network_avgs.csv`, and
+`per_node_energy_avg.csv` without rerunning simulations.
+
 ---
 
-## 12) Bản quyền & nguồn
-- WaCo: https://github.com/waco-sim/waco
-- SRDCP: https://github.com/StefanoFioravanzo/SRDCP
-Repo này tuân theo giấy phép của các dự án gốc (xem LICENSE tương ứng nếu kèm theo).
+## Working with the CSV outputs
+
+The firmware prints comma-separated telemetry so downstream Python tooling can analyse runs without
+regexes:
+
+* `CSV,PDR_UL,...` – sink-side uplink delivery ratio per source, including first/last sequence numbers.
+* `CSV,PDR_DL,...` – node-side downlink delivery ratio for source-routed runicast packets.
+* `CSV,NEI,...` – node-local neighbour snapshots sorted by hop metric, RSSI, and age.
+* `CSV,INFO_HDR` / `CSV,INFO,...` – periodic role and parent announcements to reconstruct the topology.
+* Powertrace duty-cycle logs – `_dc.txt` files parsed by `energy_parser.py` into per-node radio-on/off totals.
+
+Run the parser manually if needed:
+
+```bash
+python3 examples/simulation/scripts/log_parser.py sim/out/run.txt --out-prefix sim/out/run
+python3 examples/simulation/scripts/energy_parser.py sim/out/run_dc.txt --out-prefix sim/out/run
+```
+
+Each invocation emits `*_pdr_ul.csv`, `*_pdr_dl.csv`, `*_nei.csv`, `*_info.csv`, and energy summaries next to
+the input files.
 
 ---
 
-## 13) COOJA scenarios & Monte Carlo scripts
-- **Scenarios:** `examples/waco-srdcp/sim/` chứa cả bố cục **grid** và bố cục **random** (5/15/30 nodes) đã cấu hình sẵn cho 50 m radio range. Các file `waco-srdcp-random-*-nodes/waco-srdcp-random-*-nodes.csc` cung cấp toạ độ mẫu (có thể mở trong COOJA để chỉnh tay nếu muốn).
-- **Batch runs:** dùng các script headless `examples/waco-srdcp/sim/mc_random_5nodes.sh`, `mc_random_15nodes.sh`, `mc_random_30nodes.sh` (`[NUM_SEEDS] [OUTDIR]`). Ví dụ `./mc_random_15nodes.sh 20` sẽ chạy 20 seeds, lưu log vào `examples/waco-srdcp/sim/out/waco-srdcp-random-15-nodes-mc/`, parse CSV (PDR UL/DL, neighbour stats) và cộng gộp năng lượng.
-- **Tuỳ biến:** có thể nhân bản script để hỗ trợ số node khác hoặc chèn bước sinh toạ độ ngẫu nhiên mỗi seed (ví dụ qua Python) trước khi gọi `ant -nogui`, miễn đảm bảo các mote vẫn nằm trong bán kính truyền 50 m.
+## Useful build-time toggles
+
+All macros below can be supplied through `CFLAGS+=-DMACRO=value` when invoking `make`:
+
+| Macro | Default | Location | Effect |
+|-------|---------|----------|--------|
+| `LOG_APP` | `0` | `example-*-srdcp.c` | Enables all application printf streams, including the `CSV,*` telemetry. Set to `1` when you need logs. |
+| `LOG_TOPO` | `0` | `topology_report.c` | Verbose topology updates for debugging neighbour tables. |
+| `LOG_COLLECT` | `0` | `my_collect.c` | Additional SRDCP collect-layer diagnostics. |
+| `LOG_WUR` | `0` | `core/net/mac/wurrdc.c` | Prints wake-up radio activity to COOJA. Useful when investigating WuR behaviour. |
+| `APP_NODES` | `5` | `example-*-srdcp.c` | Upper bound of node IDs targeted by the sink for downlink tests (`2..APP_NODES`). |
+| `MSG_PERIOD` | `15*CLOCK_SECOND` | `example-*-srdcp.c` | Uplink reporting period per node. |
+| `SR_MSG_PERIOD` | `12*CLOCK_SECOND` | `example-*-srdcp.c` | Downlink rotation period at the sink. |
+| `NEI_CREDIT_MAX` / `NEI_CREDIT_INIT` | `10` / `3` | `example-*-srdcp.c` | Controls neighbour entry ageing and retention. |
+| `NETSTACK_CONF_RDC` | `wurrdc_driver` (WaCo) / `contikimac_driver` (ContikiMAC) | `project-conf.h` | Swap RDC implementations without editing source files. |
+| `QUEUEBUF_CONF_NUM` | `16` | `project-conf.h` | Increase if topologies are dense or you see buffer exhaustion. |
+
+Because the SRDCP helper sources are listed in each `Makefile` (`PROJECT_SOURCEFILES += ...`), you can
+modify them in-place without touching the Contiki core.
+
+---
+
+## Troubleshooting
+
+| Symptom | Suggested fix |
+|---------|---------------|
+| `msp430-gcc: command not found` | Install the MSP430X toolchain following the Contiki wiki guide and ensure the compiler `bin/` directory is in `PATH`. |
+| COOJA fails to open `.sky` images | Rebuild from the matching example directory (`make ... TARGET=sky`) so the correct firmware is produced. |
+| No `CSV,*` output appears | Rebuild with `CFLAGS+=-DLOG_APP=1`; logging defaults to `0` to keep COOJA quiet. |
+| Missing duty-cycle CSV files | Ensure `_dc.txt` logs are generated (powertrace enabled) or rerun `energy_parser.py` on the saved duty-cycle files. |
+| Need to compare stacks | Build both `waco-srdcp` and `contikimac-srdcp` images and point the scenario to the corresponding `.sky` binary. |
+| Investigating WuR timing | Recompile with `-DLOG_WUR=1` and watch for `wurrdc:` lines in the COOJA console. |
+
+---
+
+## Further reading
+
+* WaCo project: <https://github.com/waco-sim/waco>
+* SRDCP reference: <https://github.com/StefanoFioravanzo/SRDCP>
+* Contiki OS documentation: <https://github.com/contiki-os/contiki/wiki>
+* COOJA MSP430X toolchain instructions: <https://github.com/contiki-os/contiki/wiki/MSP430X>
+
+Refer to `LICENSE` for distribution terms.
