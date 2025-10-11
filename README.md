@@ -54,7 +54,7 @@ if your distribution does not bundle it or if you prefer TI's compiler layout:
 The guide covers downloading the TI MSP430 GCC bundle, unpacking it, and adding its `bin/`
 directory to your `PATH` before invoking `make`.
 
-> **Note:** This repository is built on Contiki OS (classic), not Contiki-NG. Use Java 11 with
+> **Note:** This repository is built on Contiki OS (classic), not Contiki-NG. Use Java 8/11 with
 > COOJA (`ant run`) for the smoothest experience.
 
 ### 2. Clone the repository
