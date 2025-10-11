@@ -1,6 +1,6 @@
 # WaCo × SRDCP Simulation Toolkit (Contiki OS)
 
-This repository extends the classic [Contiki OS](https://github.com/contiki-os/contiki) with teaching-ready
+This repository extends the classic [Contiki OS](https://github.com/contiki-os/contiki) with
 examples that combine the **Wake-up Radio COOJA extension (WaCo)** and the
 **Source-Routing Data Collection Protocol (SRDCP)** for MSP430-based Sky motes. It ships
 side-by-side variants that run on WaCo's wake-up radio RDC as well as ContikiMAC and RPL
