@@ -116,7 +116,7 @@ make example-waco-srdcp.sky TARGET=sky CFLAGS+=' -DLOG_APP=1 -DLOG_TOPO=1 -DLOG_
 ```bash
 cd examples/simulation/scripts
 ./run_scenario.sh                  # Lists available scenarios
-./run_scenario.sh waco-srdcp-grid-15-nodes 20 ~/waco-data/grid15
+./run_scenario.sh waco-srdcp-grid-15-nodes 20 
 ```
 
 The script rebuilds COOJA if required, runs `ant -nogui` with different random seeds, captures both
