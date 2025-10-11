@@ -183,11 +183,7 @@ The COOJA Simulator
   </target>
 
   <target name="run_bigmem" depends="init, compile, jar, copy configs">
-    <!-- Tuned for 32 GB host: leave headroom for OS/python; using G1GC -->
-    <java fork="yes" dir="${build}" classname="org.contikios.cooja.Cooja" maxmemory="24g">
-      <jvmarg value="-Xms8g"/>
-      <jvmarg value="-Xmx24g"/>
-      <jvmarg value="-XX:+UseG1GC"/>
+    <java fork="yes" dir="${build}" classname="org.contikios.cooja.Cooja" maxmemory="1536m">
       <arg line="${args}"/>
       <env key="LD_LIBRARY_PATH" value="."/>
       <classpath>

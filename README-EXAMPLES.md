@@ -1,5 +1,4 @@
-Contiki Examples
-================
+# Contiki Examples
 
 The examples/ directory contains a few examples that will help you get
 started with Contiki.
@@ -12,14 +11,12 @@ you need to have GTK 1.x development libraries installed. These are usually
 called 'gtk-devel', 'libgtk1-devel' or similar in your Linux software
 installation programs.
 
-compile-platforms/
-------------------
+## compile-platforms/
 
 A test script that compiles Contiki for a number of platforms and reports any
 errors found during the build.
 
-email/
-------
+## email/
 
 An email program supporting SMTP. It can be compiled and run in the 'win32'
 target by typing the following commands:
@@ -33,13 +30,11 @@ platform/win32/contiki-main.c to match your needs.
 
 Please consult cpu/native/net/README-WPCAP.md as well.
 
-esb/
-----
+## esb/
 
 A set of demo applications for the ESB board.
 
-ftp/
-----
+## ftp/
 
 An FTP client supporting download. It can be compiled and run in the 'win32'
 target by typing the following commands:
@@ -53,8 +48,7 @@ platform/win32/contiki-main.c to match your needs.
 
 Please consult cpu/native/net/README-WPCAP.md as well.
 
-hello-world/
-------------
+## hello-world/
 
 A really simple Contiki program that shows how to write Contiki programs. To
 compile and test the program, go into the hello-world directory:
@@ -65,7 +59,7 @@ Run the 'make' command.
 
     make
 
-This will compile the hello-world program in the 'native' target.  This causes
+This will compile the hello-world program in the 'native' target. This causes
 the entire Contiki operating system and the hello-world application to be
 compiled into a single program that can be run by typing the following command:
 
@@ -79,8 +73,7 @@ This will print out the following text:
 The program will then appear to hang, and must be stopped by pressing the C key
 while holding down the Control key.
 
-irc/
-----
+## irc/
 
 An IRC client. It can be compiled and run in the 'win32' target by
 typing the following commands:
@@ -94,8 +87,7 @@ platform/win32/contiki-main.c to match your needs.
 
 Please consult cpu/native/net/README-WPCAP.md as well.
 
-multi-threading/
-----------------
+## multi-threading/
 
 A quite simple demonstration of the Contiki multi-threading library
 employing two worker threads each running a recursive function. It
@@ -106,8 +98,7 @@ following commands:
     make
     ./multi-threading.native
 
-rime/
------
+## rime/
 
 Contains a set of examples on how to use the Rime communications
 stack. To run those examples in the 'netsim' target (a very simple
@@ -129,8 +120,7 @@ Run the different programs:
 Most of the examples requires you to click with the middle mouse
 button on one of the simulated nodes for something to happen.
 
-sky/
-----
+## sky/
 
 Examples inteded for running on the Tmote Sky board. To compile those, you need
 to have msp430-gcc (the gcc C compiler for the MSP430 microcontroller)
@@ -138,15 +128,14 @@ installed.
 
 The follwing programs are included:
 
-- blink.c          A simple program that blinks the on-board LEDs
-- sky-collect.c    Collects sensor data and energy profile values to a sink.
+- blink.c A simple program that blinks the on-board LEDs
+- sky-collect.c Collects sensor data and energy profile values to a sink.
   Press the "user" button on the Tmote Sky that is connected to the PC to make
   the node a sink.
-- test-button.c    Toggles the LEDs when the button is pressed.
-- test-cfs.c       Tests the 1 mb flash memory of the Tmote Sky
+- test-button.c Toggles the LEDs when the button is pressed.
+- test-cfs.c Tests the 1 mb flash memory of the Tmote Sky
 
-telnet-server/
---------------
+## telnet-server/
 
 A simple TCP telnet server with a simple command shell. It can be
 compiled and run in the 'minimal-net' target by typing the following
@@ -162,18 +151,17 @@ platform/minimal-net/contiki-main.c to match your needs.
 Please consult cpu/native/net/README-WPCAP.md as well if you are running
 Microsoft Windows.
 
-waco-srdcp/
------------
+## waco-srdcp/
 
 COOJA scenarios that integrate WaCo + SRDCP for data collection experiments on Sky motes. Build the firmware once:
 
     cd examples/waco-srdcp
-    make example-runicast-srdcp.sky TARGET=sky
+    make example-waco-srdcp.sky TARGET=sky
 
 Then launch one of the provided simulations under `examples/waco-srdcp/sim/`:
 
-* `waco-srdcp-grid-5-nodes/`, `waco-srdcp-grid-15-nodes/`, `waco-srdcp-grid-30-nodes/` – deterministic grid layouts.
-* `waco-srdcp-random-5-nodes/`, `waco-srdcp-random-15-nodes/`, `waco-srdcp-random-30-nodes/` – sample random layouts that keep all nodes within the 50 m radio range.
+- `waco-srdcp-grid-5-nodes/`, `waco-srdcp-grid-15-nodes/`, `waco-srdcp-grid-30-nodes/` – deterministic grid layouts.
+- `waco-srdcp-random-5-nodes/`, `waco-srdcp-random-15-nodes/`, `waco-srdcp-random-30-nodes/` – sample random layouts that keep all nodes within the 50 m radio range.
 
 For batch or headless runs, the Monte-Carlo helper scripts in the same folder wrap COOJA (`ant -nogui`) and parse the resulting logs. For example, to evaluate the random layouts with 20 seeds:
 
@@ -184,8 +172,7 @@ For batch or headless runs, the Monte-Carlo helper scripts in the same folder wr
 
 Each script stores results under `examples/waco-srdcp/sim/out/waco-srdcp-random-*-nodes-mc` by default. They collect CSV summaries (PDR, neighbours, energy) for each seed and aggregate them across all runs.
 
-webbrowser/
------------
+## webbrowser/
 
 A text mode web browser supporting links and forms. It can be compiled
 and run in the 'win32' target by typing the following commands:
@@ -199,8 +186,7 @@ platform/win32/contiki-main.c to match your needs.
 
 Please consult cpu/native/net/README-WPCAP.md as well.
 
-webserver/
-----------
+## webserver/
 
 A web server supporting dynamic content creation using "scripts" which
 are actually compiled-in C-functions. It can be compiled and run in the
@@ -224,8 +210,7 @@ platform/minimal-net/contiki-main.c to match your needs.
 Please consult cpu/native/net/README-WPCAP.md as well if you are running
 Microsoft Windows.
 
-wget/
------
+## wget/
 
 A command line program that retrieves files from web servers and saves them
 using the 'Contiki File System' (CFS). It can be compiled and run in the
