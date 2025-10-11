@@ -1,0 +1,6 @@
+# Python dependencies for WaCo × SRDCP simulation tooling
+numpy
+pandas
+matplotlib
+openpyxl
+requests

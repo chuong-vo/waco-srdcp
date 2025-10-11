@@ -45,8 +45,11 @@ and post-process the results with Python tooling.
 sudo apt update
 sudo apt install build-essential git python3 python3-pip ant openjdk-11-jdk \
                  gcc-msp430 msp430mcu mspdebug
-python3 -m pip install --user pandas numpy matplotlib
+python3 -m pip install --user -r requirements.txt
 ```
+
+The `requirements.txt` file collects the Python packages used by the automation scripts, including
+`pandas`, `numpy`, `matplotlib`, `openpyxl`, and `requests`.
 
 The SRDCP examples target MSP430X MCUs. Follow the Contiki wiki guide to install the MSP430X toolchain
 if your distribution does not bundle it or if you prefer TI's compiler layout:
@@ -116,7 +119,7 @@ make example-waco-srdcp.sky TARGET=sky CFLAGS+=' -DLOG_APP=1 -DLOG_TOPO=1 -DLOG_
 ```bash
 cd examples/simulation/scripts
 ./run_scenario.sh                  # Lists available scenarios
-./run_scenario.sh waco-srdcp-grid-15-nodes 20 
+./run_scenario.sh waco-srdcp-grid-15-nodes 20
 ```
 
 The script rebuilds COOJA if required, runs `ant -nogui` with different random seeds, captures both
@@ -124,6 +127,63 @@ application and duty-cycle logs, converts the `CSV,*` lines into structured CSV 
 them under `sim/out/<scenario>-mc/` (or a path you provide). Use `aggregate_results.sh <outdir>` to
 produce summaries such as `network_avgs.csv`, `per_node_avg.csv`, `energy_network_avgs.csv`, and
 `per_node_energy_avg.csv` without rerunning simulations.
+
+> **More automation details:** The helper script workflow is documented step-by-step in
+> [`examples/simulation/scripts/README.md`](examples/simulation/scripts/README.md). Refer to it for
+> environment preparation tips, CLI flags, and end-to-end batching guidance.
+
+### 5. Post-process outputs and open them in spreadsheet tools
+
+Once the CSV artefacts are generated you can turn them into Excel workbooks or explore them directly
+in Python.
+
+1. **Ensure Excel writers are installed.** Pandas needs an Excel backend such as `openpyxl`
+   (already bundled via `requirements.txt`). If you installed packages piecemeal, add it with:
+   ```bash
+   python3 -m pip install --user openpyxl
+   ```
+2. **Parse any raw COOJA logs into CSV (if you skipped the batch scripts).**
+   ```bash
+   python3 examples/simulation/scripts/log_parser.py sim/out/run.txt --out-prefix sim/out/run
+   python3 examples/simulation/scripts/energy_parser.py sim/out/run_dc.txt --out-prefix sim/out/run
+   ```
+3. **Inspect the CSV files from the shell.**
+   ```bash
+   ls sim/out/run_*.csv
+   head -n 5 sim/out/run_pdr_ul.csv
+   ```
+4. **Load the CSV data in Python and export to `.xlsx`.** The snippet below gathers the CSV outputs
+   into a single workbook that spreadsheet software such as LibreOffice Calc or Microsoft Excel can
+   open.
+   ```bash
+   python3 - <<'PY'
+   import pandas as pd
+   from pathlib import Path
+
+   out_dir = Path('sim/out')
+   prefix = 'run'  # adjust if your --out-prefix differs
+   primary = [
+       ('uplink_pdr', out_dir / f'{prefix}_pdr_ul.csv'),
+       ('downlink_pdr', out_dir / f'{prefix}_pdr_dl.csv'),
+       ('neighbours', out_dir / f'{prefix}_nei.csv'),
+       ('topology', out_dir / f'{prefix}_info.csv'),
+   ]
+   energy_candidates = [
+       ('energy_network', out_dir / f'{prefix}_energy_network.csv'),
+       ('energy_nodes', out_dir / f'{prefix}_energy_nodes.csv'),
+       ('energy_network_avg', out_dir / 'energy_network_avgs.csv'),
+       ('energy_nodes_avg', out_dir / 'per_node_energy_avg.csv'),
+   ]
+
+   with pd.ExcelWriter(out_dir / f'{prefix}_summary.xlsx', engine='openpyxl') as writer:
+       for sheet, csv_path in primary + energy_candidates:
+           if csv_path.exists():
+               pd.read_csv(csv_path).to_excel(writer, sheet_name=sheet[:31], index=False)
+   print('Wrote', out_dir / f'{prefix}_summary.xlsx')
+   PY
+   ```
+5. **Open the resulting `.xlsx` file.** You can now use your preferred spreadsheet program to read
+   the measurements, pivot them, and create plots.
 
 ---
 
