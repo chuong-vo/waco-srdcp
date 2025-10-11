@@ -4,7 +4,7 @@ This repository extends the classic [Contiki OS](https://github.com/contiki-os/c
 examples that combine the **Wake-up Radio COOJA extension (WaCo)** and the
 **Source-Routing Data Collection Protocol (SRDCP)** for MSP430-based Sky motes. It ships
 side-by-side variants that run on WaCo's wake-up radio RDC as well as ContikiMAC and RPL
-baselines so that students can compare behaviour, generate repeatable COOJA experiments,
+baselines so that can compare behaviour, generate repeatable COOJA experiments,
 and post-process the results with Python tooling.
 
 ---
@@ -37,7 +37,7 @@ and post-process the results with Python tooling.
 
 ---
 
-## Student quickstart
+## Quickstart
 
 ### 1. Prerequisites (tested on Ubuntu 20.04+/Debian)
 
