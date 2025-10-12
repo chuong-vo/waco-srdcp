@@ -1,15 +1,5 @@
 # Build artifacts
-*.o
-*.d
-*.a
-*.out
-*.map
-*.elf
-*.bin
-*.hex
-*.sky
-*.z1
-obj_*/
+
 build*/
 *.class
 *.jar
