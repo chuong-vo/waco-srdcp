@@ -7,8 +7,15 @@
 
 /* RF channel 26 for CC2420 */
 #define CC2420_CONF_CHANNEL 26
+
+/* TX power để so sánh công bằng với WaCo */
+#ifndef CC2420_CONF_TXPOWER
+#define CC2420_CONF_TXPOWER 27
+#endif
+
 /* Network's PAN ID */
 #define IEEE802154_CONF_PANID 0xABCD
+
 /* Use hardware auto-acknowledgements */
 #define CC2420_CONF_AUTOACK 1
 
@@ -32,7 +39,7 @@
 
 /* Set ContikiMAC channel check rate (default is 8 Hz) */
 #ifndef NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE
-#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 128
+#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 32
 #endif
 /* ========================================================================== */
 /* ===================== IPv6 & RPL Protocol Settings ===================== */
@@ -46,14 +53,19 @@
  * Non-Storing mode is lighter on RAM for intermediate nodes as they only
  * need to know their parent, while the root builds the full source-routing path.
  */
-#ifndef RPL_CONF_MOP
+/* Force Non-Storing mode for fair, consistent DL behaviour */
+#undef RPL_CONF_MOP
 #define RPL_CONF_MOP RPL_MOP_NON_STORING
-#endif
+
 /* Set the Objective Function to MRHOF */
 #define RPL_CONF_OF_OCP RPL_OCP_MRHOF
-/* RPL DIO timer settings to reduce control traffic in stable networks */
-#define RPL_CONF_DIO_INTERVAL_MIN 12
-#define RPL_CONF_DIO_INTERVAL_DOUBLINGS 8
+/* RPL DIO timer settings (can be overridden via CFLAGS for fair compare) */
+#ifndef RPL_CONF_DIO_INTERVAL_MIN
+#define RPL_CONF_DIO_INTERVAL_MIN 14
+#endif
+#ifndef RPL_CONF_DIO_INTERVAL_DOUBLINGS
+#define RPL_CONF_DIO_INTERVAL_DOUBLINGS 4
+#endif
 /* Minimum hop rank increase */
 #define RPL_CONF_MIN_HOPRANKINC 256
 
@@ -67,18 +79,20 @@
 #undef UIP_CONF_UDP_CONNS
 /* Reduce the number of UDP connections */
 #define UIP_CONF_UDP_CONNS 2
-/* Disable packet queue in uIP to save RAM */
+/* Keep IPv6 packet queue disabled on Sky to save RAM */
+#undef UIP_CONF_IPV6_QUEUE_PKT
 #define UIP_CONF_IPV6_QUEUE_PKT 0
-/* Further adjust neighbor and route table sizes to fit RAM on Sky motes */
+/* Non-Storing: set UIP routes to 0 to save RAM; keep neighbors modest */
 #undef NBR_TABLE_CONF_MAX_NEIGHBORS
-#define NBR_TABLE_CONF_MAX_NEIGHBORS 8
+#define NBR_TABLE_CONF_MAX_NEIGHBORS 16
 #undef UIP_CONF_MAX_ROUTES
-#define UIP_CONF_MAX_ROUTES 8
+#define UIP_CONF_MAX_ROUTES 0
 /* Disable 6LoWPAN fragmentation to save RAM */
 /* Enable 6LoWPAN fragmentation to handle larger packets (e.g. RPL source routing) */
 #define SICSLOWPAN_CONF_FRAG 1
-/* Further adjust queue buffer size to fit RAM */
-#undef QUEUEBUF_CONF_NUM
-#define QUEUEBUF_CONF_NUM 12
+/* Queue buffers */
+#ifndef QUEUEBUF_CONF_NUM
+#define QUEUEBUF_CONF_NUM 24
+#endif
 
 #endif /* PROJECT_CONF_H_ */

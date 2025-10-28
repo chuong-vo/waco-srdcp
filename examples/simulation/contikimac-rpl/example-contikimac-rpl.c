@@ -6,6 +6,7 @@
  */
 
 #include "contiki.h"
+#include "lib/random.h"
 #include "net/ip/simple-udp.h"
 #include "net/ipv6/uip-ds6.h"
 #include "net/rpl/rpl.h"
@@ -29,11 +30,11 @@
 #endif
 
 #ifndef MSG_PERIOD
-#define MSG_PERIOD (15 * CLOCK_SECOND)
+#define MSG_PERIOD (30 * CLOCK_SECOND)
 #endif
 
 #ifndef SR_MSG_PERIOD
-#define SR_MSG_PERIOD (12 * CLOCK_SECOND)
+#define SR_MSG_PERIOD (45 * CLOCK_SECOND)
 #endif
 
 #ifndef PDR_PRINT_PERIOD
@@ -42,6 +43,19 @@
 
 #define UL_PORT 8765
 #define DL_PORT 8766
+
+#define RPL_READY_TIMEOUT (120UL * CLOCK_SECOND)
+#define RPL_READY_POLL_INTERVAL (CLOCK_SECOND)
+
+#define DL_ROTATION_START 2
+
+/* =================== Forward declarations =================== */
+static uint16_t dag_rank_to_hops(const rpl_dag_t *dag);
+static uint8_t dag_has_parent(const rpl_dag_t *dag);
+static clock_time_t compute_ul_jitter(void);
+static void parent_tracker_update(const linkaddr_t *new_parent, uint16_t metric);
+static void send_ul_message(void);
+static uint8_t pick_next_dl_target(void);
 
 /* =================== Helpers for SRDCP-style ID:00 =================== */
 static inline void addr_to_id00(const linkaddr_t *a, uint8_t *id0, uint8_t *id1)
@@ -81,7 +95,14 @@ typedef struct
   uint16_t seqn;
   uint16_t metric;    /* hops approx */
   uint8_t src0, src1; /* SRDCP-style id:00 of source */
+  uint32_t timestamp; /* clock_time() when queued */
 } __attribute__((packed)) ul_msg_t;
+
+typedef struct
+{
+  uint16_t seqn;
+  uint32_t timestamp;
+} __attribute__((packed)) dl_msg_t;
 
 static struct simple_udp_connection ul_conn; /* sink server / node client */
 static struct simple_udp_connection dl_conn; /* node server / sink client */
@@ -97,9 +118,13 @@ typedef struct
   uip_ipaddr_t ip6;
 } id_ip_t;
 #ifndef MAP_MAX_NODES
-#define MAP_MAX_NODES 64
+#define MAP_MAX_NODES 32
 #endif
 static id_ip_t id_ip_map[MAP_MAX_NODES];
+
+static linkaddr_t tracked_parent;
+static uint8_t parent_is_known = 0;
+static struct etimer ul_jitter_timer;
 
 /* =================== CSV PDR stats (similar to SRDCP) =================== */
 
@@ -108,7 +133,7 @@ typedef struct
   uint8_t used;
   uint8_t id0, id1; /* linkaddr ID:00 */
   uint16_t first_seq, last_seq;
-  uint32_t received, gaps, dups;
+  uint16_t received, gaps, dups;
 } pdr_ul_t;
 
 #define PDR_MAX_SRC 32
@@ -248,7 +273,7 @@ typedef struct
 {
   uint8_t inited;
   uint16_t first_seq, last_seq;
-  uint32_t received, gaps, dups;
+  uint16_t received, gaps, dups;
 } pdr_dl_t;
 static pdr_dl_t pdr_dl;
 
@@ -327,19 +352,151 @@ static void pdr_dl_print_csv(uint16_t my_metric, const linkaddr_t *parent, const
          (unsigned long)(pdrx / 100), (unsigned long)(pdrx % 100));
 }
 
+/* =================== Utility helpers =================== */
+
+static uint16_t dag_rank_to_hops(const rpl_dag_t *dag)
+{
+  if (dag == NULL)
+  {
+    return 0xFFFF;
+  }
+#ifdef RPL_MIN_HOPRANKINC
+  return dag->rank / RPL_MIN_HOPRANKINC;
+#else
+  return dag->rank / 256;
+#endif
+}
+
+static uint8_t dag_has_parent(const rpl_dag_t *dag)
+{
+  return (dag != NULL && dag->preferred_parent != NULL);
+}
+
+static clock_time_t compute_ul_jitter(void)
+{
+  clock_time_t window = MSG_PERIOD / 2;
+  if (window == 0)
+  {
+    return 0;
+  }
+  return (clock_time_t)(random_rand() % window);
+}
+
+static void parent_tracker_update(const linkaddr_t *new_parent, uint16_t metric)
+{
+  uint8_t me0, me1, old0 = 0, old1 = 0, new0 = 0, new1 = 0;
+
+  addr_to_id00(&linkaddr_node_addr, &me0, &me1);
+
+  if (parent_is_known)
+  {
+    addr_to_id00(&tracked_parent, &old0, &old1);
+  }
+
+  if (!new_parent)
+  {
+    if (parent_is_known)
+    {
+      printf("ROUTE[NODE %02u:%02u]: parent %02u:%02u -> --:-- metric=%u\n",
+             (unsigned)me0, (unsigned)me1,
+             (unsigned)old0, (unsigned)old1,
+             (unsigned)metric);
+      parent_is_known = 0;
+      memset(&tracked_parent, 0, sizeof(tracked_parent));
+    }
+    return;
+  }
+
+  addr_to_id00(new_parent, &new0, &new1);
+  if (!parent_is_known || memcmp(tracked_parent.u8, new_parent->u8, LINKADDR_SIZE) != 0)
+  {
+    printf("ROUTE[NODE %02u:%02u]: parent %02u:%02u -> %02u:%02u metric=%u\n",
+           (unsigned)me0, (unsigned)me1,
+           (unsigned)old0, (unsigned)old1,
+           (unsigned)new0, (unsigned)new1,
+           (unsigned)metric);
+    linkaddr_copy(&tracked_parent, new_parent);
+    parent_is_known = 1;
+  }
+}
+
+static void send_ul_message(void)
+{
+  rpl_dag_t *curr_dag;
+  const linkaddr_t *parent;
+  ul_msg_t m;
+  uint16_t hops;
+  uint8_t me0, me1, p0, p1;
+
+  curr_dag = rpl_get_any_dag();
+  if (!dag_has_parent(curr_dag))
+  {
+    parent_tracker_update(NULL, 0xFFFF);
+    return;
+  }
+
+  parent = rpl_get_parent_lladdr(curr_dag->preferred_parent);
+  hops = dag_rank_to_hops(curr_dag);
+  parent_tracker_update(parent, hops);
+
+  m.seqn = ul_seq++;
+  m.metric = hops;
+  m.src0 = (uint8_t)node_id;
+  m.src1 = 0;
+  m.timestamp = (uint32_t)clock_time();
+
+  addr_to_id00(&linkaddr_node_addr, &me0, &me1);
+  addr_to_id00(parent, &p0, &p1);
+
+  APP_LOG("APP-UL[NODE %02u:%02u]: send seq=%u metric=%u parent=%02u:%02u\n",
+          (unsigned)me0, (unsigned)me1,
+          (unsigned)m.seqn,
+          (unsigned)m.metric,
+          (unsigned)p0, (unsigned)p1);
+
+  simple_udp_sendto(&ul_conn, &m, sizeof(m), &curr_dag->dag_id);
+}
+
+static uint8_t pick_next_dl_target(void)
+{
+  uint8_t attempts;
+  uint8_t candidate;
+
+  if (APP_NODES <= 1)
+  {
+    return 0;
+  }
+
+  candidate = next_dl;
+  attempts = (uint8_t)(APP_NODES - 1);
+
+  while (attempts > 0)
+  {
+    if (candidate < MAP_MAX_NODES && id_ip_map[candidate].known)
+    {
+      next_dl = (uint8_t)(candidate + 1);
+      if (next_dl > APP_NODES)
+      {
+        next_dl = DL_ROTATION_START;
+      }
+      return candidate;
+    }
+
+    candidate++;
+    if (candidate > APP_NODES)
+    {
+      candidate = DL_ROTATION_START;
+    }
+    attempts--;
+  }
+
+  next_dl = DL_ROTATION_START;
+  return 0;
+}
+
 static uint16_t rpl_hops_approx(void)
 {
-  rpl_dag_t *dag = rpl_get_any_dag();
-  if (dag)
-  {
-    rpl_rank_t r = dag->rank;
-#ifdef RPL_MIN_HOPRANKINC
-    return r / RPL_MIN_HOPRANKINC;
-#else
-    return r / 256;
-#endif
-  }
-  return 0xFFFF;
+  return dag_rank_to_hops(rpl_get_any_dag());
 }
 
 /* =================== UDP callbacks =================== */
@@ -355,6 +512,17 @@ static void ul_rx_cb(struct simple_udp_connection *c, const uip_ipaddr_t *sender
     APP_LOG("APP-UL[SINK]: got seq=%u from %02u:%02u hops=%u my_metric=%u\n",
             (unsigned)m->seqn, (unsigned)m->src0, (unsigned)m->src1,
             (unsigned)m->metric, 0);
+    clock_time_t now = clock_time();
+    clock_time_t ts = (clock_time_t)m->timestamp;
+    uint32_t delay_ticks = (now >= ts) ? (uint32_t)(now - ts) : 0;
+    uint8_t sink0, sink1;
+    addr_to_id00(&linkaddr_node_addr, &sink0, &sink1);
+    printf("STAT,UL_DELAY,local=%02u:%02u,time=%lu,src=%02u:%02u,hops=%u,delay_ticks=%lu\n",
+           (unsigned)sink0, (unsigned)sink1,
+           (unsigned long)(now / CLOCK_SECOND),
+           (unsigned)m->src0, (unsigned)m->src1,
+           (unsigned)m->metric,
+           (unsigned long)delay_ticks);
     /* Learn mapping from src ID -> IPv6 for DL later (at sink) */
     if (node_id == 1)
     {
@@ -373,19 +541,36 @@ static void dl_rx_cb(struct simple_udp_connection *c, const uip_ipaddr_t *sender
                      uint16_t sender_port, const uip_ipaddr_t *receiver_addr,
                      uint16_t receiver_port, const uint8_t *data, uint16_t datalen)
 {
-  /* Downlink receive at node; payload is seq only */
-  if (datalen >= 2)
+  /* Downlink receive at node; payload carries seq and timestamp */
+  if (datalen >= sizeof(dl_msg_t))
   {
-    uint16_t seq = ((uint16_t)data[0] << 8) | data[1];
-    linkaddr_t me = linkaddr_node_addr;
-    char mebuf[6] = {0};
-    print_addr_id(&me, mebuf, sizeof(mebuf));
+    const dl_msg_t *msg = (const dl_msg_t *)data;
+    uint16_t seq = msg->seqn;
     rpl_dag_t *dag = rpl_get_any_dag();
     const linkaddr_t *pl = (dag && dag->preferred_parent) ? rpl_get_parent_lladdr(dag->preferred_parent) : NULL;
-    char pbuf[6] = {0};
-    print_parent_id(pl, pbuf, sizeof(pbuf));
-    APP_LOG("APP-DL[NODE %s]: got SR seq=%u hops=%u my_metric=%u parent=%s\n",
-            mebuf, (unsigned)seq, (unsigned)rpl_hops_approx(), (unsigned)rpl_hops_approx(), pbuf);
+    uint8_t me0, me1;
+    addr_to_id00(&linkaddr_node_addr, &me0, &me1);
+    linkaddr_t parent_tmp = linkaddr_null;
+    if (pl)
+    {
+      linkaddr_copy(&parent_tmp, pl);
+    }
+    uint8_t p0, p1;
+    addr_to_id00(&parent_tmp, &p0, &p1);
+    APP_LOG("APP-DL[NODE %02u:%02u]: got SR seq=%u hops=%u my_metric=%u parent=%02u:%02u\n",
+            (unsigned)me0, (unsigned)me1,
+            (unsigned)seq,
+            (unsigned)rpl_hops_approx(),
+            (unsigned)rpl_hops_approx(),
+            (unsigned)p0, (unsigned)p1);
+    clock_time_t now = clock_time();
+    clock_time_t ts = (clock_time_t)msg->timestamp;
+    uint32_t delay_ticks = (now >= ts) ? (uint32_t)(now - ts) : 0;
+    printf("STAT,DL_DELAY,local=%02u:%02u,time=%lu,delay_ticks=%lu,parent=%02u:%02u\n",
+           (unsigned)me0, (unsigned)me1,
+           (unsigned long)(now / CLOCK_SECOND),
+           (unsigned long)delay_ticks,
+           (unsigned)p0, (unsigned)p1);
     /* DL PDR update */
     pdr_dl_update(seq);
   }
@@ -393,19 +578,27 @@ static void dl_rx_cb(struct simple_udp_connection *c, const uip_ipaddr_t *sender
 
 /* =================== Main process =================== */
 
-PROCESS(waco_rpl_process, "WaCo + RPL UDP example (fixed)");
+PROCESS(waco_rpl_process, "WaCo + RPL UDP example");
 AUTOSTART_PROCESSES(&waco_rpl_process);
 
 PROCESS_THREAD(waco_rpl_process, ev, data)
 {
   static struct etimer ul_timer, dl_timer, stats_timer;
+  static struct etimer rpl_wait_timer;
   linkaddr_t me = linkaddr_node_addr;
   char mebuf[6] = {0};
-  print_addr_id(&me, mebuf, sizeof(mebuf));
-  static linkaddr_t last_parent;
-  static uint8_t have_last_parent = 0;
+  static clock_time_t rpl_wait_deadline;
+  static uint8_t rpl_ready_flag;
+  static uint8_t rpl_timeout_flag;
 
   PROCESS_BEGIN();
+
+  memset(&tracked_parent, 0, sizeof(tracked_parent));
+  parent_is_known = 0;
+  memset(id_ip_map, 0, sizeof(id_ip_map));
+  next_dl = DL_ROTATION_START;
+
+  print_addr_id(&me, mebuf, sizeof(mebuf));
 
   /* IPv6 addressing: add global addr based on link-layer */
   uip_ipaddr_t ipaddr;
@@ -433,116 +626,180 @@ PROCESS_THREAD(waco_rpl_process, ev, data)
   {
     APP_LOG("APP-ROLE[SINK]: started (local=%s)\n", mebuf);
     csv_print_info_role("SINK", 0, NULL);
-    /* Ensure CSV headers appear even before first packets */
     pdr_ul_print_csv(rpl_hops_approx(), NULL);
   }
   else
   {
+    rpl_dag_t *init_dag = rpl_get_any_dag();
+    const linkaddr_t *init_parent = (init_dag && init_dag->preferred_parent) ? rpl_get_parent_lladdr(init_dag->preferred_parent) : NULL;
     APP_LOG("APP-ROLE[NODE %s]: started\n", mebuf);
-    rpl_dag_t *dag = rpl_get_any_dag();
-    const linkaddr_t *pl = (dag && dag->preferred_parent) ? rpl_get_parent_lladdr(dag->preferred_parent) : NULL;
-    csv_print_info_role("NODE", rpl_hops_approx(), pl);
-    /* Ensure CSV headers appear even before first packets */
-    linkaddr_t sink_ll;
-    memset(&sink_ll, 0, sizeof(sink_ll));
-    sink_ll.u8[3] = 1;
-    sink_ll.u8[4] = 0; /* 01:00 */
-    pdr_dl_print_csv(rpl_hops_approx(), pl, &sink_ll);
+    csv_print_info_role("NODE", dag_rank_to_hops(init_dag), init_parent);
+    {
+      linkaddr_t sink_ll;
+      memset(&sink_ll, 0, sizeof(sink_ll));
+      sink_ll.u8[3] = 1;
+      sink_ll.u8[4] = 0; /* 01:00 */
+      pdr_dl_print_csv(dag_rank_to_hops(init_dag), init_parent, &sink_ll);
+    }
   }
 
-  etimer_set(&ul_timer, CLOCK_SECOND * 5);
+  /* Wait for RPL readiness before starting traffic (reduce early drops) */
+  rpl_wait_deadline = clock_time() + RPL_READY_TIMEOUT;
+  rpl_ready_flag = 0;
+  rpl_timeout_flag = 0;
+
+  while (!rpl_ready_flag)
+  {
+    rpl_dag_t *wait_dag = rpl_get_any_dag();
+
+    if (node_id == 1)
+    {
+      if (wait_dag != NULL)
+      {
+        rpl_ready_flag = 1;
+      }
+    }
+    else if (dag_has_parent(wait_dag))
+    {
+      rpl_ready_flag = 1;
+    }
+
+    if (rpl_ready_flag)
+    {
+      break;
+    }
+
+    if (clock_time() >= rpl_wait_deadline)
+    {
+      rpl_timeout_flag = 1;
+      break;
+    }
+
+    etimer_set(&rpl_wait_timer, RPL_READY_POLL_INTERVAL);
+    PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER && data == &rpl_wait_timer);
+  }
+
+  etimer_stop(&rpl_wait_timer);
+
+  if (rpl_timeout_flag)
+  {
+    APP_LOG("APP-RPL: readiness timeout, continue best-effort\n");
+  }
+
+  if (node_id != 1)
+  {
+    rpl_dag_t *ready_dag = rpl_get_any_dag();
+    if (dag_has_parent(ready_dag))
+    {
+      const linkaddr_t *ready_parent = rpl_get_parent_lladdr(ready_dag->preferred_parent);
+      csv_print_info_role("NODE", dag_rank_to_hops(ready_dag), ready_parent);
+    }
+  }
+  else
+  {
+    csv_print_info_role("SINK", 0, NULL);
+  }
+
+  if (node_id != 1)
+  {
+    etimer_set(&ul_timer, MSG_PERIOD);
+  }
   if (node_id == 1)
   {
-    etimer_set(&dl_timer, CLOCK_SECOND * 10);
+    etimer_set(&dl_timer, SR_MSG_PERIOD);
   }
   etimer_set(&stats_timer, PDR_PRINT_PERIOD);
 
   while (1)
   {
-    PROCESS_YIELD();
+    PROCESS_WAIT_EVENT();
 
-    if (etimer_expired(&ul_timer))
+    if (ev == PROCESS_EVENT_TIMER)
     {
-      etimer_reset(&ul_timer);
-      if (node_id != 1)
+      if (data == &ul_timer)
       {
-        /* Node sends UL to DAG root */
-        rpl_dag_t *dag = rpl_get_any_dag();
-        if (dag)
+        if (node_id != 1)
         {
-          ul_msg_t m;
-          m.seqn = ul_seq++;
-          m.metric = rpl_hops_approx();
-          m.src0 = (uint8_t)node_id;
-          m.src1 = 0;
-          /* Detect parent change */
-          const linkaddr_t *pl = (dag->preferred_parent) ? rpl_get_parent_lladdr(dag->preferred_parent) : NULL;
-          if (!have_last_parent)
+          clock_time_t jitter;
+          rpl_dag_t *period_dag;
+
+          etimer_reset(&ul_timer);
+
+          period_dag = rpl_get_any_dag();
+          if (!dag_has_parent(period_dag))
           {
-            if (pl)
+            parent_tracker_update(NULL, 0xFFFF);
+            APP_LOG("APP-UL[SKIP]: no parent yet\n");
+          }
+          else
+          {
+            jitter = compute_ul_jitter();
+            etimer_stop(&ul_jitter_timer);
+            if (jitter > 0)
             {
-              last_parent = *pl;
-              have_last_parent = 1;
+              etimer_set(&ul_jitter_timer, jitter);
+            }
+            else
+            {
+              send_ul_message();
             }
           }
-          else if (pl && (memcmp(last_parent.u8, pl->u8, LINKADDR_SIZE) != 0))
-          {
-            char lpbuf[6] = {0}, pbuf[6] = {0}, nbuf[6] = {0};
-            print_addr_id(&me, nbuf, sizeof(nbuf));
-            print_parent_id(&last_parent, lpbuf, sizeof(lpbuf));
-            print_parent_id(pl, pbuf, sizeof(pbuf));
-            printf("ROUTE[NODE %s]: parent %s -> %s metric=%u\n", nbuf, lpbuf, pbuf, m.metric);
-            last_parent = *pl;
-          }
-          /* Log send with current parent */
-          char pbuf[6] = {0}, nbuf[6] = {0};
-          print_parent_id(pl, pbuf, sizeof(pbuf));
-          print_addr_id(&me, nbuf, sizeof(nbuf));
-          APP_LOG("APP-UL[NODE %s]: send seq=%u metric=%u parent=%s\n", nbuf, (unsigned)m.seqn, (unsigned)m.metric, pbuf);
-          simple_udp_sendto(&ul_conn, &m, sizeof(m), &dag->dag_id);
         }
       }
-    }
-
-    if (node_id == 1 && etimer_expired(&dl_timer))
-    {
-      etimer_reset(&dl_timer);
-      /* Sink sends DL to next node: use IP learned from UL mapping */
-      if (next_dl <= APP_NODES)
+      else if (data == &ul_jitter_timer)
       {
-        if (next_dl < MAP_MAX_NODES && id_ip_map[next_dl].known)
+        send_ul_message();
+      }
+      else if (data == &dl_timer)
+      {
+        if (node_id == 1)
         {
-          uip_ipaddr_t dst;
-          uip_ipaddr_copy(&dst, &id_ip_map[next_dl].ip6);
-          uint8_t payload[2] = {(uint8_t)(dl_seq >> 8), (uint8_t)(dl_seq & 0xFF)};
-          APP_LOG("APP-DL[SINK]: send SR seq=%u -> %02u:%02u\n", (unsigned)dl_seq, (unsigned)next_dl, 0);
-          simple_udp_sendto(&dl_conn, payload, sizeof(payload), &dst);
-          dl_seq++;
-        }
-        next_dl++;
-        if (next_dl > APP_NODES)
-          next_dl = 2;
-      }
-    }
+          uint8_t target_id;
 
-    if (etimer_expired(&stats_timer))
-    {
-      etimer_reset(&stats_timer);
-      if (node_id == 1)
-      {
-        /* SINK: print UL CSV stats periodically */
-        pdr_ul_print_csv(rpl_hops_approx(), NULL);
+          etimer_reset(&dl_timer);
+
+          target_id = pick_next_dl_target();
+          if (target_id >= DL_ROTATION_START && target_id < MAP_MAX_NODES && id_ip_map[target_id].known)
+          {
+            dl_msg_t payload;
+            uip_ipaddr_t dst;
+
+            payload.seqn = dl_seq;
+            payload.timestamp = (uint32_t)clock_time();
+            uip_ipaddr_copy(&dst, &id_ip_map[target_id].ip6);
+            APP_LOG("APP-DL[SINK]: send SR seq=%u -> %02u:%02u\n", (unsigned)dl_seq, (unsigned)target_id, 0);
+            simple_udp_sendto(&dl_conn, &payload, sizeof(payload), &dst);
+            dl_seq++;
+          }
+          else
+          {
+            APP_LOG("APP-DL[SINK]: skip (no known UL target)\n");
+          }
+        }
       }
-      else
+      else if (data == &stats_timer)
       {
-        /* NODE: print DL CSV */
-        rpl_dag_t *dag = rpl_get_any_dag();
-        const linkaddr_t *pl = (dag && dag->preferred_parent) ? rpl_get_parent_lladdr(dag->preferred_parent) : NULL;
-        linkaddr_t sink_ll;
-        memset(&sink_ll, 0, sizeof(sink_ll));
-        sink_ll.u8[3] = 1;
-        sink_ll.u8[4] = 0; /* 01:00 */
-        pdr_dl_print_csv(rpl_hops_approx(), pl, &sink_ll);
+        rpl_dag_t *stats_dag;
+        const linkaddr_t *parent_ref;
+
+        etimer_reset(&stats_timer);
+
+        stats_dag = rpl_get_any_dag();
+        if (node_id == 1)
+        {
+          pdr_ul_print_csv(dag_rank_to_hops(stats_dag), NULL);
+        }
+        else
+        {
+          parent_ref = (stats_dag && stats_dag->preferred_parent) ? rpl_get_parent_lladdr(stats_dag->preferred_parent) : NULL;
+          {
+            linkaddr_t sink_ll;
+            memset(&sink_ll, 0, sizeof(sink_ll));
+            sink_ll.u8[3] = 1;
+            sink_ll.u8[4] = 0; /* 01:00 */
+            pdr_dl_print_csv(dag_rank_to_hops(stats_dag), parent_ref, &sink_ll);
+          }
+        }
       }
     }
   }

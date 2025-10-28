@@ -4,6 +4,19 @@
 #include <string.h>
 #include <stdint.h>
 
+#ifndef SRDCP_GRAPH_MIN_PRR
+#define SRDCP_GRAPH_MIN_PRR 40
+#endif
+#ifndef SRDCP_GRAPH_PRR_WEIGHT
+#define SRDCP_GRAPH_PRR_WEIGHT 4
+#endif
+#ifndef SRDCP_GRAPH_LOAD_WEIGHT
+#define SRDCP_GRAPH_LOAD_WEIGHT 1
+#endif
+
+static int find_route_tree(my_collect_conn *conn, const linkaddr_t *dest);
+static int find_route_graph(my_collect_conn *conn, const linkaddr_t *dest);
+
 // -------------------------------------------------------------------------------------------------
 //                                      DICT IMPLEMENTATION
 // -------------------------------------------------------------------------------------------------
@@ -152,6 +165,59 @@ int already_in_route(my_collect_conn *conn, uint8_t len, linkaddr_t *target)
         return false;
 }
 
+static int node_index_of(const linkaddr_t nodes[], int count, const linkaddr_t *addr)
+{
+        int i;
+        for (i = 0; i < count; i++)
+        {
+                if (linkaddr_cmp(&nodes[i], addr))
+                        return i;
+        }
+        return -1;
+}
+
+static srdcp_graph_node *graph_get_node(srdcp_graph_state *graph, const linkaddr_t *addr)
+{
+        int i;
+        for (i = 0; i < MAX_NODES; i++)
+        {
+                if (graph->nodes[i].used && linkaddr_cmp(&graph->nodes[i].node, addr))
+                        return &graph->nodes[i];
+        }
+        return NULL;
+}
+
+static bool edge_is_fresh(const srdcp_graph_edge *edge)
+{
+        if (edge->last_update == 0)
+                return false;
+        clock_time_t now = clock_time();
+        return (clock_time_t)(now - edge->last_update) <= SRDCP_INFO_MAX_AGE;
+}
+
+static uint16_t edge_cost(const srdcp_graph_edge *edge)
+{
+        uint16_t hop_penalty = SRDCP_GRAPH_HOP_WEIGHT;
+        uint16_t prr_penalty = (uint16_t)((100U - edge->prr) * SRDCP_GRAPH_PRR_WEIGHT);
+        uint16_t load_penalty = (uint16_t)(edge->load * SRDCP_GRAPH_LOAD_WEIGHT);
+        return (uint16_t)(hop_penalty + prr_penalty + load_penalty);
+}
+
+static int ensure_node(linkaddr_t nodes[], srdcp_graph_node *ptrs[], int *count, int max,
+                       srdcp_graph_state *graph, const linkaddr_t *addr)
+{
+        int idx = node_index_of(nodes, *count, addr);
+        if (idx >= 0)
+                return idx;
+        if (*count >= max)
+                return -1;
+        linkaddr_copy(&nodes[*count], addr);
+        ptrs[*count] = graph_get_node(graph, addr);
+        idx = *count;
+        (*count)++;
+        return idx;
+}
+
 /**
  * @brief Finds a route from the SINK to a destination by backtracking through parents.
  * @param conn The collect connection structure (at the SINK).
@@ -159,7 +225,7 @@ int already_in_route(my_collect_conn *conn, uint8_t len, linkaddr_t *target)
  * @return The path length, or 0 on error (no route, loop detected, or path too long).
  * @details The path is constructed by traversing the parent dictionary backwards from the destination.
  */
-int find_route(my_collect_conn *conn, const linkaddr_t *dest)
+static int find_route_tree(my_collect_conn *conn, const linkaddr_t *dest)
 {
         init_routing_path(conn);
 
@@ -192,6 +258,158 @@ int find_route(my_collect_conn *conn, const linkaddr_t *dest)
         return path_len;
 }
 
+static int find_route_graph(my_collect_conn *conn, const linkaddr_t *dest)
+{
+        if (!conn->is_sink)
+                return 0;
+        if (linkaddr_cmp(dest, &sink_addr))
+                return 0;
+
+        linkaddr_t nodes[MAX_NODES];
+        srdcp_graph_node *ptrs[MAX_NODES];
+        int count = 0;
+
+        memset(nodes, 0, sizeof(nodes));
+        memset(ptrs, 0, sizeof(ptrs));
+
+        if (ensure_node(nodes, ptrs, &count, MAX_NODES, &conn->graph, &sink_addr) < 0)
+                return 0;
+
+        /* Ensure destination exists in the index even if we have little data */
+        if (ensure_node(nodes, ptrs, &count, MAX_NODES, &conn->graph, dest) < 0)
+                return 0;
+
+        int i;
+        for (i = 0; i < MAX_NODES && count < MAX_NODES; i++)
+        {
+                if (!conn->graph.nodes[i].used)
+                        continue;
+                ensure_node(nodes, ptrs, &count, MAX_NODES, &conn->graph, &conn->graph.nodes[i].node);
+        }
+
+        /* Include neighbor endpoints */
+        int gi;
+        for (gi = 0; gi < MAX_NODES && count < MAX_NODES; gi++)
+        {
+                if (!conn->graph.nodes[gi].used)
+                        continue;
+                srdcp_graph_node *gn = &conn->graph.nodes[gi];
+                uint8_t e;
+                for (e = 0; e < gn->neighbor_count; e++)
+                {
+                        ensure_node(nodes, ptrs, &count, MAX_NODES, &conn->graph, &gn->neighbors[e].neighbor);
+                }
+        }
+
+        int dest_idx = node_index_of(nodes, count, dest);
+        if (dest_idx < 0)
+                return 0;
+
+        if (count <= 1)
+                return 0;
+
+        uint16_t dist[MAX_NODES];
+        int16_t prev[MAX_NODES];
+        uint8_t visited[MAX_NODES];
+
+        for (i = 0; i < count; i++)
+        {
+                dist[i] = 0xFFFF;
+                prev[i] = -1;
+                visited[i] = 0;
+        }
+        dist[0] = 0; /* sink */
+
+        int iter;
+        for (iter = 0; iter < count; iter++)
+        {
+                int u = -1;
+                uint16_t best = 0xFFFF;
+                for (i = 0; i < count; i++)
+                {
+                        if (!visited[i] && dist[i] < best)
+                        {
+                                best = dist[i];
+                                u = i;
+                        }
+                }
+                if (u < 0 || best == 0xFFFF)
+                        break;
+
+                visited[u] = 1;
+                if (u == dest_idx)
+                        break;
+
+                /* Direct neighbors from this node */
+                srdcp_graph_node *node = ptrs[u];
+                if (node)
+                {
+                        uint8_t eidx;
+                        for (eidx = 0; eidx < node->neighbor_count; eidx++)
+                        {
+                                srdcp_graph_edge *edge = &node->neighbors[eidx];
+                                if (!edge_is_fresh(edge) || edge->prr < SRDCP_GRAPH_MIN_PRR)
+                                        continue;
+                                int v = node_index_of(nodes, count, &edge->neighbor);
+                                if (v < 0)
+                                        continue;
+                                uint16_t cost = edge_cost(edge);
+                                uint32_t alt = (uint32_t)dist[u] + cost;
+                                if (alt < dist[v])
+                                {
+                                        dist[v] = (uint16_t)alt;
+                                        prev[v] = u;
+                                }
+                        }
+                }
+
+                /* Implicit reverse edges: other owners that list this node */
+                for (gi = 0; gi < MAX_NODES; gi++)
+                {
+                        if (!conn->graph.nodes[gi].used)
+                                continue;
+                        srdcp_graph_node *gn = &conn->graph.nodes[gi];
+                        uint8_t eidx;
+                        for (eidx = 0; eidx < gn->neighbor_count; eidx++)
+                        {
+                                srdcp_graph_edge *edge = &gn->neighbors[eidx];
+                                if (!linkaddr_cmp(&edge->neighbor, &nodes[u]))
+                                        continue;
+                                if (!edge_is_fresh(edge) || edge->prr < SRDCP_GRAPH_MIN_PRR)
+                                        continue;
+                                int v = node_index_of(nodes, count, &gn->node);
+                                if (v < 0)
+                                        continue;
+                                uint16_t cost = edge_cost(edge);
+                                uint32_t alt = (uint32_t)dist[u] + cost;
+                                if (alt < dist[v])
+                                {
+                                        dist[v] = (uint16_t)alt;
+                                        prev[v] = u;
+                                }
+                        }
+                }
+        }
+
+        if (dist[dest_idx] == 0xFFFF)
+                return 0;
+
+        init_routing_path(conn);
+        int idx = dest_idx;
+        uint8_t path_len = 0;
+        while (idx > 0 && idx >= 0)
+        {
+            if (path_len >= MAX_PATH_LENGTH)
+                    return 0;
+            linkaddr_copy(&conn->routing_table.tree_path[path_len], &nodes[idx]);
+            idx = prev[idx];
+            if (idx < 0)
+                    break;
+            path_len++;
+        }
+        return path_len;
+}
+
 /**
  * @brief Prints the route (tree_path) that was just found for a destination.
  * @param conn      The collect connection structure.
@@ -209,4 +427,20 @@ void print_route(my_collect_conn *conn, uint8_t route_len, const linkaddr_t *des
                        conn->routing_table.tree_path[i].u8[0],
                        conn->routing_table.tree_path[i].u8[1]);
         }
+}
+
+int find_route(my_collect_conn *conn, const linkaddr_t *dest)
+{
+        int len = find_route_graph(conn, dest);
+        if (len > 0)
+        {
+                printf("Graph route selected len=%d\n", len);
+                return len;
+        }
+        len = find_route_tree(conn, dest);
+        if (len > 0)
+        {
+                printf("Fallback tree route len=%d\n", len);
+        }
+        return len;
 }

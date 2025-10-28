@@ -23,6 +23,7 @@
 #define TAG_UL "UL"
 #define TAG_PRR "PRR"
 #define TAG_STAB "STAB"
+#define TAG_GRAPH "GRAPH"
 /* ===== Logging toggle for my_collect.c ===== */
 #ifndef LOG_COLLECT
 #define LOG_COLLECT 0 /* 1: enable log; 0: disable log */
@@ -65,6 +66,10 @@ const linkaddr_t sink_addr = {{0x01, 0x00}};
 #define PARENT_TIMEOUT (4 * BEACON_INTERVAL)
 #endif
 
+#ifndef SRDCP_NEIGHBOR_STALE_TICKS
+#define SRDCP_NEIGHBOR_STALE_TICKS (3 * BEACON_INTERVAL)
+#endif
+
 typedef struct
 {
         uint8_t used;
@@ -73,6 +78,9 @@ typedef struct
         uint32_t expected;      /* beacons expected based on tx_seq deltas */
         uint32_t received;      /* beacons actually received */
         clock_time_t last_seen; /* last time a beacon was observed from this neighbor */
+        int8_t last_rssi;
+        uint8_t last_lqi;
+        uint16_t last_metric;
 } prr_entry_t;
 
 static prr_entry_t prr_tab[PRR_NEI_MAX];
@@ -122,7 +130,7 @@ static prr_entry_t *prr_lookup_or_add(const linkaddr_t *addr)
  *          delta between sequence numbers and increments the received count. This
  *          allows for an estimation of the Packet Reception Rate (PRR) of beacons.
  */
-static void prr_update_on_beacon(const linkaddr_t *addr, uint16_t tx_seq)
+static prr_entry_t *prr_update_on_beacon(const linkaddr_t *addr, uint16_t tx_seq)
 {
         prr_entry_t *e = prr_lookup_or_add(addr);
         uint16_t delta = 0;
@@ -133,7 +141,7 @@ static void prr_update_on_beacon(const linkaddr_t *addr, uint16_t tx_seq)
                 e->expected = 1;
                 e->received = 1;
                 e->last_seen = clock_time();
-                return;
+                return e;
         }
         else
         {
@@ -145,6 +153,7 @@ static void prr_update_on_beacon(const linkaddr_t *addr, uint16_t tx_seq)
                 e->last_tx_seq = tx_seq;
                 e->last_seen = clock_time();
         }
+        return e;
 }
 
 /**
@@ -207,6 +216,13 @@ void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender);
 int sr_send(struct my_collect_conn *conn, const linkaddr_t *dest);
 int my_collect_send(struct my_collect_conn *conn);
 
+static uint8_t piggy_collect_neighbors(srdcp_piggy_neighbor_item *items, uint8_t max_items);
+static srdcp_graph_node *graph_lookup_or_create(srdcp_graph_state *graph, const linkaddr_t *node);
+static void graph_update_neighbors(struct my_collect_conn *conn, const linkaddr_t *owner,
+                                   const srdcp_piggy_neighbor_item *items, uint8_t count,
+                                   uint8_t queue_load);
+static void graph_update_status(struct my_collect_conn *conn, const srdcp_node_status *status);
+
 bool check_address_in_piggyback_block(uint8_t piggy_len, linkaddr_t node);
 void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender);
 void forward_downward_data(struct my_collect_conn *conn, const linkaddr_t *sender);
@@ -244,6 +260,7 @@ void my_collect_open(struct my_collect_conn *conn, uint16_t channels,
         {
                 conn->metric = 0;
                 conn->routing_table.len = 0;
+                memset(&conn->graph, 0, sizeof(conn->graph));
                 ctimer_set(&conn->beacon_timer, CLOCK_SECOND, beacon_timer_cb, conn);
         }
 }
@@ -327,17 +344,23 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
         }
 
         /* Update PRR estimator for this neighbor */
-        prr_update_on_beacon(sender, beacon.tx_seq);
-        /* Log integer-only PRR (no floats: Sky has no FPU) */
+        prr_entry_t *dbg = prr_update_on_beacon(sender, beacon.tx_seq);
+        if (dbg)
         {
-                prr_entry_t *dbg = prr_lookup_or_add(sender);
+                dbg->last_rssi = rssi;
+                dbg->last_lqi = lqi;
+                dbg->last_metric = beacon.metric;
+                /* Log integer-only PRR (no floats: Sky has no FPU) */
                 uint8_t prr = prr_percent(sender);
-                LOG(TAG_PRR, "nei=%02u:%02u prr=%u recv=%lu exp=%lu tx=%u",
+                LOG(TAG_PRR, "nei=%02u:%02u prr=%u recv=%lu exp=%lu tx=%u rssi=%d lqi=%u metric=%u",
                     sender->u8[0], sender->u8[1],
                     (unsigned)prr,
                     (unsigned long)dbg->received,
                     (unsigned long)dbg->expected,
-                    (unsigned)beacon.tx_seq);
+                    (unsigned)beacon.tx_seq,
+                    (int)dbg->last_rssi,
+                    (unsigned)dbg->last_lqi,
+                    (unsigned)dbg->last_metric);
         }
 
         uint16_t new_metric = (uint16_t)(beacon.metric + 1);
@@ -510,16 +533,10 @@ void bc_recv(struct broadcast_conn *bc_conn, const linkaddr_t *sender)
  */
 int my_collect_send(struct my_collect_conn *conn)
 {
-        uint8_t piggy_len = 0;
-        tree_connection tc = {.node = linkaddr_node_addr, .parent = conn->parent};
-
-        if (PIGGYBACKING == 1)
-                piggy_len = 1;
-
         struct upward_data_packet_header hdr = {
             .source = linkaddr_node_addr,
             .hops = 0,
-            .piggy_len = piggy_len};
+            .piggy_len = (PIGGYBACKING == 1) ? 1 : 0};
         enum packet_type pt = upward_data_packet;
 
         if (linkaddr_cmp(&conn->parent, &linkaddr_null))
@@ -530,14 +547,95 @@ int my_collect_send(struct my_collect_conn *conn)
 
         if (PIGGYBACKING == 1)
         {
-                packetbuf_hdralloc(sizeof(enum packet_type) +
-                                   sizeof(upward_data_packet_header) +
-                                   sizeof(tree_connection));
-                memcpy(packetbuf_hdrptr(), &pt, sizeof(enum packet_type));
-                memcpy(packetbuf_hdrptr() + sizeof(enum packet_type),
-                       &hdr, sizeof(upward_data_packet_header));
-                memcpy(packetbuf_hdrptr() + sizeof(enum packet_type) + sizeof(upward_data_packet_header),
-                       &tc, sizeof(tree_connection));
+                tree_connection tc = {.node = linkaddr_node_addr, .parent = conn->parent};
+                tc.node.u8[1] = 0x00;
+                tc.parent.u8[1] = 0x00;
+
+                srdcp_piggy_neighbor_item nei_items[SRDCP_PIGGY_MAX_NEIGHBORS];
+                uint8_t neighbor_count = piggy_collect_neighbors(nei_items, SRDCP_PIGGY_MAX_NEIGHBORS);
+
+                uint8_t queue_load = srdcp_app_queue_load_percent();
+                if (queue_load > 100)
+                        queue_load = 100;
+
+                if (neighbor_count > 0)
+                {
+                        uint8_t i;
+                        for (i = 0; i < neighbor_count; i++)
+                        {
+                                nei_items[i].load = queue_load;
+                        }
+                }
+
+                srdcp_node_status status = {
+                    .node = linkaddr_node_addr,
+                    .battery_mv = srdcp_app_battery_mv(),
+                    .queue_load = queue_load,
+                    .metric = (uint8_t)((conn->metric <= 0xFF) ? conn->metric : 0xFF),
+                    .ul_delay = srdcp_app_last_ul_delay_ticks(),
+                    .dl_delay = srdcp_app_last_dl_delay_ticks(),
+                    .flags = 0};
+
+                size_t neighbor_payload_len = 0;
+                if (neighbor_count > 0)
+                {
+                        neighbor_payload_len = sizeof(linkaddr_t) + sizeof(uint8_t) + sizeof(uint8_t) +
+                                               neighbor_count * sizeof(srdcp_piggy_neighbor_item);
+                }
+                const size_t status_payload_len = sizeof(srdcp_node_status);
+
+                size_t tlv_total = 0;
+                if (neighbor_payload_len > 0)
+                        tlv_total += sizeof(srdcp_piggy_tlv) + neighbor_payload_len;
+                tlv_total += sizeof(srdcp_piggy_tlv) + status_payload_len;
+
+                const size_t header_total =
+                    sizeof(enum packet_type) + sizeof(upward_data_packet_header) + sizeof(tree_connection) + tlv_total;
+
+                if (!packetbuf_hdralloc((int)header_total))
+                {
+                        LOG(TAG_PIGGY, "drop (hdralloc fail) header_total=%u", (unsigned)header_total);
+                        return 0;
+                }
+
+                uint8_t *ptr = packetbuf_hdrptr();
+                memcpy(ptr, &pt, sizeof(enum packet_type));
+                ptr += sizeof(enum packet_type);
+                memcpy(ptr, &hdr, sizeof(upward_data_packet_header));
+                ptr += sizeof(upward_data_packet_header);
+                memcpy(ptr, &tc, sizeof(tree_connection));
+                ptr += sizeof(tree_connection);
+
+                if (neighbor_payload_len > 0)
+                {
+                        srdcp_piggy_tlv tlv = {.type = SRDCP_PIGGY_TLV_NEIGHBORS, .length = (uint8_t)neighbor_payload_len};
+                        memcpy(ptr, &tlv, sizeof(tlv));
+                        ptr += sizeof(tlv);
+
+                        memcpy(ptr, &linkaddr_node_addr, sizeof(linkaddr_t));
+                        ptr += sizeof(linkaddr_t);
+                        *ptr++ = neighbor_count;
+                        *ptr++ = queue_load;
+                        LOG(TAG_PIGGY, "UL piggy neighbors count=%u queue=%u",
+                            (unsigned)neighbor_count, (unsigned)queue_load);
+                        uint8_t i;
+                        for (i = 0; i < neighbor_count; i++)
+                        {
+                                memcpy(ptr, &nei_items[i], sizeof(srdcp_piggy_neighbor_item));
+                                ptr += sizeof(srdcp_piggy_neighbor_item);
+                        }
+                }
+
+                {
+                        srdcp_piggy_tlv tlv = {.type = SRDCP_PIGGY_TLV_STATUS, .length = (uint8_t)status_payload_len};
+                        memcpy(ptr, &tlv, sizeof(tlv));
+                        ptr += sizeof(tlv);
+                        memcpy(ptr, &status, sizeof(srdcp_node_status));
+                        ptr += sizeof(srdcp_node_status);
+                        LOG(TAG_PIGGY, "UL piggy status batt=%u queue=%u metric=%u",
+                            (unsigned)status.battery_mv, (unsigned)status.queue_load,
+                            (unsigned)status.metric);
+                }
         }
         else
         {
@@ -648,6 +746,145 @@ void uc_recv(struct unicast_conn *uc_conn, const linkaddr_t *sender)
 
 /* ----------------------------- Helpers for upward/downward ----------------------------- */
 
+static uint8_t piggy_collect_neighbors(srdcp_piggy_neighbor_item *items, uint8_t max_items)
+{
+        if (max_items == 0)
+                return 0;
+
+        prr_entry_t *candidates[PRR_NEI_MAX];
+        uint8_t cand_count = 0;
+        clock_time_t now = clock_time();
+
+        memset(candidates, 0, sizeof(candidates));
+
+        uint8_t i;
+        for (i = 0; i < PRR_NEI_MAX; i++)
+        {
+                if (!prr_tab[i].used)
+                        continue;
+                if ((now - prr_tab[i].last_seen) > SRDCP_NEIGHBOR_STALE_TICKS)
+                        continue;
+                candidates[cand_count++] = &prr_tab[i];
+                if (cand_count == PRR_NEI_MAX)
+                        break;
+        }
+
+        uint8_t produced = 0;
+        while (produced < max_items)
+        {
+                int best = -1;
+                uint8_t best_prr = 0;
+                int8_t best_rssi = -128;
+
+                uint8_t idx;
+                for (idx = 0; idx < cand_count; idx++)
+                {
+                        prr_entry_t *cand = candidates[idx];
+                        if (!cand)
+                                continue;
+                        uint8_t prr = prr_percent(&cand->addr);
+                        if (prr == 0)
+                                continue;
+                        if (best < 0 || prr > best_prr || (prr == best_prr && cand->last_rssi > best_rssi))
+                        {
+                                best = idx;
+                                best_prr = prr;
+                                best_rssi = cand->last_rssi;
+                        }
+                }
+
+                if (best < 0)
+                        break;
+
+                prr_entry_t *sel = candidates[best];
+                items[produced].neighbor = sel->addr;
+                items[produced].rssi = sel->last_rssi;
+                items[produced].prr = best_prr;
+                items[produced].metric = (uint8_t)((sel->last_metric <= 0xFF) ? sel->last_metric : 0xFF);
+                items[produced].load = 0; /* filled by caller */
+                candidates[best] = NULL;
+                produced++;
+        }
+
+        return produced;
+}
+
+static srdcp_graph_node *graph_lookup_or_create(srdcp_graph_state *graph, const linkaddr_t *node)
+{
+        int free_idx = -1;
+        int i;
+        for (i = 0; i < MAX_NODES; i++)
+        {
+                if (graph->nodes[i].used && linkaddr_cmp(&graph->nodes[i].node, node))
+                        return &graph->nodes[i];
+                if (!graph->nodes[i].used && free_idx < 0)
+                        free_idx = i;
+        }
+        if (free_idx < 0)
+                return NULL;
+        srdcp_graph_node *entry = &graph->nodes[free_idx];
+        memset(entry, 0, sizeof(*entry));
+        entry->used = 1;
+        linkaddr_copy(&entry->node, node);
+        entry->neighbor_count = 0;
+        entry->status_last_update = 0;
+        return entry;
+}
+
+static void graph_update_neighbors(struct my_collect_conn *conn, const linkaddr_t *owner,
+                                   const srdcp_piggy_neighbor_item *items, uint8_t count,
+                                   uint8_t queue_load)
+{
+        if (!conn->is_sink)
+                return;
+        srdcp_graph_node *node = graph_lookup_or_create(&conn->graph, owner);
+        if (!node)
+                return;
+
+        uint8_t capped = count;
+        if (capped > SRDCP_GRAPH_MAX_NEIGHBORS)
+                capped = SRDCP_GRAPH_MAX_NEIGHBORS;
+        node->neighbor_count = capped;
+        clock_time_t now = clock_time();
+
+        uint8_t i;
+        for (i = 0; i < capped; i++)
+        {
+                (void)graph_lookup_or_create(&conn->graph, &items[i].neighbor);
+                node->neighbors[i].neighbor = items[i].neighbor;
+                node->neighbors[i].rssi = items[i].rssi;
+                node->neighbors[i].prr = items[i].prr;
+                node->neighbors[i].metric = items[i].metric;
+                node->neighbors[i].load = (items[i].load > 0) ? items[i].load : queue_load;
+                node->neighbors[i].last_update = now;
+        }
+        for (; i < SRDCP_GRAPH_MAX_NEIGHBORS; i++)
+        {
+                memset(&node->neighbors[i], 0, sizeof(node->neighbors[i]));
+                node->neighbors[i].neighbor = linkaddr_null;
+        }
+
+        LOG(TAG_GRAPH, "nei update owner=%02u:%02u count=%u",
+            owner->u8[0], owner->u8[1], (unsigned)capped);
+}
+
+static void graph_update_status(struct my_collect_conn *conn, const srdcp_node_status *status)
+{
+        if (!conn->is_sink)
+                return;
+        srdcp_graph_node *node = graph_lookup_or_create(&conn->graph, &status->node);
+        if (!node)
+                return;
+
+        node->status = *status;
+        node->status_last_update = clock_time();
+
+        LOG(TAG_GRAPH, "status update node=%02u:%02u batt=%u queue=%u metric=%u",
+            status->node.u8[0], status->node.u8[1],
+            (unsigned)status->battery_mv, (unsigned)status->queue_load,
+            (unsigned)status->metric);
+}
+
 /**
  * @brief Checks if a node address is already in the piggyback block.
  * @param piggy_len The number of piggyback entries currently in the packet.
@@ -691,8 +928,14 @@ void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
 
         if (conn->is_sink == 1)
         {
-                packetbuf_hdrreduce(sizeof(enum packet_type) + sizeof(upward_data_packet_header));
-                if (PIGGYBACKING == 1)
+                size_t base_hdr = sizeof(enum packet_type) + sizeof(upward_data_packet_header);
+                size_t tc_bytes = (size_t)hdr.piggy_len * sizeof(tree_connection);
+                uint8_t *data_ptr = (uint8_t *)packetbuf_dataptr();
+                size_t datalen = packetbuf_datalen();
+                LOG(TAG_PIGGY, "sink pre-strip datalen=%u base=%u tc=%u piggy_len=%u",
+                    (unsigned)datalen, (unsigned)base_hdr, (unsigned)tc_bytes, (unsigned)hdr.piggy_len);
+
+                if (PIGGYBACKING == 1 && datalen >= base_hdr)
                 {
                         tree_connection tc;
                         if (hdr.piggy_len > MAX_PATH_LENGTH)
@@ -704,56 +947,132 @@ void forward_upward_data(struct my_collect_conn *conn, const linkaddr_t *sender)
                                 LOG(TAG_PIGGY, "apply %u entries at sink", (unsigned)hdr.piggy_len);
                         }
                         uint8_t i;
-                        /* ---- PATCH START (my_collect.c: forward_upward_data sink loop) ---- */
+                        uint8_t *tc_ptr = data_ptr + base_hdr;
                         for (i = 0; i < hdr.piggy_len; i++)
                         {
-                                memcpy(&tc, packetbuf_dataptr() + sizeof(tree_connection) * i, sizeof(tree_connection));
-                                /* sanitize + filter garbage before loading into dict */
+                                if ((size_t)(base_hdr + (i + 1) * sizeof(tree_connection)) > datalen)
+                                        break;
+                                memcpy(&tc, tc_ptr + sizeof(tree_connection) * i, sizeof(tree_connection));
                                 tc.node.u8[1] = 0x00;
                                 tc.parent.u8[1] = 0x00;
                                 if (tc.node.u8[0] != 0 && tc.parent.u8[0] != 0)
                                 {
                                         dict_add(&conn->routing_table, tc.node, tc.parent);
                                 }
-                                else
-                                {
-                                        /* printf("[PIGGY] drop invalid tc node=%02u:%02u parent=%02u:%02u\n",
-                                           tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]); */
-                                }
                         }
-                        /* ---- PATCH END ---- */
-
-                        packetbuf_hdrreduce(sizeof(tree_connection) * hdr.piggy_len);
                 }
+
+                size_t consumed = base_hdr + tc_bytes;
+                size_t remaining = (datalen > consumed) ? (datalen - consumed) : 0;
+
+                size_t ctrl_bytes = 0;
+                if (remaining >= sizeof(srdcp_piggy_tlv))
+                {
+                        uint8_t *tlv_ptr = data_ptr + consumed;
+                        uint8_t parsed = 0;
+                        while (remaining >= sizeof(srdcp_piggy_tlv) && parsed < 2)
+                        {
+                                srdcp_piggy_tlv tlv;
+                                memcpy(&tlv, tlv_ptr, sizeof(tlv));
+                                size_t total_len = sizeof(tlv) + tlv.length;
+                                if (tlv.length > (remaining - sizeof(tlv)))
+                                {
+                                        LOG(TAG_PIGGY, "skip TLV type=%u truncated len=%u rem=%u",
+                                            (unsigned)tlv.type, (unsigned)tlv.length, (unsigned)remaining);
+                                        break;
+                                }
+                                if (tlv.type == SRDCP_PIGGY_TLV_NEIGHBORS)
+                                {
+                                        if (tlv.length >= (sizeof(linkaddr_t) + 2))
+                                        {
+                                                const uint8_t *payload = tlv_ptr + sizeof(tlv);
+                                                linkaddr_t owner;
+                                                memcpy(&owner, payload, sizeof(linkaddr_t));
+                                                owner.u8[1] = 0x00;
+                                                uint8_t count = *(payload + sizeof(linkaddr_t));
+                                                uint8_t queue_load = *(payload + sizeof(linkaddr_t) + 1);
+                                                size_t base = sizeof(linkaddr_t) + 2;
+                                                size_t avail_items = (tlv.length - base) / sizeof(srdcp_piggy_neighbor_item);
+                                                if (count > avail_items)
+                                                        count = (uint8_t)avail_items;
+                                                if (count > 0)
+                                                {
+                                                        srdcp_piggy_neighbor_item buf[SRDCP_PIGGY_MAX_NEIGHBORS];
+                                                        if (count > SRDCP_PIGGY_MAX_NEIGHBORS)
+                                                                count = SRDCP_PIGGY_MAX_NEIGHBORS;
+                                                        memcpy(buf, payload + base, count * sizeof(srdcp_piggy_neighbor_item));
+                                                        graph_update_neighbors(conn, &owner, buf, count, queue_load);
+                                                }
+                                        }
+                                        tlv_ptr += total_len;
+                                        remaining -= total_len;
+                                        ctrl_bytes += total_len;
+                                        parsed++;
+                                        continue;
+                                }
+                                if (tlv.type == SRDCP_PIGGY_TLV_STATUS)
+                                {
+                                        if (tlv.length == sizeof(srdcp_node_status))
+                                        {
+                                                const uint8_t *payload = tlv_ptr + sizeof(tlv);
+                                                srdcp_node_status status;
+                                                memcpy(&status, payload, sizeof(status));
+                                                status.node.u8[1] = 0x00;
+                                                graph_update_status(conn, &status);
+                                        }
+                                        tlv_ptr += total_len;
+                                        remaining -= total_len;
+                                        ctrl_bytes += total_len;
+                                        parsed++;
+                                        continue;
+                                }
+                                /* Unknown TLV -> stop parsing and leave payload intact */
+                                break;
+                        }
+                }
+
+                packetbuf_hdrreduce((int)base_hdr);
+                if (tc_bytes > 0)
+                        packetbuf_hdrreduce((int)tc_bytes);
+                if (ctrl_bytes > 0)
+                        packetbuf_hdrreduce((int)ctrl_bytes);
+                LOG(TAG_PIGGY, "sink post-strip datalen=%u ctrl_bytes=%u",
+                    (unsigned)packetbuf_datalen(), (unsigned)ctrl_bytes);
+
                 conn->callbacks->recv(&hdr.source, hdr.hops + 1);
         }
         else
         {
                 hdr.hops++;
 
-                /* ---- PATCH START (my_collect.c: forward_upward_data node add piggy) ---- */
-                /* Only piggyback if parent is valid and not already in the block */
-                if (PIGGYBACKING == 1 && !linkaddr_cmp(&conn->parent, &linkaddr_null) && !check_address_in_piggyback_block(hdr.piggy_len, linkaddr_node_addr))
+                if (PIGGYBACKING == 1 && !linkaddr_cmp(&conn->parent, &linkaddr_null) &&
+                    !check_address_in_piggyback_block(hdr.piggy_len, linkaddr_node_addr))
                 {
-                        packetbuf_hdralloc(sizeof(tree_connection));
-                        packetbuf_compact();
-                        tree_connection tc = {.node = linkaddr_node_addr, .parent = conn->parent};
-                        tc.node.u8[1] = 0x00;
-                        tc.parent.u8[1] = 0x00;
-                        hdr.piggy_len = hdr.piggy_len + 1;
-
-                        printf("Adding tree_connection to piggyinfo: key %02u:%02u value: %02u:%02u\n",
-                               tc.node.u8[0], tc.node.u8[1], tc.parent.u8[0], tc.parent.u8[1]);
-
-                        memcpy(packetbuf_hdrptr(), packetbuf_dataptr(), sizeof(enum packet_type));
-                        memcpy(packetbuf_hdrptr() + sizeof(enum packet_type), &hdr, sizeof(upward_data_packet_header));
-                        memcpy(packetbuf_hdrptr() + sizeof(enum packet_type) + sizeof(upward_data_packet_header), &tc, sizeof(tree_connection));
+                        size_t old_len = packetbuf_datalen();
+                        size_t insert_offset = sizeof(enum packet_type) +
+                                               sizeof(upward_data_packet_header) +
+                                               (size_t)hdr.piggy_len * sizeof(tree_connection);
+                        if (insert_offset <= old_len &&
+                            (old_len + sizeof(tree_connection)) <= PACKETBUF_SIZE)
+                        {
+                                packetbuf_set_datalen(old_len + sizeof(tree_connection));
+                                uint8_t *data = packetbuf_dataptr();
+                                memmove(data + insert_offset + sizeof(tree_connection),
+                                        data + insert_offset,
+                                        old_len - insert_offset);
+                                tree_connection tc = {.node = linkaddr_node_addr, .parent = conn->parent};
+                                tc.node.u8[1] = 0x00;
+                                tc.parent.u8[1] = 0x00;
+                                memcpy(data + insert_offset, &tc, sizeof(tree_connection));
+                                hdr.piggy_len = (uint8_t)(hdr.piggy_len + 1);
+                        }
+                        else
+                        {
+                                LOG(TAG_PIGGY, "cannot add tree_connection (offset=%u len=%u)",
+                                    (unsigned)insert_offset, (unsigned)old_len);
+                        }
                 }
-                else
-                {
-                        memcpy(packetbuf_dataptr() + sizeof(enum packet_type), &hdr, sizeof(upward_data_packet_header));
-                }
-                /* ---- PATCH END ---- */
+                memcpy(packetbuf_dataptr() + sizeof(enum packet_type), &hdr, sizeof(upward_data_packet_header));
 
                 unicast_send(&conn->uc, &conn->parent);
         }
@@ -806,4 +1125,39 @@ void forward_downward_data(struct my_collect_conn *conn, const linkaddr_t *sende
                 LOG(TAG_SRDCP, "drop (for=%02u:%02u; I'm=%02u:%02u)",
                     addr.u8[0], addr.u8[1], linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);
         }
+}
+
+/* --------------------------------------------------------------------
+ * Default weak hooks (may be overridden by applications)
+ * ------------------------------------------------------------------ */
+
+__attribute__((weak)) void srdcp_app_beacon_observed(const linkaddr_t *sender,
+                                                     uint16_t metric,
+                                                     int16_t rssi,
+                                                     uint8_t lqi)
+{
+        (void)sender;
+        (void)metric;
+        (void)rssi;
+        (void)lqi;
+}
+
+__attribute__((weak)) uint16_t srdcp_app_battery_mv(void)
+{
+        return 0;
+}
+
+__attribute__((weak)) uint8_t srdcp_app_queue_load_percent(void)
+{
+        return 0;
+}
+
+__attribute__((weak)) uint16_t srdcp_app_last_ul_delay_ticks(void)
+{
+        return 0;
+}
+
+__attribute__((weak)) uint16_t srdcp_app_last_dl_delay_ticks(void)
+{
+        return 0;
 }

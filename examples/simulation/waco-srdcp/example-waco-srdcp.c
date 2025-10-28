@@ -23,31 +23,25 @@
 #include "net/netstack.h"
 #include "core/net/linkaddr.h"
 #include "powertrace.h"
+#include "net/queuebuf.h"
+#include "sensors.h"
+#include "dev/battery-sensor.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include "my_collect.h"
-/* Ensure prototypes for shell init functions are visible even if
- * ENABLE_COLLECT_VIEW==0 to avoid implicit-decl warnings */
-#include "serial-shell.h"
-#include "shell-blink.h"
+/* If Serial shell/Collect-View are unused, we keep stubs (no-op). */
+#define serial_shell_init() ((void)0)
+#define shell_blink_init() ((void)0)
 
 /* ===== Application logging toggle (does not change behavior) ===== */
 #ifndef LOG_APP
-#define LOG_APP 0 /* 1: enable all app logs (including CSV); 0: silence */
+#define LOG_APP 1 /* 1: enable all app logs (including CSV); 0: silence */
 #endif
 #if LOG_APP
 #define APP_LOG(...) printf(__VA_ARGS__)
 #else
 #define APP_LOG(...)
-#endif
-/* ===== Collect-View toggle ===== */
-#ifndef ENABLE_COLLECT_VIEW
-#define ENABLE_COLLECT_VIEW 0 /* 1: enable collect-view-shell; 0: disable */
-#endif
-#if ENABLE_COLLECT_VIEW
-#include "shell.h"
-#include "collect-view.h"
 #endif
 /*==================== App configuration ====================*/
 #define APP_UPWARD_TRAFFIC 1   /* Nodes -> Sink */
@@ -60,18 +54,18 @@
 
 #ifndef MSG_PERIOD
 /* Fast-convergence app profile: a bit more frequent UL */
-#define MSG_PERIOD (15 * CLOCK_SECOND) /* uplink period */
+#define MSG_PERIOD (30 * CLOCK_SECOND) /* uplink period */
 #endif
 #ifndef SR_MSG_PERIOD
 /* Fast-convergence app profile: slightly faster DL rotation */
-#define SR_MSG_PERIOD (12 * CLOCK_SECOND) /* downlink period at sink */
+#define SR_MSG_PERIOD (45 * CLOCK_SECOND) /* downlink period at sink */
 #endif
 #define COLLECT_CHANNEL 0xAA /* SRDCP uses C and C+1 */
 
 #define NEI_MAX 32
 #define NEI_TOPK 5
-#define NEI_PRINT_PERIOD (60 * CLOCK_SECOND)
-#define PDR_PRINT_PERIOD (60 * CLOCK_SECOND)
+#define NEI_PRINT_PERIOD (30 * CLOCK_SECOND)
+#define PDR_PRINT_PERIOD (30 * CLOCK_SECOND)
 /* Neighbor credit aging: +1 on beacon seen (max 10),
  * -1 every BEACON_INTERVAL if not seen; entry is removed if credit reaches 0.
  */
@@ -87,7 +81,8 @@
 /*==================== App payload ====================*/
 typedef struct
 {
-  uint16_t seqn; /* UL: per-source at node; DL: per-destination at sink */
+  uint16_t seqn;      /* UL: per-source at node; DL: per-destination at sink */
+  uint32_t timestamp; /* clock_time() when message was queued */
 } __attribute__((packed)) test_msg_t;
 
 /*==================== SRDCP connection ====================*/
@@ -405,6 +400,7 @@ typedef struct
 static pdr_dl_t pdr_dl;
 static clock_time_t pdr_dl_last_print = 0;
 static uint8_t csv_dl_header_printed = 0;
+static clock_time_t last_dl_delay_ticks_value = 0;
 
 /**
  * @brief Reset DL PDR (self-assessed by node) on a new sequence number cycle.
@@ -586,6 +582,19 @@ static void recv_cb(const linkaddr_t *originator, uint8_t hops)
   }
   memcpy(&msg, packetbuf_dataptr(), sizeof(msg));
 
+  if (msg.timestamp != 0)
+  {
+    clock_time_t now = clock_time();
+    clock_time_t ts = (clock_time_t)msg.timestamp;
+    clock_time_t ul_delay = (now >= ts) ? (now - ts) : 0;
+    APP_LOG("STAT,UL_DELAY,local=%02u:%02u,time=%lu,src=%02u:%02u,hops=%u,delay_ticks=%lu\n",
+            linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
+            (unsigned long)(now / CLOCK_SECOND),
+            originator->u8[0], originator->u8[1],
+            hops,
+            (unsigned long)ul_delay);
+  }
+
   /* update neighbor table (include metric=hops for originator as seen by sink) */
   nei_update_from_rx(originator, msg.seqn, (int)hops);
 
@@ -648,6 +657,19 @@ static void sr_recv_cb(struct my_collect_conn *ptr, uint8_t hops)
   if (sender_ll)
     nei_update_from_rx(sender_ll, sr_msg.seqn, -1);
 
+  if (sr_msg.timestamp != 0)
+  {
+    clock_time_t now = clock_time();
+    clock_time_t ts = (clock_time_t)sr_msg.timestamp;
+    clock_time_t dl_delay = (now >= ts) ? (now - ts) : 0;
+    last_dl_delay_ticks_value = dl_delay;
+    APP_LOG("STAT,DL_DELAY,local=%02u:%02u,time=%lu,delay_ticks=%lu,parent=%02u:%02u\n",
+            linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
+            (unsigned long)(now / CLOCK_SECOND),
+            (unsigned long)dl_delay,
+            ptr->parent.u8[0], ptr->parent.u8[1]);
+  }
+
   APP_LOG("APP-DL[NODE %02u:%02u]: got SR seq=%u hops=%u my_metric=%u parent=%02u:%02u\n",
           linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
           sr_msg.seqn, hops, ptr->metric, ptr->parent.u8[0], ptr->parent.u8[1]);
@@ -690,6 +712,46 @@ void srdcp_app_beacon_observed(const linkaddr_t *sender, uint16_t metric, int16_
 {
   /* Update neighbor metric at NODE/SINK when we overhear a beacon */
   nei_update_from_beacon(sender, metric, rssi, lqi);
+}
+
+uint16_t srdcp_app_battery_mv(void)
+{
+#if CONTIKI_TARGET_SKY || CONTIKI_TARGET_Z1 || defined(BATTERY_SENSOR)
+  uint16_t value;
+  SENSORS_ACTIVATE(battery_sensor);
+  value = (uint16_t)battery_sensor.value(0);
+  SENSORS_DEACTIVATE(battery_sensor);
+  return value;
+#else
+  return 0;
+#endif
+}
+
+uint8_t srdcp_app_queue_load_percent(void)
+{
+#if defined(QUEUEBUF_CONF_NUM)
+  const uint16_t total = QUEUEBUF_CONF_NUM;
+#else
+  const uint16_t total = 16; /* fallback */
+#endif
+  uint16_t free = (uint16_t)queuebuf_numfree();
+  if (free > total)
+    free = total;
+  uint16_t used = total - free;
+  uint8_t percent = (uint8_t)((used * 100U) / (total ? total : 1));
+  return percent;
+}
+
+uint16_t srdcp_app_last_ul_delay_ticks(void)
+{
+  return 0;
+}
+
+uint16_t srdcp_app_last_dl_delay_ticks(void)
+{
+  if (last_dl_delay_ticks_value > 0xFFFF)
+    return 0xFFFF;
+  return (uint16_t)last_dl_delay_ticks_value;
 }
 
 /*==================== PROCESS ====================*/
@@ -787,6 +849,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         packetbuf_clear();
         /* per-destination seq so each target sees contiguous seq */
         msg.seqn = ++dl_seq_per_dest[dest.u8[0]];
+        msg.timestamp = clock_time();
         packetbuf_copyfrom(&msg, sizeof(msg));
 
         APP_LOG("APP-DL[SINK]: send SR seq=%u -> %02u:%02u\n",
@@ -874,6 +937,7 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
 
         /* uplink send */
         packetbuf_clear();
+        msg.timestamp = clock_time();
         packetbuf_copyfrom(&msg, sizeof(msg));
 
         APP_LOG("APP-UL[NODE %02u:%02u]: send seq=%u metric=%u parent=%02u:%02u\n",

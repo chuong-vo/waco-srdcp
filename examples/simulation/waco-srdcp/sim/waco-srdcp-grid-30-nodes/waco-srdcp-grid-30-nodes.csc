@@ -49,8 +49,8 @@
       <breakpoints />
       <interface_config>
         org.contikios.cooja.interfaces.Position
-        <x>0.0</x>
-        <y>0.0</y>
+        <x>70.16752577319588</x>
+        <y>50.67654639175258</y>
         <z>0.0</z>
       </interface_config>
       <interface_config>
@@ -355,8 +355,8 @@
       <breakpoints />
       <interface_config>
         org.contikios.cooja.interfaces.Position
-        <x>75.0</x>
-        <y>50.0</y>
+        <x>-0.12886597938144462</x>
+        <y>0.7409793814432888</y>
         <z>0.0</z>
       </interface_config>
       <interface_config>
@@ -589,7 +589,7 @@
   <plugin>
     org.contikios.cooja.plugins.SimControl
     <width>280</width>
-    <z>2</z>
+    <z>1</z>
     <height>160</height>
     <location_x>400</location_x>
     <location_y>0</location_y>
@@ -614,8 +614,8 @@
 var LOG_BASENAME         = "waco-srdcp-grid-30-nodes";      // sẽ tạo &lt;LOG_DIR&gt;/&lt;LOG_BASENAME&gt;.log và *_dc.log
 var APPEND_TO_EXISTING   = false;       // true = ghi nối tiếp, false = ghi đè
 var ADD_TIMESTAMP_SUFFIX = true;        // true = gắn "-yyyyMMdd-HHmmss" vào tên file
-var SIM_SETTLING_TIME    = 240000;       // 20s
-TIMEOUT(1800000);                       // 30 phút
+var SIM_SETTLING_TIME    = 240000;       // settling (ms)
+TIMEOUT(3600000);                       // 60 phút
 // =======================================
 
 try { load("nashorn:mozilla_compat.js"); } catch(err) {}
@@ -680,7 +680,7 @@ while (true) {
       <active>true</active>
     </plugin_config>
     <width>1043</width>
-    <z>3</z>
+    <z>4</z>
     <height>700</height>
     <location_x>267</location_x>
     <location_y>30</location_y>
@@ -688,9 +688,25 @@ while (true) {
   <plugin>
     PowerTracker
     <width>400</width>
-    <z>0</z>
+    <z>1</z>
     <height>400</height>
-    <location_x>430</location_x>
-    <location_y>30</location_y>
+    <location_x>1214</location_x>
+    <location_y>205</location_y>
+  </plugin>
+  <plugin>
+    org.contikios.cooja.plugins.Visualizer
+    <plugin_config>
+      <moterelations>true</moterelations>
+      <skin>org.contikios.cooja.plugins.skins.IDVisualizerSkin</skin>
+      <skin>org.contikios.cooja.plugins.skins.GridVisualizerSkin</skin>
+      <skin>org.contikios.cooja.plugins.skins.TrafficVisualizerSkin</skin>
+      <skin>org.contikios.cooja.plugins.skins.UDGMVisualizerSkin</skin>
+      <viewport>2.8218181818181813 0.0 0.0 2.8218181818181813 17.636363636363672 31.90909090909094</viewport>
+    </plugin_config>
+    <width>821</width>
+    <z>0</z>
+    <height>787</height>
+    <location_x>343</location_x>
+    <location_y>93</location_y>
   </plugin>
 </simconf>

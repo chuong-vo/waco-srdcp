@@ -9,19 +9,30 @@
 #ifndef CC2420_CONF_CHANNEL
 #define CC2420_CONF_CHANNEL 26
 #endif
+
+/* Slight TX power back-off from max to improve SNR without large energy cost */
+#ifndef CC2420_CONF_TXPOWER
+#define CC2420_CONF_TXPOWER 27
+#endif
+
 /* Network's PAN ID */
 #ifndef IEEE802154_CONF_PANID
 #define IEEE802154_CONF_PANID 0xABCD
 #endif
+
 /* Use hardware auto-acknowledgements */
 #ifndef CC2420_CONF_AUTOACK
 #define CC2420_CONF_AUTOACK 1
 #endif
+
 /* Let wurrdc use the 802.15.4 auto-ack feature */
 #ifndef WURRDC_CONF_802154_AUTOACK
 #define WURRDC_CONF_802154_AUTOACK 1
 #endif
 
+#ifndef NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE
+#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 32
+#endif
 /* ========================================================================== */
 /* ========================= Network Stack Settings ========================= */
 /* ========================================================================== */

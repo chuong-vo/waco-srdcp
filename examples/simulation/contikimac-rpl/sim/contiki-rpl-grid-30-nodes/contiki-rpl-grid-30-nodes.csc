@@ -49,8 +49,8 @@
       <breakpoints />
       <interface_config>
         org.contikios.cooja.interfaces.Position
-        <x>0.0</x>
-        <y>0.0</y>
+        <x>60.135236114842954</x>
+        <y>40.10974354275577</y>
         <z>0.0</z>
       </interface_config>
       <interface_config>
@@ -355,8 +355,8 @@
       <breakpoints />
       <interface_config>
         org.contikios.cooja.interfaces.Position
-        <x>60.0</x>
-        <y>40.0</y>
+        <x>0.022909507445582067</x>
+        <y>0.18327605956470827</y>
         <z>0.0</z>
       </interface_config>
       <interface_config>
@@ -589,7 +589,7 @@
   <plugin>
     org.contikios.cooja.plugins.SimControl
     <width>280</width>
-    <z>4</z>
+    <z>1</z>
     <height>160</height>
     <location_x>400</location_x>
     <location_y>0</location_y>
@@ -602,11 +602,11 @@
       <skin>org.contikios.cooja.plugins.skins.GridVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.TrafficVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.UDGMVisualizerSkin</skin>
-      <viewport>2.755681818181818 0.0 0.0 2.755681818181818 68.13215488215485 119.63552188552192</viewport>
+      <viewport>3.9681818181818174 0.0 0.0 3.9681818181818174 139.7082011498732 127.3046616317497</viewport>
     </plugin_config>
-    <width>400</width>
+    <width>625</width>
     <z>3</z>
-    <height>400</height>
+    <height>559</height>
     <location_x>1</location_x>
     <location_y>1</location_y>
   </plugin>

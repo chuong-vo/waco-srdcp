@@ -34,6 +34,12 @@ re_csv_pdrdl = re.compile(r'CSV,PDR_DL,local=([0-9]{2}:[0-9]{2}),[^,]*,(?:[^,]*,
 re_csv_prr_ul = re.compile(r'CSV,PRR_UL,local=([0-9]{2}:[0-9]{2}),[^,]*,([0-9]{2}:[0-9]{2}),([0-9]+(?:\.[0-9]+)?)', re.IGNORECASE)
 re_csv_prr_dl = re.compile(r'CSV,PRR_DL,local=([0-9]{2}:[0-9]{2}),[^,]*,([0-9]{2}:[0-9]{2}),([0-9]+(?:\.[0-9]+)?)', re.IGNORECASE)
 
+# End-to-end delay logs (ticks)
+re_stat_ul_delay = re.compile(r'STAT,UL_DELAY,local=([0-9]{2}:[0-9]{2}),time=(\d+),src=([0-9]{2}:[0-9]{2}),hops=\d+,delay_ticks=(\d+)', re.IGNORECASE)
+re_stat_dl_delay = re.compile(r'STAT,DL_DELAY,local=([0-9]{2}:[0-9]{2}),time=(\d+),delay_ticks=(\d+)', re.IGNORECASE)
+
+CLOCK_SECOND = int(os.environ.get("CLOCK_SECOND", "128"))
+
 def id_to_addr(id_int: int) -> str:
     return f"{id_int:02d}:00"
 
@@ -62,6 +68,10 @@ def parse_files(paths: List[str]):
 
     # Optional: last PDR_DL% từ CSV PDR
     csv_pdrdl_last: Dict[str, float] = {}
+
+    # End-to-end delay samples (ticks)
+    ul_delays: Dict[str, List[int]] = defaultdict(list)
+    dl_delays: Dict[str, List[int]] = defaultdict(list)
 
     for path in paths:
         if not os.path.exists(path):
@@ -157,12 +167,31 @@ def parse_files(paths: List[str]):
                     prr_observed_per_node[node_local].append(pct)
                     continue
 
+                m = re_stat_ul_delay.search(line)
+                if m:
+                    src_node = m.group(3)
+                    try:
+                        ul_delays[src_node].append(int(m.group(4)))
+                    except ValueError:
+                        pass
+                    continue
+
+                m = re_stat_dl_delay.search(line)
+                if m:
+                    node_local = m.group(1)
+                    try:
+                        dl_delays[node_local].append(int(m.group(3)))
+                    except ValueError:
+                        pass
+                    continue
+
     # Tập node đầy đủ
     nodes = set(nei_prr_vals.keys()) \
           | set(prr_parent_last.keys()) | set(prr_sender_last.keys()) \
           | set(last_parent_addr.keys()) \
           | set(ul_sends.keys()) | set(ul_recv.keys()) | set(dl_sends.keys()) | set(dl_recv.keys()) \
-          | set(csv_pdrdl_last.keys()) | set(prr_observed_per_node.keys())
+          | set(csv_pdrdl_last.keys()) | set(prr_observed_per_node.keys()) \
+          | set(ul_delays.keys()) | set(dl_delays.keys())
 
     rows = []
     for node in sorted(nodes):
@@ -200,6 +229,18 @@ def parse_files(paths: List[str]):
         pdr_ul = safe_pct(len(ul_r), len(ul_s))
         pdr_dl = safe_pct(len(dl_r), len(dl_s))
 
+        ul_delay_list = ul_delays.get(node, [])
+        dl_delay_list = dl_delays.get(node, [])
+
+        def mean_or_nan(values: List[int]) -> float:
+            return float('nan') if not values else sum(values) / len(values)
+
+        ul_delay_ticks_avg = mean_or_nan(ul_delay_list)
+        dl_delay_ticks_avg = mean_or_nan(dl_delay_list)
+
+        ul_delay_ms_avg = (ul_delay_ticks_avg * 1000.0 / CLOCK_SECOND) if not math.isnan(ul_delay_ticks_avg) else math.nan
+        dl_delay_ms_avg = (dl_delay_ticks_avg * 1000.0 / CLOCK_SECOND) if not math.isnan(dl_delay_ticks_avg) else math.nan
+
         rows.append({
             "node": node,
             "prr_parent(last)": round(prr_parent, 2) if not math.isnan(prr_parent) else math.nan,
@@ -212,12 +253,20 @@ def parse_files(paths: List[str]):
             "dl_recv": len(dl_r),
             "PDR_DL(%)": round(pdr_dl, 2) if not math.isnan(pdr_dl) else math.nan,
             "PDR_DL_CSV_last(%)": csv_pdrdl_last.get(node, math.nan),
+            "UL_delay_samples": len(ul_delay_list),
+            "UL_delay_ticks_avg": round(ul_delay_ticks_avg, 2) if not math.isnan(ul_delay_ticks_avg) else math.nan,
+            "UL_delay_ms_avg": round(ul_delay_ms_avg, 2) if not math.isnan(ul_delay_ms_avg) else math.nan,
+            "DL_delay_samples": len(dl_delay_list),
+            "DL_delay_ticks_avg": round(dl_delay_ticks_avg, 2) if not math.isnan(dl_delay_ticks_avg) else math.nan,
+            "DL_delay_ms_avg": round(dl_delay_ms_avg, 2) if not math.isnan(dl_delay_ms_avg) else math.nan,
         })
 
     # DataFrames
     cols = [
         "node","prr_parent(last)","prr_sender(last)","prr_all_nei_avg",
-        "ul_sent","ul_recv","PDR_UL(%)","dl_sent","dl_recv","PDR_DL(%)","PDR_DL_CSV_last(%)"
+        "ul_sent","ul_recv","PDR_UL(%)","dl_sent","dl_recv","PDR_DL(%)","PDR_DL_CSV_last(%)",
+        "UL_delay_samples","UL_delay_ticks_avg","UL_delay_ms_avg",
+        "DL_delay_samples","DL_delay_ticks_avg","DL_delay_ms_avg",
     ]
     df = pd.DataFrame(rows, columns=cols).sort_values("node") if rows else pd.DataFrame(columns=cols)
 
@@ -231,6 +280,10 @@ def parse_files(paths: List[str]):
         "prr_all_nei_avg_avg":    col_mean("prr_all_nei_avg"),
         "PDR_UL(%)_avg":          col_mean("PDR_UL(%)"),
         "PDR_DL(%)_avg":          col_mean("PDR_DL(%)"),
+        "UL_delay_ticks_avg":     col_mean("UL_delay_ticks_avg"),
+        "UL_delay_ms_avg":        col_mean("UL_delay_ms_avg"),
+        "DL_delay_ticks_avg":     col_mean("DL_delay_ticks_avg"),
+        "DL_delay_ms_avg":        col_mean("DL_delay_ms_avg"),
     }])
 
     return df, df_net
