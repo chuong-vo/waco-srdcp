@@ -92,7 +92,7 @@
 #define SICSLOWPAN_CONF_FRAG 1
 /* Queue buffers */
 #ifndef QUEUEBUF_CONF_NUM
-#define QUEUEBUF_CONF_NUM 24
+#define QUEUEBUF_CONF_NUM 16
 #endif
 
 #endif /* PROJECT_CONF_H_ */
