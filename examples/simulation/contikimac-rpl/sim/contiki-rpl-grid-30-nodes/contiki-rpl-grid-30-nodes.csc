@@ -589,7 +589,7 @@
   <plugin>
     org.contikios.cooja.plugins.SimControl
     <width>280</width>
-    <z>1</z>
+    <z>0</z>
     <height>160</height>
     <location_x>400</location_x>
     <location_y>0</location_y>
@@ -605,7 +605,7 @@
       <viewport>3.9681818181818174 0.0 0.0 3.9681818181818174 139.7082011498732 127.3046616317497</viewport>
     </plugin_config>
     <width>625</width>
-    <z>3</z>
+    <z>4</z>
     <height>559</height>
     <location_x>1</location_x>
     <location_y>1</location_y>
@@ -618,7 +618,7 @@ var LOG_BASENAME         = "contiki-rpl-grid-30-nodes";
 var APPEND_TO_EXISTING   = false;
 var ADD_TIMESTAMP_SUFFIX = true;
 var SIM_SETTLING_TIME    = 240000;
-TIMEOUT(1800000);
+TIMEOUT(3600000);
 
 try { load("nashorn:mozilla_compat.js"); } catch(err) {}
 
@@ -672,7 +672,7 @@ while (true) {
       <active>true</active>
     </plugin_config>
     <width>986</width>
-    <z>2</z>
+    <z>3</z>
     <height>767</height>
     <location_x>52</location_x>
     <location_y>100</location_y>
@@ -680,7 +680,7 @@ while (true) {
   <plugin>
     PowerTracker
     <width>400</width>
-    <z>1</z>
+    <z>2</z>
     <height>400</height>
     <location_x>672</location_x>
     <location_y>803</location_y>
@@ -693,9 +693,10 @@ while (true) {
       <coloring />
     </plugin_config>
     <width>1031</width>
-    <z>0</z>
+    <z>1</z>
     <height>240</height>
     <location_x>400</location_x>
     <location_y>160</location_y>
   </plugin>
 </simconf>
+

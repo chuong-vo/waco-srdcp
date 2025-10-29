@@ -41,7 +41,7 @@ CFLAGS += -DRSSI_THRESHOLD=-90
 
 # Giữ parent tối thiểu 60s để ổn định cây
 CFLAGS += -DMIN_PARENT_DWELL=\(60*CLOCK_SECOND\)
-CFLAGS += -DBEACON_INTERVAL=\(30*CLOCK_SECOND\)
+CFLAGS += -DBEACON_INTERVAL=\(45*CLOCK_SECOND\)  # Optimized: 30s → 45s for lower RDC
 
 # Định tuyến DL từ đồ thị piggyback: bỏ cạnh PRR thấp, ưu tiên PRR mạnh hơn
 CFLAGS += \
@@ -62,7 +62,7 @@ CFLAGS += \
   -DCC2420_CONF_TXPOWER=27
 
 # Giảm overhead control/data: piggyback neighbors gọn + giảm nhẹ tải ứng dụng
-CFLAGS += -DSRDCP_PIGGY_MAX_NEIGHBORS=4
+CFLAGS += -DSRDCP_PIGGY_MAX_NEIGHBORS=3  # Optimized: 4 → 3 for lower TX overhead
 CFLAGS += -DMSG_PERIOD=\(30*CLOCK_SECOND\)
 CFLAGS += -DSR_MSG_PERIOD=\(45*CLOCK_SECOND\)
 

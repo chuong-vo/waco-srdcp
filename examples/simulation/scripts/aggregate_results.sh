@@ -23,14 +23,30 @@ echo "[agg] Tổng hợp trong: $OUTDIR"
 # 1) Gộp network averages theo seed
 net_files=("$OUTDIR"/seed-*"_network_avg.csv")
 agg_net="$OUTDIR/network_avgs.csv"
-echo "seed,prr_parent(last)_avg,prr_sender(last)_avg,prr_all_nei_avg_avg,PDR_UL(%)_avg,PDR_DL(%)_avg" > "$agg_net"
+echo "seed,prr_parent(last)_avg,prr_sender(last)_avg,prr_all_nei_avg_avg,PDR_UL(%)_avg,PDR_DL(%)_avg,UL_delay_ticks_avg,UL_delay_ms_avg,DL_delay_ticks_avg,DL_delay_ms_avg" > "$agg_net"
 for f in "${net_files[@]}"; do
   [[ -f "$f" ]] || continue
   base=$(basename "$f")
   seed=${base#seed-}; seed=${seed%%_*}
   tail -n +2 "$f" | sed "s/^/$seed,/" >> "$agg_net" || true
 done
-echo "[agg] -> $agg_net"
+
+# Thêm dòng trung bình vào cuối network_avgs.csv
+python3 - "$agg_net" <<'PY'
+import sys, pandas as pd
+import numpy as np
+csv_path = sys.argv[1]
+df = pd.read_csv(csv_path)
+if not df.empty:
+    # Tính trung bình cho tất cả numeric columns (bỏ seed)
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    avg_row = {col: df[col].mean() if col in numeric_cols else '' for col in df.columns}
+    avg_row['seed'] = 'AVG'
+    avg_df = pd.DataFrame([avg_row])
+    df = pd.concat([df, avg_df], ignore_index=True)
+    df.to_csv(csv_path, index=False)
+PY
+echo "[agg] -> $agg_net (with average row)"
 
 # 2) Gộp energy network averages theo seed (nếu có)
 enet_files=("$OUTDIR"/seed-*"_energy_network.csv")
@@ -46,7 +62,23 @@ if [[ -e "${enet_files[0]:-}" ]]; then
     seed=${base#seed-}; seed=${seed%%_*}
     tail -n +2 "$f" | sed "s/^/$seed,/" >> "$agg_enet" || true
   done
-  echo "[agg] -> $agg_enet"
+  
+  # Thêm dòng trung bình vào cuối energy_network_avgs.csv
+  python3 - "$agg_enet" <<'PY'
+import sys, pandas as pd
+import numpy as np
+csv_path = sys.argv[1]
+df = pd.read_csv(csv_path)
+if not df.empty:
+    # Tính trung bình cho tất cả numeric columns (bỏ seed)
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    avg_row = {col: df[col].mean() if col in numeric_cols else '' for col in df.columns}
+    avg_row['seed'] = 'AVG'
+    avg_df = pd.DataFrame([avg_row])
+    df = pd.concat([df, avg_df], ignore_index=True)
+    df.to_csv(csv_path, index=False)
+PY
+  echo "[agg] -> $agg_enet (with average row)"
 else
   echo "[agg] Bỏ qua energy_network_avgs.csv (không có seed-*_energy_network.csv)"
 fi
@@ -55,7 +87,26 @@ fi
 sum_files=("$OUTDIR"/seed-*"_summary.csv")
 if [[ -e "${sum_files[0]:-}" ]]; then
   python3 "$SCRIPT_DIR/agg_per_node.py" --out "$OUTDIR/per_node_avg.csv" "${sum_files[@]}" || true
-  echo "[agg] -> $OUTDIR/per_node_avg.csv"
+  # Thêm dòng trung bình vào cuối per_node_avg.csv
+  python3 - "$OUTDIR/per_node_avg.csv" <<'PY'
+import sys, pandas as pd
+import numpy as np
+csv_path = sys.argv[1]
+try:
+    df = pd.read_csv(csv_path)
+    if not df.empty:
+        # Tính trung bình cho tất cả numeric columns (bỏ node column)
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        avg_row = {col: df[col].mean() if col in numeric_cols else 'AVG' for col in df.columns}
+        if 'node' in df.columns:
+            avg_row['node'] = 'AVG'
+        avg_df = pd.DataFrame([avg_row])
+        df = pd.concat([df, avg_df], ignore_index=True)
+        df.to_csv(csv_path, index=False)
+except Exception as e:
+    pass  # Ignore if file empty or can't read
+PY
+  echo "[agg] -> $OUTDIR/per_node_avg.csv (with average row)"
 else
   echo "[agg] Bỏ qua per_node_avg.csv (không có seed-*_summary.csv)"
 fi
@@ -64,27 +115,29 @@ fi
 enode_files=("$OUTDIR"/seed-*"_energy_nodes.csv")
 if [[ -e "${enode_files[0]:-}" ]]; then
   python3 "$SCRIPT_DIR/agg_per_node.py" --out "$OUTDIR/per_node_energy_avg.csv" "${enode_files[@]}" || true
-  echo "[agg] -> $OUTDIR/per_node_energy_avg.csv"
+  # Thêm dòng trung bình vào cuối per_node_energy_avg.csv
+  python3 - "$OUTDIR/per_node_energy_avg.csv" <<'PY'
+import sys, pandas as pd
+import numpy as np
+csv_path = sys.argv[1]
+try:
+    df = pd.read_csv(csv_path)
+    if not df.empty:
+        # Tính trung bình cho tất cả numeric columns (bỏ node/mote column)
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        id_col = 'node' if 'node' in df.columns else ('mote' if 'mote' in df.columns else None)
+        avg_row = {col: df[col].mean() if col in numeric_cols else 'AVG' for col in df.columns}
+        if id_col:
+            avg_row[id_col] = 'AVG'
+        avg_df = pd.DataFrame([avg_row])
+        df = pd.concat([df, avg_df], ignore_index=True)
+        df.to_csv(csv_path, index=False)
+except Exception as e:
+    pass  # Ignore if file empty or can't read
+PY
+  echo "[agg] -> $OUTDIR/per_node_energy_avg.csv (with average row)"
 else
   echo "[agg] Bỏ qua per_node_energy_avg.csv (không có seed-*_energy_nodes.csv)"
 fi
 
 echo "[agg] Hoàn tất."
-
-# 5) (Tùy chọn) Tổng hợp trung bình qua tất cả seed cho file energy_network_avgs.csv
-if [[ -f "$agg_enet" ]]; then
-  python3 - "$agg_enet" "$OUTDIR/energy_network_overall.csv" <<'PY'
-import sys, pandas as pd
-src, dst = sys.argv[1], sys.argv[2]
-df = pd.read_csv(src)
-if df.empty:
-    open(dst,'w').close(); sys.exit(0)
-num = df.select_dtypes(include='number')
-cols = [c for c in num.columns if c.lower() != 'seed']
-out = { 'seeds': len(df) }
-for c in cols:
-    out[c+'_mean'] = round(num[c].mean(), 6)
-pd.DataFrame([out]).to_csv(dst, index=False)
-print(f"[agg] -> {dst}")
-PY
-fi

@@ -61,7 +61,7 @@
 #define RPL_CONF_OF_OCP RPL_OCP_MRHOF
 /* RPL DIO timer settings (can be overridden via CFLAGS for fair compare) */
 #ifndef RPL_CONF_DIO_INTERVAL_MIN
-#define RPL_CONF_DIO_INTERVAL_MIN 14
+#define RPL_CONF_DIO_INTERVAL_MIN 12 // Optimized: 14 → 16 to match WaCo optimization
 #endif
 #ifndef RPL_CONF_DIO_INTERVAL_DOUBLINGS
 #define RPL_CONF_DIO_INTERVAL_DOUBLINGS 4

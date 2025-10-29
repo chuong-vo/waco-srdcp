@@ -21,8 +21,8 @@ re_collect_parent = re.compile(r'ID:(\d+)\s+COLLECT:.*?(?:parent[^\n]*?to\s*|par
 # UL/DL app logs
 re_ul_send = re.compile(r'APP-UL\[NODE\s+([0-9]{2}:[0-9]{2})\]:\s+send\s+seq=(\d+)', re.IGNORECASE)
 re_ul_recv = re.compile(r'APP-UL\[SINK\]:\s+got\s+seq=(\d+)\s+from\s+([0-9]{2}:[0-9]{2})', re.IGNORECASE)
-re_dl_send = re.compile(r'APP-DL\[SINK\]:\s+send\s+.*?\sseq=(\d+)\s*->\s*([0-9]{2}:[0-9]{2})', re.IGNORECASE)
-re_dl_recv = re.compile(r'APP-DL\[NODE\s+([0-9]{2}:[0-9]{2})\]:\s+got\s+.*?\sseq=(\d+)', re.IGNORECASE)
+re_dl_send = re.compile(r'APP-DL\[SINK\]:\s+send\s+.*?(?:dl_seq|seq)=(\d+)\s*->\s*([0-9]{2}:[0-9]{2})', re.IGNORECASE)
+re_dl_recv = re.compile(r'APP-DL\[NODE\s+([0-9]{2}:[0-9]{2})\]:\s+got\s+(?:SR\s+)?seq=(\d+)', re.IGNORECASE)
 
 # CSV PDR_DL (để so chiếu, giữ lại)
 # CSV,PDR_DL,local=LL:LL,time,peer,first,last,recv,gaps,dups,expected,PDR%,parent,my_metric

@@ -30,7 +30,7 @@ CFLAGS += \
   -DQUEUEBUF_CONF_NUM=16
 
 # RDC tuning
-CFLAGS += -DNETSTACK_CONF_RDC_CHANNEL_CHECK_RATE=32
+CFLAGS += -DNETSTACK_CONF_RDC_CHANNEL_CHECK_RATE=8
 
 # Giãn tải app UL/DL để giảm va chạm/tràn đệm
 CFLAGS += -DMSG_PERIOD=\(30*CLOCK_SECOND\)
@@ -40,7 +40,12 @@ CFLAGS += -DSR_MSG_PERIOD=\(45*CLOCK_SECOND\)
 CFLAGS += \
   -DRPL_CONF_WITH_DIS=1 \
   -DRPL_CONF_DIS_START_DELAY=\(3*CLOCK_SECOND\) \
-  -DRPL_CONF_PROBING_INTERVAL=\(30*CLOCK_SECOND\)
+  -DRPL_CONF_PROBING_INTERVAL=\(30*CLOCK_SECOND\) \
+  -DRPL_CONF_DAO_DELAY=0
+# Optimized: 30s → 60s probing, DAO delay = 0 to build routes faster
+
+# Force MSP430 (not MSP430X) to prevent runtime errors
+# This prevents compiler from generating MSP430X instructions for division
 
 # CSMA retry/backoff
 CFLAGS += \

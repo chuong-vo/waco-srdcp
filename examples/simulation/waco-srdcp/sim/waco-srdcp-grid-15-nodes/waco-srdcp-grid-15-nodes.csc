@@ -49,8 +49,8 @@
       <breakpoints />
       <interface_config>
         org.contikios.cooja.interfaces.Position
-        <x>0.0</x>
-        <y>0.0</y>
+        <x>49.948824827118095</x>
+        <y>27.83036711778599</y>
         <z>0.0</z>
       </interface_config>
       <interface_config>
@@ -175,8 +175,8 @@
       <breakpoints />
       <interface_config>
         org.contikios.cooja.interfaces.Position
-        <x>53.333333333333336</x>
-        <y>26.666666666666668</y>
+        <x>0.7108487831091663</x>
+        <y>0.6592493600893685</y>
         <z>0.0</z>
       </interface_config>
       <interface_config>
@@ -332,11 +332,11 @@
       <skin>org.contikios.cooja.plugins.skins.GridVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.TrafficVisualizerSkin</skin>
       <skin>org.contikios.cooja.plugins.skins.UDGMVisualizerSkin</skin>
-      <viewport>2.755681818181818 0.0 0.0 2.755681818181818 68.13215488215485 119.63552188552192</viewport>
+      <viewport>8.228421818181815 0.0 0.0 8.228421818181815 106.13781236363639 136.29152484848512</viewport>
     </plugin_config>
-    <width>400</width>
-    <z>2</z>
-    <height>400</height>
+    <width>1186</width>
+    <z>0</z>
+    <height>882</height>
     <location_x>1</location_x>
     <location_y>1</location_y>
   </plugin>
@@ -362,7 +362,7 @@ var LOG_BASENAME         = "waco-srdcp-grid-15-nodes";      // sẽ tạo &lt;LO
 var APPEND_TO_EXISTING   = false;       // true = ghi nối tiếp, false = ghi đè
 var ADD_TIMESTAMP_SUFFIX = true;        // true = gắn "-yyyyMMdd-HHmmss" vào tên file
 var SIM_SETTLING_TIME    = 240000;       // 20s
-TIMEOUT(1800000);                       // 30 phút
+TIMEOUT(3600000);                       // 30 phút
 // =======================================
 
 try { load("nashorn:mozilla_compat.js"); } catch(err) {}
@@ -441,7 +441,7 @@ while (true) {
       <coloring />
     </plugin_config>
     <width>1476</width>
-    <z>1</z>
+    <z>2</z>
     <height>240</height>
     <location_x>400</location_x>
     <location_y>160</location_y>
@@ -449,9 +449,10 @@ while (true) {
   <plugin>
     PowerTracker
     <width>400</width>
-    <z>0</z>
+    <z>1</z>
     <height>400</height>
     <location_x>7</location_x>
     <location_y>495</location_y>
   </plugin>
 </simconf>
+
