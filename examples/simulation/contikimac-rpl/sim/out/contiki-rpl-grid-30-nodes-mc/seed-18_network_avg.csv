@@ -1,0 +1,2 @@
+prr_parent(last)_avg,prr_sender(last)_avg,prr_all_nei_avg_avg,PDR_UL(%)_avg,PDR_UL_attempts(%)_avg,PDR_UL_sent(%)_avg,PDR_UL_per_node_avg(%),UL_Route_Coverage(%),UL_Coverage(%),PDR_DL(%)_avg,PDR_DL_attempts(%)_avg,PDR_DL_sent(%)_avg,PDR_DL_per_node_avg(%),DL_Route_Coverage(%),DL_Coverage(%),UL_delay_ticks_avg,UL_delay_ms_avg,UL_delay_per_node_avg(ms),DL_delay_ticks_avg,DL_delay_ms_avg,DL_delay_per_node_avg(ms)
+20.91,99.71,90.91,99.71,99.71,99.71,99.71,100.0,100.0,71.67,52.56,71.67,52.56,76.92,51.72,62.32,486.91,486.91,8.03,62.76,62.76
