@@ -6,13 +6,7 @@ build*/
 *.cooja
 *.csc.backup
 
-# Simulation and measurement outputs
-*.time
-*_summary.csv
-*_network_avg.csv
-*_per_node_avg.csv
-*_per_node_energy_avg.csv
-*.pcap
+
 
 # Generated logs
 *.log
