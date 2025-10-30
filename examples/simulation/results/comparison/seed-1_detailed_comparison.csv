@@ -1,0 +1,10 @@
+Metric,WaCo-SRDCP,ContikiMAC-RPL,Difference,Winner
+UL PDR (%),96.41,99.30,-2.89,RPL
+DL PDR (%),100.00,61.81,+38.19,WaCo
+UL Coverage (%),100.00,100.00,+0.00,Equal
+DL Coverage (%),100.00,58.62,+41.38,WaCo
+UL Route Coverage (%),100.00,100.00,+0.00,Equal
+DL Route Coverage (%),100.00,79.66,+20.34,WaCo
+UL Delay (ms),262.74,208.09,+54.65,RPL
+DL Delay (ms),393.63,293.35,+100.28,RPL
+PRR to Parent (%),95.48,25.05,+70.43,WaCo

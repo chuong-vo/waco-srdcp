@@ -766,8 +766,14 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
   static linkaddr_t dest;
   static int ret;
 
+  /* UL attempts tracking (like RPL, for consistent metrics) */
+  static uint16_t ul_attempt_seq = 0;  /* Total UL attempts */
+  static uint16_t ul_sent_count = 0;   /* Total UL packets actually sent */
+  
   /* DL seq per-destination at sink (index by low byte) */
   static uint16_t dl_seq_per_dest[64] = {0};
+  static uint16_t dl_attempt_seq = 0;  /* Total DL attempts (like RPL) */
+  static uint16_t dl_sent_count = 0;    /* Total DL packets actually sent (like RPL dl_seq) */
 
   int i;
 
@@ -852,13 +858,31 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         msg.timestamp = clock_time();
         packetbuf_copyfrom(&msg, sizeof(msg));
 
+        /* Track total attempts (like RPL dl_attempt_seq) */
+        dl_attempt_seq++;
+        
         APP_LOG("APP-DL[SINK]: send SR seq=%u -> %02u:%02u\n",
                 msg.seqn, dest.u8[0], dest.u8[1]);
 
         ret = sr_send(&my_collect, &dest);
         if (ret == 0)
         {
+          /* No route - log attempt with route_ok=0 (like RPL) */
           APP_LOG("ERR,SINK,sr_send,seq=%u,dst=%02u:%02u\n", msg.seqn, dest.u8[0], dest.u8[1]);
+          printf("STAT,DL_ATTEMPT,time=%lu,attempt_seq=%u,target=%02u:%02u,route_ok=0\n",
+                 (unsigned long)(clock_time() / CLOCK_SECOND),
+                 (unsigned)dl_attempt_seq,
+                 (unsigned)dest.u8[0], (unsigned)dest.u8[1]);
+        }
+        else
+        {
+          /* Route exists - packet sent (like RPL route_ok=1) */
+          dl_sent_count++;
+          printf("STAT,DL_ATTEMPT,time=%lu,attempt_seq=%u,target=%02u:%02u,route_ok=1,sent_seq=%u\n",
+                 (unsigned long)(clock_time() / CLOCK_SECOND),
+                 (unsigned)dl_attempt_seq,
+                 (unsigned)dest.u8[0], (unsigned)dest.u8[1],
+                 (unsigned)dl_sent_count);
         }
 
         /* rotate 2..APP_NODES */
@@ -906,6 +930,8 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
     etimer_set(&nei_aging, BEACON_INTERVAL);
 
     msg.seqn = 0;
+    ul_attempt_seq = 0;
+    ul_sent_count = 0;
 
     while (1)
     {
@@ -935,21 +961,42 @@ PROCESS_THREAD(example_runicast_srdcp_process, ev, data)
         etimer_set(&rnd, (uint16_t)(random_rand() % (MSG_PERIOD / 2)));
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&rnd));
 
+        /* Track UL attempts (like RPL, for consistent metrics) */
+        ul_attempt_seq++;
+        
         /* uplink send */
         packetbuf_clear();
         msg.timestamp = clock_time();
+        
+        /* Set seq before attempting send (seq only appears in log/packet if sent) */
+        msg.seqn = ul_sent_count;
         packetbuf_copyfrom(&msg, sizeof(msg));
-
-        APP_LOG("APP-UL[NODE %02u:%02u]: send seq=%u metric=%u parent=%02u:%02u\n",
-                linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
-                msg.seqn, my_collect.metric, my_collect.parent.u8[0], my_collect.parent.u8[1]);
 
         ret = my_collect_send(&my_collect);
         if (ret == 0)
         {
-          APP_LOG("ERR,NODE,my_collect_send,seq=%u\n", msg.seqn);
+          /* No parent - log attempt with route_ok=0 (like RPL) */
+          APP_LOG("ERR,NODE,my_collect_send,seq=%u\n", ul_sent_count);
+          printf("STAT,UL_ATTEMPT,time=%lu,source=%02u:%02u,attempt_seq=%u,route_ok=0\n",
+                 (unsigned long)(clock_time() / CLOCK_SECOND),
+                 (unsigned)linkaddr_node_addr.u8[0], (unsigned)linkaddr_node_addr.u8[1],
+                 (unsigned)ul_attempt_seq);
         }
-        msg.seqn++;
+        else
+        {
+          /* Parent exists - packet sent (like RPL route_ok=1) */
+          /* Log only when actually sent (consistent with RPL) */
+          APP_LOG("APP-UL[NODE %02u:%02u]: send seq=%u metric=%u parent=%02u:%02u\n",
+                  linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
+                  msg.seqn, my_collect.metric, my_collect.parent.u8[0], my_collect.parent.u8[1]);
+          
+          ul_sent_count++;  /* Increment sent count (becomes new seq for next send) */
+          printf("STAT,UL_ATTEMPT,time=%lu,source=%02u:%02u,attempt_seq=%u,route_ok=1,sent_seq=%u\n",
+                 (unsigned long)(clock_time() / CLOCK_SECOND),
+                 (unsigned)linkaddr_node_addr.u8[0], (unsigned)linkaddr_node_addr.u8[1],
+                 (unsigned)ul_attempt_seq,
+                 (unsigned)ul_sent_count);
+        }
       }
 
       if (etimer_expired(&nei_tick))

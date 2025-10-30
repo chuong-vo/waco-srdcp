@@ -1,0 +1,9 @@
+Metric,WaCo,RPL,Equal
+DL Coverage (%),20,0,0
+DL Delay (ms),0,20,0
+DL PDR (%),20,0,0
+DL Route Coverage (%),0,0,20
+PRR to Parent (%),20,0,0
+UL Coverage (%),0,0,20
+UL Delay (ms),0,20,0
+UL PDR (%),0,20,0

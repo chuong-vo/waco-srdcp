@@ -1,0 +1,10 @@
+Metric,WaCo mean,WaCo std,RPL mean,RPL std,WaCo - RPL,Better
+UL PDR (%),96.49,0.42,99.52,0.21,-3.03,RPL
+DL PDR (%),99.91,0.31,55.29,8.21,44.62,WaCo
+UL Coverage (%),100.0,0.0,100.0,0.0,0.0,Equal
+DL Coverage (%),100.0,0.0,57.67,5.9,42.33,WaCo
+UL Route Coverage (%),100.0,0.0,100.0,0.0,0.0,Equal
+DL Route Coverage (%),100.0,0.0,88.47,11.87,11.53,WaCo
+UL Delay (ms),405.67,243.6,285.36,203.08,120.32,RPL
+DL Delay (ms),390.36,234.11,188.41,167.04,201.96,RPL
+PRR to Parent (%),95.1,0.71,22.45,10.13,72.65,WaCo

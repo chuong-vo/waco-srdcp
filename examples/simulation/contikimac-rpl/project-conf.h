@@ -59,12 +59,12 @@
 
 /* Set the Objective Function to MRHOF */
 #define RPL_CONF_OF_OCP RPL_OCP_MRHOF
-/* RPL DIO timer settings (can be overridden via CFLAGS for fair compare) */
+/* RPL DIO timer settings (optimized for faster topology convergence) */
 #ifndef RPL_CONF_DIO_INTERVAL_MIN
-#define RPL_CONF_DIO_INTERVAL_MIN 12 // Optimized: 14 → 16 to match WaCo optimization
+#define RPL_CONF_DIO_INTERVAL_MIN 11 // Reduced: 12 → 11 (2s instead of 4s for faster DIO)
 #endif
 #ifndef RPL_CONF_DIO_INTERVAL_DOUBLINGS
-#define RPL_CONF_DIO_INTERVAL_DOUBLINGS 4
+#define RPL_CONF_DIO_INTERVAL_DOUBLINGS 3 // Reduced: 4 → 3 (max 32s instead of 65s)
 #endif
 /* Minimum hop rank increase */
 #define RPL_CONF_MIN_HOPRANKINC 256

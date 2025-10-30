@@ -12,9 +12,11 @@ PROJECT_SOURCEFILES +=
 # Logging toggles (similar to waco-srdcp)
 CFLAGS += \
   -DLOG_APP=1 \
+  -DLOG_APP_MINIMAL=1 \
   -DLOG_COLLECT=0 \
   -DLOG_TOPO=0 \
   -DLOG_WUR=0
+# LOG_APP_MINIMAL=1: Only log metrics (APP-UL/DL send/got, STAT,*), disable debug
 
 # Use our project conf
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
@@ -30,19 +32,20 @@ CFLAGS += \
   -DQUEUEBUF_CONF_NUM=16
 
 # RDC tuning
-CFLAGS += -DNETSTACK_CONF_RDC_CHANNEL_CHECK_RATE=8
+CFLAGS += -DNETSTACK_CONF_RDC_CHANNEL_CHECK_RATE=32
 
 # Giãn tải app UL/DL để giảm va chạm/tràn đệm
 CFLAGS += -DMSG_PERIOD=\(30*CLOCK_SECOND\)
 CFLAGS += -DSR_MSG_PERIOD=\(45*CLOCK_SECOND\)
 
-# RPL control tweaks
+# RPL control tweaks (optimized for faster convergence)
 CFLAGS += \
   -DRPL_CONF_WITH_DIS=1 \
   -DRPL_CONF_DIS_START_DELAY=\(3*CLOCK_SECOND\) \
+  -DRPL_CONF_DIS_INTERVAL=\(30*CLOCK_SECOND\) \
   -DRPL_CONF_PROBING_INTERVAL=\(30*CLOCK_SECOND\) \
   -DRPL_CONF_DAO_DELAY=0
-# Optimized: 30s → 60s probing, DAO delay = 0 to build routes faster
+# Optimized for faster routes: DIO min=11 (2s), DIS=20s, probing=20s, DAO delay=0
 
 # Force MSP430 (not MSP430X) to prevent runtime errors
 # This prevents compiler from generating MSP430X instructions for division

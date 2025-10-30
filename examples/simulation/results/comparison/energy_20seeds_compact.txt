@@ -1,0 +1,4 @@
+Avg Energy/node: WaCo 1.936J < RPL 3.437J
+Avg Power/node: WaCo 0.576mW < RPL 1.023mW
+RDC_avg: WaCo 4.27% < RPL 5.08%
+Total Energy: WaCo 58.1J < RPL 103.1J

@@ -40,8 +40,8 @@ def aggregate_network_avgs(outdir: Path) -> None:
         print("[agg] Bỏ qua network_avgs.csv (không có seed-*_network_avg.csv)")
         return
     
-    # Expected header
-    header = "seed,prr_parent(last)_avg,prr_sender(last)_avg,prr_all_nei_avg_avg,PDR_UL(%)_avg,PDR_DL(%)_avg,UL_delay_ticks_avg,UL_delay_ms_avg,DL_delay_ticks_avg,DL_delay_ms_avg"
+    # Expected header (with unified PDR metrics + coverage + route coverage + per-node delay for fair comparison)
+    header = "seed,prr_parent(last)_avg,prr_sender(last)_avg,prr_all_nei_avg_avg,PDR_UL(%)_avg,PDR_UL_attempts(%)_avg,PDR_UL_sent(%)_avg,PDR_UL_per_node_avg(%),UL_Route_Coverage(%),UL_Coverage(%),PDR_DL(%)_avg,PDR_DL_attempts(%)_avg,PDR_DL_sent(%)_avg,PDR_DL_per_node_avg(%),DL_Route_Coverage(%),DL_Coverage(%),UL_delay_ticks_avg,UL_delay_ms_avg,UL_delay_per_node_avg(ms),DL_delay_ticks_avg,DL_delay_ms_avg,DL_delay_per_node_avg(ms)"
     
     dfs = []
     for f in net_files:

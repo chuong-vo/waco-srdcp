@@ -1,0 +1,161 @@
+seed,Metric,WaCo,RPL,WaCo-RPL,Winner
+1,UL PDR (%),96.41,99.62,-3.21,RPL
+1,UL Delay (ms),262.74,139.57,123.17,RPL
+1,UL Coverage (%),100.0,100.0,0.0,Equal
+1,DL PDR (%),100.0,50.0,50.0,WaCo
+1,DL Delay (ms),393.63,249.39,144.24,RPL
+1,DL Coverage (%),100.0,51.72,48.28,WaCo
+1,DL Route Coverage (%),100.0,100.0,0.0,Equal
+1,PRR to Parent (%),95.48,12.46,83.02,WaCo
+2,UL PDR (%),96.26,99.8,-3.54,RPL
+2,UL Delay (ms),679.74,476.9,202.84,RPL
+2,UL Coverage (%),100.0,100.0,0.0,Equal
+2,DL PDR (%),100.0,48.28,51.72,WaCo
+2,DL Delay (ms),147.09,13.02,134.07,RPL
+2,DL Coverage (%),100.0,51.72,48.28,WaCo
+2,DL Route Coverage (%),100.0,100.0,0.0,Equal
+2,PRR to Parent (%),95.62,18.58,77.04,WaCo
+3,UL PDR (%),96.15,99.65,-3.5,RPL
+3,UL Delay (ms),67.47,9.08,58.39,RPL
+3,UL Coverage (%),100.0,100.0,0.0,Equal
+3,DL PDR (%),100.0,49.43,50.57,WaCo
+3,DL Delay (ms),836.3,477.6,358.7,RPL
+3,DL Coverage (%),100.0,51.72,48.28,WaCo
+3,DL Route Coverage (%),100.0,100.0,0.0,Equal
+3,PRR to Parent (%),95.31,12.25,83.06,WaCo
+4,UL PDR (%),96.35,99.71,-3.36,RPL
+4,UL Delay (ms),69.44,13.54,55.9,RPL
+4,UL Coverage (%),100.0,100.0,0.0,Equal
+4,DL PDR (%),100.0,53.45,46.55,WaCo
+4,DL Delay (ms),777.3,515.06,262.24,RPL
+4,DL Coverage (%),100.0,55.17,44.83,WaCo
+4,DL Route Coverage (%),100.0,100.0,0.0,Equal
+4,PRR to Parent (%),94.86,11.7,83.16,WaCo
+5,UL PDR (%),97.28,99.8,-2.52,RPL
+5,UL Delay (ms),130.5,45.52,84.98,RPL
+5,UL Coverage (%),100.0,100.0,0.0,Equal
+5,DL PDR (%),100.0,61.49,38.51,WaCo
+5,DL Delay (ms),651.49,366.91,284.58,RPL
+5,DL Coverage (%),100.0,65.52,34.48,WaCo
+5,DL Route Coverage (%),100.0,100.0,0.0,Equal
+5,PRR to Parent (%),95.34,15.9,79.44,WaCo
+6,UL PDR (%),96.81,99.83,-3.02,RPL
+6,UL Delay (ms),431.95,260.35,171.6,RPL
+6,UL Coverage (%),100.0,100.0,0.0,Equal
+6,DL PDR (%),100.0,56.32,43.68,WaCo
+6,DL Delay (ms),308.82,74.68,234.14,RPL
+6,DL Coverage (%),100.0,58.62,41.38,WaCo
+6,DL Route Coverage (%),100.0,100.0,0.0,Equal
+6,PRR to Parent (%),94.9,11.5,83.4,WaCo
+7,UL PDR (%),96.5,99.57,-3.07,RPL
+7,UL Delay (ms),677.71,477.81,199.9,RPL
+7,UL Coverage (%),100.0,100.0,0.0,Equal
+7,DL PDR (%),100.0,49.43,50.57,WaCo
+7,DL Delay (ms),88.63,10.94,77.69,RPL
+7,DL Coverage (%),100.0,51.72,48.28,WaCo
+7,DL Route Coverage (%),100.0,100.0,0.0,Equal
+7,PRR to Parent (%),95.28,12.36,82.92,WaCo
+8,UL PDR (%),96.5,99.62,-3.12,RPL
+8,UL Delay (ms),650.58,450.02,200.56,RPL
+8,UL Coverage (%),100.0,100.0,0.0,Equal
+8,DL PDR (%),100.0,49.43,50.57,WaCo
+8,DL Delay (ms),145.03,23.0,122.03,RPL
+8,DL Coverage (%),100.0,51.72,48.28,WaCo
+8,DL Route Coverage (%),100.0,100.0,0.0,Equal
+8,PRR to Parent (%),95.79,12.15,83.64,WaCo
+9,UL PDR (%),97.1,99.65,-2.55,RPL
+9,UL Delay (ms),792.55,595.33,197.22,RPL
+9,UL Coverage (%),100.0,100.0,0.0,Equal
+9,DL PDR (%),100.0,52.87,47.13,WaCo
+9,DL Delay (ms),87.1,3.06,84.04,RPL
+9,DL Coverage (%),100.0,58.62,41.38,WaCo
+9,DL Route Coverage (%),100.0,100.0,0.0,Equal
+9,PRR to Parent (%),94.41,22.48,71.93,WaCo
+10,UL PDR (%),96.52,99.74,-3.22,RPL
+10,UL Delay (ms),233.57,122.6,110.97,RPL
+10,UL Coverage (%),100.0,100.0,0.0,Equal
+10,DL PDR (%),100.0,46.55,53.45,WaCo
+10,DL Delay (ms),449.22,252.22,197.0,RPL
+10,DL Coverage (%),100.0,58.62,41.38,WaCo
+10,DL Route Coverage (%),100.0,100.0,0.0,Equal
+10,PRR to Parent (%),95.76,39.14,56.62,WaCo
+11,UL PDR (%),96.32,99.83,-3.51,RPL
+11,UL Delay (ms),513.02,334.04,178.98,RPL
+11,UL Coverage (%),100.0,100.0,0.0,Equal
+11,DL PDR (%),100.0,51.15,48.85,WaCo
+11,DL Delay (ms),193.34,35.16,158.18,RPL
+11,DL Coverage (%),100.0,55.17,44.83,WaCo
+11,DL Route Coverage (%),100.0,100.0,0.0,Equal
+11,PRR to Parent (%),95.31,17.54,77.77,WaCo
+12,UL PDR (%),97.16,99.59,-2.43,RPL
+12,UL Delay (ms),383.92,229.2,154.72,RPL
+12,UL Coverage (%),100.0,100.0,0.0,Equal
+12,DL PDR (%),100.0,54.02,45.98,WaCo
+12,DL Delay (ms),348.42,116.39,232.03,RPL
+12,DL Coverage (%),100.0,62.07,37.93,WaCo
+12,DL Route Coverage (%),100.0,100.0,0.0,Equal
+12,PRR to Parent (%),93.66,26.79,66.87,WaCo
+13,UL PDR (%),96.84,99.68,-2.84,RPL
+13,UL Delay (ms),393.05,211.95,181.1,RPL
+13,UL Coverage (%),100.0,100.0,0.0,Equal
+13,DL PDR (%),100.0,50.57,49.43,WaCo
+13,DL Delay (ms),278.87,85.53,193.34,RPL
+13,DL Coverage (%),100.0,55.17,44.83,WaCo
+13,DL Route Coverage (%),100.0,100.0,0.0,Equal
+13,PRR to Parent (%),96.03,17.54,78.49,WaCo
+14,UL PDR (%),96.15,99.39,-3.24,RPL
+14,UL Delay (ms),114.08,34.87,79.21,RPL
+14,UL Coverage (%),100.0,100.0,0.0,Equal
+14,DL PDR (%),98.85,55.75,43.1,WaCo
+14,DL Delay (ms),739.99,380.14,359.85,RPL
+14,DL Coverage (%),100.0,62.07,37.93,WaCo
+14,DL Route Coverage (%),100.0,100.0,0.0,Equal
+14,PRR to Parent (%),95.41,21.6,73.81,WaCo
+15,UL PDR (%),96.29,99.88,-3.59,RPL
+15,UL Delay (ms),246.33,103.18,143.15,RPL
+15,UL Coverage (%),100.0,100.0,0.0,Equal
+15,DL PDR (%),100.0,46.55,53.45,WaCo
+15,DL Delay (ms),480.33,208.07,272.26,RPL
+15,DL Coverage (%),100.0,51.72,48.28,WaCo
+15,DL Route Coverage (%),100.0,100.0,0.0,Equal
+15,PRR to Parent (%),94.83,18.47,76.36,WaCo
+16,UL PDR (%),96.67,99.59,-2.92,RPL
+16,UL Delay (ms),182.8,58.9,123.9,RPL
+16,UL Coverage (%),100.0,100.0,0.0,Equal
+16,DL PDR (%),100.0,57.47,42.53,WaCo
+16,DL Delay (ms),564.16,218.17,345.99,RPL
+16,DL Coverage (%),100.0,62.07,37.93,WaCo
+16,DL Route Coverage (%),100.0,100.0,0.0,Equal
+16,PRR to Parent (%),96.07,16.42,79.65,WaCo
+17,UL PDR (%),96.41,99.62,-3.21,RPL
+17,UL Delay (ms),228.24,116.96,111.28,RPL
+17,UL Coverage (%),100.0,100.0,0.0,Equal
+17,DL PDR (%),100.0,53.45,46.55,WaCo
+17,DL Delay (ms),597.88,223.63,374.25,RPL
+17,DL Coverage (%),100.0,55.17,44.83,WaCo
+17,DL Route Coverage (%),100.0,100.0,0.0,Equal
+17,PRR to Parent (%),95.28,11.6,83.68,WaCo
+18,UL PDR (%),96.29,99.42,-3.13,RPL
+18,UL Delay (ms),593.44,415.84,177.6,RPL
+18,UL Coverage (%),100.0,100.0,0.0,Equal
+18,DL PDR (%),100.0,48.85,51.15,WaCo
+18,DL Delay (ms),183.64,56.51,127.13,RPL
+18,DL Coverage (%),100.0,51.72,48.28,WaCo
+18,DL Route Coverage (%),100.0,100.0,0.0,Equal
+18,PRR to Parent (%),95.45,12.03,83.42,WaCo
+19,UL PDR (%),96.21,99.62,-3.41,RPL
+19,UL Delay (ms),684.68,485.2,199.48,RPL
+19,UL Coverage (%),100.0,100.0,0.0,Equal
+19,DL PDR (%),100.0,52.3,47.7,WaCo
+19,DL Delay (ms),121.54,9.36,112.18,RPL
+19,DL Coverage (%),100.0,55.17,44.83,WaCo
+19,DL Route Coverage (%),100.0,100.0,0.0,Equal
+19,PRR to Parent (%),94.45,12.1,82.35,WaCo
+20,UL PDR (%),96.81,99.62,-2.81,RPL
+20,UL Delay (ms),756.41,560.17,196.24,RPL
+20,UL Coverage (%),100.0,100.0,0.0,Equal
+20,DL PDR (%),100.0,52.3,47.7,WaCo
+20,DL Delay (ms),83.11,13.02,70.09,RPL
+20,DL Coverage (%),100.0,65.52,34.48,WaCo
+20,DL Route Coverage (%),100.0,100.0,0.0,Equal
+20,PRR to Parent (%),96.31,35.64,60.67,WaCo

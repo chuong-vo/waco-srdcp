@@ -29,10 +29,21 @@
 #ifndef LOG_APP
 #define LOG_APP 1
 #endif
-#if LOG_APP
+/* Minimal logging: only essential logs for metrics extraction */
+#ifndef LOG_APP_MINIMAL
+#define LOG_APP_MINIMAL 1
+#endif
+#if LOG_APP && !LOG_APP_MINIMAL
 #define APP_LOG(...) printf(__VA_ARGS__)
+#elif LOG_APP && LOG_APP_MINIMAL
+/* Only log critical metrics: APP-UL/DL send/got for parser */
+#define APP_LOG_METRICS(...) printf(__VA_ARGS__)
+#define APP_LOG_DEBUG(...) /* silent */
+#define APP_LOG(...) APP_LOG_METRICS(__VA_ARGS__)
 #else
 #define APP_LOG(...)
+#define APP_LOG_METRICS(...)
+#define APP_LOG_DEBUG(...)
 #endif
 
 /* =================== app parameters =================== */
@@ -126,7 +137,8 @@ static struct simple_udp_connection ul_conn;
 static struct simple_udp_connection dl_conn;
 
 /* sequence counters */
-static uint16_t ul_seq = 0;
+static uint16_t ul_seq = 0;         /* only increments on REAL UL sends */
+static uint16_t ul_attempt_seq = 0; /* increments on every UL attempt, even if skipped */
 static uint16_t dl_seq = 0;         /* only increments on REAL DL sends */
 static uint16_t dl_attempt_seq = 0; /* increments on every DL attempt, even if skipped */
 
@@ -538,6 +550,12 @@ static void send_ul_message(void)
   if (!dag_has_parent(curr_dag))
   {
     parent_tracker_update(NULL, 0xFFFF);
+    /* Log UL attempt with route_ok=0 (like DL) */
+    addr_to_id00(&linkaddr_node_addr, &me0, &me1);
+    printf("STAT,UL_ATTEMPT,time=%lu,source=%02u:%02u,attempt_seq=%u,route_ok=0\n",
+           (unsigned long)(clock_time() / CLOCK_SECOND),
+           (unsigned)me0, (unsigned)me1,
+           (unsigned)ul_attempt_seq);
     return;
   }
 
@@ -563,6 +581,13 @@ static void send_ul_message(void)
           (unsigned)m.seqn,
           (unsigned)m.metric,
           (unsigned)p0, (unsigned)p1);
+
+  /* Log UL attempt with route_ok=1 (like DL) */
+  printf("STAT,UL_ATTEMPT,time=%lu,source=%02u:%02u,attempt_seq=%u,route_ok=1,ul_seq=%u\n",
+         (unsigned long)(clock_time() / CLOCK_SECOND),
+         (unsigned)me0, (unsigned)me1,
+         (unsigned)ul_attempt_seq,
+         (unsigned)ul_seq);
 
   /* send to DAG root (sink IPv6) */
   simple_udp_sendto(&ul_conn, &m, sizeof(m), &curr_dag->dag_id);
@@ -669,7 +694,7 @@ static void send_dl_message(void)
       else
       {
         /* known target but no downward route in RPL */
-        APP_LOG("APP-DL[SINK]: skip dl_attempt=%u -> %02u:00 (no route in RPL)\n",
+        APP_LOG_DEBUG("APP-DL[SINK]: skip dl_attempt=%u -> %02u:00 (no route in RPL)\n",
                 (unsigned)dl_attempt_seq,
                 (unsigned)target_id);
 
@@ -682,7 +707,7 @@ static void send_dl_message(void)
     else
     {
       /* no DAG at sink?! */
-      APP_LOG("APP-DL[SINK]: skip dl_attempt=%u -> %02u:00 (no DAG)\n",
+      APP_LOG_DEBUG("APP-DL[SINK]: skip dl_attempt=%u -> %02u:00 (no DAG)\n",
               (unsigned)dl_attempt_seq,
               (unsigned)target_id);
 
@@ -695,7 +720,7 @@ static void send_dl_message(void)
   else
   {
     /* nobody to send to (no UL heard yet etc.) */
-    APP_LOG("APP-DL[SINK]: skip dl_attempt=%u (no known UL target)\n",
+    APP_LOG_DEBUG("APP-DL[SINK]: skip dl_attempt=%u (no known UL target)\n",
             (unsigned)dl_attempt_seq);
 
     printf("STAT,DL_ATTEMPT,time=%lu,attempt_seq=%u,target=--:--,route_ok=0\n",
@@ -873,7 +898,7 @@ PROCESS_THREAD(waco_rpl_process, ev, data)
 
   if (node_id == 1)
   {
-    APP_LOG("APP-ROLE[SINK]: started (local=%s)\n", mebuf);
+    APP_LOG_DEBUG("APP-ROLE[SINK]: started (local=%s)\n", mebuf);
     csv_print_info_role("SINK", 0, NULL);
     /* PDR_UL snapshot at the sink (my_hops ~ 0) */
     pdr_ul_print_csv(rpl_hops_approx(), NULL);
@@ -885,7 +910,7 @@ PROCESS_THREAD(waco_rpl_process, ev, data)
         (init_dag && init_dag->preferred_parent)
             ? rpl_get_parent_lladdr(init_dag->preferred_parent)
             : NULL;
-    APP_LOG("APP-ROLE[NODE %s]: started\n", mebuf);
+    APP_LOG_DEBUG("APP-ROLE[NODE %s]: started\n", mebuf);
     csv_print_info_role("NODE", dag_rank_to_hops(init_dag), init_parent);
 
     /* print initial DL PDR status line */
@@ -939,7 +964,7 @@ PROCESS_THREAD(waco_rpl_process, ev, data)
 
   if (rpl_timeout_flag)
   {
-    APP_LOG("APP-RPL: readiness timeout, continue best-effort\n");
+    APP_LOG_DEBUG("APP-RPL: readiness timeout, continue best-effort\n");
   }
 
   /* After RPL "ready", print updated role snapshot */
@@ -1009,10 +1034,22 @@ PROCESS_THREAD(waco_rpl_process, ev, data)
           etimer_reset(&ul_timer);
 
           period_dag = rpl_get_any_dag();
+          /* Track UL attempts (like DL) */
+          ul_attempt_seq++;
+          
           if (!dag_has_parent(period_dag))
           {
             parent_tracker_update(NULL, 0xFFFF);
-            APP_LOG("APP-UL[SKIP]: no parent yet\n");
+            APP_LOG_DEBUG("APP-UL[SKIP]: no parent yet\n");
+            /* Log UL attempt with route_ok=0 */
+            {
+              uint8_t me0, me1;
+              addr_to_id00(&linkaddr_node_addr, &me0, &me1);
+              printf("STAT,UL_ATTEMPT,time=%lu,source=%02u:%02u,attempt_seq=%u,route_ok=0\n",
+                     (unsigned long)(clock_time() / CLOCK_SECOND),
+                     (unsigned)me0, (unsigned)me1,
+                     (unsigned)ul_attempt_seq);
+            }
           }
           else
           {

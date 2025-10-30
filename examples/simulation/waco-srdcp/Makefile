@@ -41,7 +41,7 @@ CFLAGS += -DRSSI_THRESHOLD=-90
 
 # Giữ parent tối thiểu 60s để ổn định cây
 CFLAGS += -DMIN_PARENT_DWELL=\(60*CLOCK_SECOND\)
-CFLAGS += -DBEACON_INTERVAL=\(45*CLOCK_SECOND\)  # Optimized: 30s → 45s for lower RDC
+CFLAGS += -DBEACON_INTERVAL=\(16*CLOCK_SECOND\)  # Synchronized: 45s → 16s (match RPL max DIO interval for fair comparison)
 
 # Định tuyến DL từ đồ thị piggyback: bỏ cạnh PRR thấp, ưu tiên PRR mạnh hơn
 CFLAGS += \
