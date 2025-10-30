@@ -1,0 +1,2 @@
+prr_parent(last)_avg,prr_sender(last)_avg,prr_all_nei_avg_avg,PDR_UL(%)_avg,PDR_DL(%)_avg,UL_delay_ticks_avg,UL_delay_ms_avg,DL_delay_ticks_avg,DL_delay_ms_avg
+98.71,81.64,90.86,99.64,100.0,6.77,52.87,72.8,568.77
