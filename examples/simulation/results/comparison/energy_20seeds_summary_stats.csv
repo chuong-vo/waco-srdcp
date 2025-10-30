@@ -1,5 +1,0 @@
-Metric,WaCo mean,WaCo std,WaCo median,RPL mean,RPL std,RPL median,WaCo - RPL (mean),Winner
-Avg Energy per Node (J),1.936,0.042,1.934,3.437,0.127,3.456,-1.501,WaCo
-Avg Power per Node (mW),0.576,0.013,0.575,1.023,0.038,1.028,-0.447,WaCo
-Radio Duty Cycle (%),4.274,0.032,4.27,5.08,0.087,5.1,-0.806,WaCo
-Total Energy (J),58.079,1.27,58.023,103.102,3.812,103.673,-45.023,WaCo

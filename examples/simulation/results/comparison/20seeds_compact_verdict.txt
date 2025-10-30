@@ -1,2 +1,0 @@
-UL → RPL: PDR 99.5% > 96.5%, Delay 285 < 406 ms, Coverage = 100%
-DL → WaCo: PDR 99.9% >> 55.3%, Coverage 100% >> 58%, Route 100% > 88% (RPL delay thấp hơn nhưng bias do coverage)
