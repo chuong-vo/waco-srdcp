@@ -1,6 +1,0 @@
-Pair,Pearson,Spearman
-DL Route Coverage (%) vs DL Coverage (%),0.16,0.187
-DL Route Coverage (%) vs DL PDR (%),0.494,0.489
-PRR to Parent (%) vs DL PDR (%),-0.629,-0.502
-PRR to Parent (%) vs UL PDR (%),0.154,0.244
-PRR to Parent (%) vs UL Delay (ms),0.24,0.197

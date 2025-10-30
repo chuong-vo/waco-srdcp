@@ -1,7 +1,0 @@
-Direction,Metric,WaCo-SRDCP,ContikiMAC-RPL,Difference,Coverage_WaCo,Coverage_RPL,Note
-Uplink (Node → Sink),Delay (per-node avg),262.74 ms,208.09 ms,+54.65 ms,96.7%,100.0%,So sánh công bằng (per-node avg)
-Uplink (Node → Sink),Coverage,96.67%,100.00%,-3.33%,,,Số % nodes nhận được ít nhất 1 packet
-Uplink (Node → Sink),PDR (per-node avg),96.41%,99.30%,-2.89%,,,
-Downlink (Sink → Node),Delay (per-node avg),393.63 ms,293.35 ms,+100.28 ms,96.7%,58.6%,⚠️ Coverage bias: WaCo 96.7% vs RPL 58.6%
-Downlink (Sink → Node),Coverage,96.67%,58.62%,+38.05%,,,Số % nodes nhận được ít nhất 1 packet
-Downlink (Sink → Node),PDR (per-node avg),100.00%,61.81%,+38.19%,,,
